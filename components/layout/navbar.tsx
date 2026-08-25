@@ -21,9 +21,9 @@ export async function Navbar() {
         <div className="flex items-center space-x-8">
           <Link href="/" className="flex items-center space-x-2 font-extrabold text-xl tracking-tight group">
             <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-black shadow-md group-hover:scale-105 transition-transform">
-              L
+              E
             </div>
-            <span className="gradient-text font-black tracking-widest text-lg">LUMEN</span>
+            <span className="gradient-text font-black tracking-wider text-lg">ENAT MARKET</span>
           </Link>
 
           {/* Desktop Links */}

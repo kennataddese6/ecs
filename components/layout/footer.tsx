@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Lock } from "lucide-react";
+import { Lock, Mail, Phone } from "lucide-react";
 
 export function Footer() {
   return (
@@ -9,14 +9,28 @@ export function Footer() {
           <div className="space-y-4">
             <Link href="/" className="flex items-center space-x-2 font-black text-xl tracking-wider">
               <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-black shadow-md">
-                L
+                E
               </div>
-              <span className="gradient-text font-black tracking-widest text-lg">LUMEN</span>
+              <span className="gradient-text font-black tracking-wider text-lg">ENAT MARKET</span>
             </Link>
             <p className="text-xs text-muted-foreground leading-relaxed max-w-xs">
-              A modern luxury e-commerce experience showcasing curated electronics, artisan goods, and timeless fashion.
+              Your trusted marketplace for premium curated lifestyle products, food items, and daily essentials.
             </p>
-            <div className="flex items-center space-x-2 text-xs text-muted-foreground">
+            <div className="space-y-1.5 pt-1 text-xs text-muted-foreground">
+              <div className="flex items-center space-x-2">
+                <Mail className="h-3.5 w-3.5 text-primary" />
+                <a href="mailto:shop@enatmarket.co.uk" className="hover:text-primary transition-colors">
+                  shop@enatmarket.co.uk
+                </a>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Phone className="h-3.5 w-3.5 text-primary" />
+                <a href="tel:07830682710" className="hover:text-primary transition-colors">
+                  07830682710 / 02035760507
+                </a>
+              </div>
+            </div>
+            <div className="flex items-center space-x-2 text-xs text-muted-foreground pt-2">
               <Lock className="h-3.5 w-3.5 text-primary" />
               <span>256-Bit SSL Encrypted Checkout</span>
             </div>
@@ -53,7 +67,7 @@ export function Footer() {
         </div>
 
         <div className="border-t border-border pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} LUMEN Luxury Commerce Inc. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Enat Market. All rights reserved.</p>
           <div className="flex space-x-6">
             <Link href="/about" className="hover:text-foreground transition-colors">Privacy Policy</Link>
             <Link href="/about" className="hover:text-foreground transition-colors">Terms of Service</Link>

@@ -9,31 +9,31 @@ const plusJakarta = Plus_Jakarta_Sans({
   weight: ["300", "400", "500", "600", "700", "800"],
 });
 
-const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://lumen-store.vercel.app";
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: "LUMEN | Modern Premium E-Commerce",
-    template: "%s | LUMEN Store",
+    default: "Enat Market | Quality Products & Daily Essentials",
+    template: "%s | Enat Market",
   },
-  description: "Curated collection of luxury lifestyle goods, precision electronics, and timeless essentials.",
-  keywords: ["ecommerce", "luxury goods", "modern design", "curated storefront", "premium acoustics"],
-  authors: [{ name: "LUMEN Design Studio" }],
-  creator: "LUMEN",
+  description: "Your trusted marketplace for premium curated lifestyle products, food items, and daily essentials.",
+  keywords: ["ecommerce", "enat market", "online shopping", "quality essentials", "curated marketplace"],
+  authors: [{ name: "Enat Market Team" }],
+  creator: "Enat Market",
   openGraph: {
     type: "website",
     locale: "en_US",
     url: baseUrl,
-    siteName: "LUMEN Store",
-    title: "LUMEN | Modern Premium E-Commerce",
-    description: "Curated collection of luxury lifestyle goods, precision electronics, and timeless essentials.",
+    siteName: "Enat Market",
+    title: "Enat Market | Quality Products & Daily Essentials",
+    description: "Your trusted marketplace for premium curated lifestyle products, food items, and daily essentials.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "LUMEN | Modern Premium E-Commerce",
-    description: "Curated collection of luxury lifestyle goods, precision electronics, and timeless essentials.",
-    creator: "@lumenstore",
+    title: "Enat Market | Quality Products & Daily Essentials",
+    description: "Your trusted marketplace for premium curated lifestyle products, food items, and daily essentials.",
+    creator: "@enatmarket",
   },
   robots: {
     index: true,
