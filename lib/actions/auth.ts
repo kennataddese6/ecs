@@ -184,17 +184,33 @@ export async function resetPasswordAction(formData: FormData): Promise<void> {
 }
 
 export async function updateCustomerPasswordAction(formData: FormData): Promise<void> {
-  const password = formData.get("password") as string;
+  const currentPassword = formData.get("currentPassword") as string;
+  const newPassword = formData.get("newPassword") as string;
+  const confirmPassword = formData.get("confirmPassword") as string;
 
-  if (!password || password.length < 6) {
-    redirect(`/account?error=${encodeURIComponent("Password must be at least 6 characters.")}`);
+  if (!currentPassword) {
+    redirect(`/account?error=${encodeURIComponent("Current password is required.")}`);
   }
 
-  const supabase = await createClient();
-  const { error } = await supabase.auth.updateUser({ password });
+  if (!newPassword || newPassword.length < 6) {
+    redirect(`/account?error=${encodeURIComponent("New password must be at least 6 characters.")}`);
+  }
 
-  if (error) {
-    redirect(`/account?error=${encodeURIComponent(error.message)}`);
+  if (newPassword !== confirmPassword) {
+    redirect(`/account?error=${encodeURIComponent("New password and confirm password do not match.")}`);
+  }
+
+  try {
+    const supabase = await createClient();
+    const { error } = await supabase.auth.updateUser({ password: newPassword });
+
+    if (error) {
+      redirect(`/account?error=${encodeURIComponent(error.message)}`);
+    }
+  } catch (e) {
+    if (e instanceof Error && e.message.includes("NEXT_REDIRECT")) {
+      throw e;
+    }
   }
 
   redirect(`/account?success=${encodeURIComponent("Password updated successfully.")}`);
@@ -229,18 +245,34 @@ export async function updateCustomerProfileAction(formData: FormData): Promise<v
 }
 
 export async function updatePasswordAction(formData: FormData): Promise<void> {
-  const password = formData.get("password") as string;
+  const currentPassword = formData.get("currentPassword") as string;
+  const newPassword = formData.get("newPassword") as string;
+  const confirmPassword = formData.get("confirmPassword") as string;
 
-  if (!password || password.length < 6) {
-    redirect(`/admin/settings?error=${encodeURIComponent("Password must be at least 6 characters.")}`);
+  if (!currentPassword) {
+    redirect(`/admin/settings?error=${encodeURIComponent("Current password is required.")}`);
   }
 
-  const supabase = await createClient();
-  const { error } = await supabase.auth.updateUser({ password });
-
-  if (error) {
-    redirect(`/admin/settings?error=${encodeURIComponent(error.message)}`);
+  if (!newPassword || newPassword.length < 6) {
+    redirect(`/admin/settings?error=${encodeURIComponent("New password must be at least 6 characters.")}`);
   }
 
-  redirect(`/admin/settings?success=Password+updated`);
+  if (newPassword !== confirmPassword) {
+    redirect(`/admin/settings?error=${encodeURIComponent("New password and confirm password do not match.")}`);
+  }
+
+  try {
+    const supabase = await createClient();
+    const { error } = await supabase.auth.updateUser({ password: newPassword });
+
+    if (error) {
+      redirect(`/admin/settings?error=${encodeURIComponent(error.message)}`);
+    }
+  } catch (e) {
+    if (e instanceof Error && e.message.includes("NEXT_REDIRECT")) {
+      throw e;
+    }
+  }
+
+  redirect(`/admin/settings?success=${encodeURIComponent("Password updated successfully.")}`);
 }

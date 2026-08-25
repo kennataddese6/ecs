@@ -100,9 +100,20 @@ export default async function AccountPage({
             <CardContent className="pt-2">
               <form action={updateCustomerPasswordAction} className="space-y-3">
                 <div className="space-y-1">
-                  <label className="text-xs font-semibold">New Password</label>
-                  <Input name="password" type="password" placeholder="••••••••" required minLength={6} />
+                  <label className="text-xs font-semibold">Current Password</label>
+                  <Input name="currentPassword" type="password" placeholder="••••••••" required />
                 </div>
+
+                <div className="space-y-1">
+                  <label className="text-xs font-semibold">New Password</label>
+                  <Input name="newPassword" type="password" placeholder="••••••••" required minLength={6} />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-xs font-semibold">Confirm New Password</label>
+                  <Input name="confirmPassword" type="password" placeholder="••••••••" required minLength={6} />
+                </div>
+
                 <Button type="submit" size="sm" variant="secondary" className="w-full">
                   Update Password
                 </Button>

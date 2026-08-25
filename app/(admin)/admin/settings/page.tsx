@@ -5,8 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ShieldCheck, KeyRound } from "lucide-react";
 
-export default async function AdminSettingsPage() {
+export default async function AdminSettingsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string; success?: string }>;
+}) {
   const { user } = await requireAdmin();
+  const params = await searchParams;
 
   return (
     <div className="max-w-2xl space-y-6">
@@ -16,6 +21,18 @@ export default async function AdminSettingsPage() {
           Manage your account credentials and system configuration.
         </p>
       </div>
+
+      {params.error && (
+        <div className="p-4 rounded-xl bg-destructive/10 text-destructive text-sm font-medium border border-destructive/20">
+          {params.error}
+        </div>
+      )}
+
+      {params.success && (
+        <div className="p-4 rounded-xl bg-emerald-500/10 text-emerald-500 text-sm font-medium border border-emerald-500/20">
+          {params.success}
+        </div>
+      )}
 
       <Card>
         <CardHeader className="flex flex-row items-center space-x-3 pb-2">
@@ -42,8 +59,18 @@ export default async function AdminSettingsPage() {
         <CardContent>
           <form action={updatePasswordAction} className="space-y-4">
             <div className="space-y-2">
+              <label className="text-sm font-semibold">Current Password</label>
+              <Input name="currentPassword" type="password" placeholder="••••••••" required />
+            </div>
+
+            <div className="space-y-2">
               <label className="text-sm font-semibold">New Password</label>
-              <Input name="password" type="password" placeholder="••••••••" required minLength={6} />
+              <Input name="newPassword" type="password" placeholder="••••••••" required minLength={6} />
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-semibold">Confirm New Password</label>
+              <Input name="confirmPassword" type="password" placeholder="••••••••" required minLength={6} />
             </div>
 
             <Button type="submit">Update Password</Button>
