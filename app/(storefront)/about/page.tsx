@@ -36,7 +36,7 @@ export default function AboutPage() {
           </h2>
           <div className="space-y-4 text-muted-foreground text-base leading-relaxed">
             <p>
-              Enat Market represents care, warmth, and quality. We carefully curate products across electronics, apparel, lifestyle items, and daily goods.
+              Enat Market represents care, warmth, and quality. We carefully curate products across coffee beans, Habesha Kemis apparel, gourmet spices, and daily goods.
             </p>
             <p>
               We prioritize authenticity, reliable delivery, and customer satisfaction above all else. Every item in our store is inspected to guarantee high standards.
@@ -46,8 +46,8 @@ export default function AboutPage() {
 
         <div className="relative aspect-square sm:aspect-video lg:aspect-square rounded-3xl overflow-hidden border border-border shadow-xl bg-muted">
           <Image
-            src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?q=80&w=1200&auto=format&fit=crop"
-            alt="Enat Market Curated Storefront"
+            src="/habesha-cloth-1.png"
+            alt="Enat Market Habesha Kemis Dress"
             fill
             className="object-cover"
           />
@@ -101,7 +101,7 @@ export default function AboutPage() {
       <section className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-primary/10 via-card to-card border border-primary/20 p-12 sm:p-16 text-center space-y-6 shadow-xl">
         <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">Explore the Enat Market Catalog</h2>
         <p className="text-muted-foreground text-sm sm:text-base max-w-xl mx-auto">
-          Browse our curated selection of quality electronics, apparel, artisan accessories, and lifestyle goods.
+          Browse our curated selection of quality coffee, Habesha Kemis apparel, Niter Kibe butter, and lifestyle goods.
         </p>
         <Button size="lg" className="font-bold shadow-lg shadow-primary/25" asChild>
           <Link href="/shop">

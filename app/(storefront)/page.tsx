@@ -31,8 +31,8 @@ export default async function HomePage() {
 
   const categoryVisuals: Record<string, string> = {
     coffee: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=800&auto=format&fit=crop",
-    apparel: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=800&auto=format&fit=crop",
-    spices: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?q=80&w=800&auto=format&fit=crop",
+    apparel: "/habesha-cloth.png",
+    spices: "https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?q=80&w=800&auto=format&fit=crop",
     crafts: "https://images.unsplash.com/photo-1606744824163-985d376605aa?q=80&w=800&auto=format&fit=crop",
   };
 
@@ -179,7 +179,7 @@ export default async function HomePage() {
       <section className="relative overflow-hidden rounded-3xl bg-card border border-border p-8 sm:p-16 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center shadow-xl">
         <div className="relative aspect-square sm:aspect-video lg:aspect-square rounded-2xl overflow-hidden border border-border bg-muted">
           <Image
-            src="https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=1200&auto=format&fit=crop"
+            src="/habesha-cloth.png"
             alt="Authentic Habesha Kemis Weaving"
             fill
             className="object-cover"
