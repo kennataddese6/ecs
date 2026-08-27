@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { createNewsAction } from "@/lib/actions/admin-news";
+import { ImageUploadInput } from "@/components/admin/image-upload-input";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowLeft } from "lucide-react";
@@ -21,12 +22,12 @@ export default function NewNewsArticlePage() {
       <form action={createNewsAction} className="space-y-4 bg-card border border-border p-6 rounded-xl shadow-sm">
         <div className="space-y-2">
           <label className="text-sm font-semibold">Title</label>
-          <Input name="title" placeholder="Summer Collection Release Announcement" required />
+          <Input name="title" placeholder="The Art of Coffee Ceremony" required />
         </div>
 
         <div className="space-y-2">
           <label className="text-sm font-semibold">Slug</label>
-          <Input name="slug" placeholder="summer-collection-release" required />
+          <Input name="slug" placeholder="art-of-coffee-ceremony" required />
         </div>
 
         <div className="space-y-2">
@@ -38,10 +39,11 @@ export default function NewNewsArticlePage() {
           />
         </div>
 
-        <div className="space-y-2">
-          <label className="text-sm font-semibold">Featured Image URL</label>
-          <Input name="featuredImage" placeholder="https://..." />
-        </div>
+        <ImageUploadInput
+          label="Featured Article Image (Upload File to Supabase Storage or URL)"
+          name="featuredImage"
+          fileInputName="imageFile"
+        />
 
         <div className="space-y-2">
           <label className="text-sm font-semibold">Content (HTML / Markdown)</label>

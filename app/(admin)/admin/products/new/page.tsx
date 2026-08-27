@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getAllAdminCategories } from "@/lib/services/admin";
 import { createProductAction } from "@/lib/actions/admin-products";
+import { ImageUploadInput } from "@/components/admin/image-upload-input";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowLeft } from "lucide-react";
@@ -35,27 +36,24 @@ export default async function NewProductPage({
       <form action={createProductAction} className="space-y-4 bg-card border border-border p-6 rounded-xl shadow-sm">
         <div className="space-y-2">
           <label className="text-sm font-semibold">Product Name</label>
-          <Input name="name" placeholder="Premium Leather Boots" required />
+          <Input name="name" placeholder="Yirgacheffe Specialty Coffee" required />
         </div>
 
         <div className="space-y-2">
           <label className="text-sm font-semibold">Slug</label>
-          <Input name="slug" placeholder="premium-leather-boots" required />
+          <Input name="slug" placeholder="yirgacheffe-specialty-coffee" required />
         </div>
 
-        <div className="space-y-2">
-          <label className="text-sm font-semibold">Primary Image URL</label>
-          <Input name="imageUrl" placeholder="https://images.unsplash.com/photo-..." />
-        </div>
+        <ImageUploadInput label="Product Image (Upload File to Supabase Storage or URL)" name="imageUrl" fileInputName="imageFile" />
 
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <label className="text-sm font-semibold">Price ($)</label>
-            <Input name="price" type="number" step="0.01" placeholder="149.99" required />
+            <label className="text-sm font-semibold">Price (£)</label>
+            <Input name="price" type="number" step="0.01" placeholder="28.50" required />
           </div>
           <div className="space-y-2">
-            <label className="text-sm font-semibold">Compare At Price ($)</label>
-            <Input name="compareAtPrice" type="number" step="0.01" placeholder="199.99" />
+            <label className="text-sm font-semibold">Compare At Price (£)</label>
+            <Input name="compareAtPrice" type="number" step="0.01" placeholder="34.00" />
           </div>
         </div>
 
@@ -66,7 +64,7 @@ export default async function NewProductPage({
           </div>
           <div className="space-y-2">
             <label className="text-sm font-semibold">SKU</label>
-            <Input name="sku" placeholder="BOOT-001" />
+            <Input name="sku" placeholder="ETH-COF-001" />
           </div>
         </div>
 

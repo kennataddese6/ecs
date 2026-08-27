@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getProductById } from "@/lib/services/products";
 import { getAllAdminCategories } from "@/lib/services/admin";
 import { updateProductAction } from "@/lib/actions/admin-products";
+import { ImageUploadInput } from "@/components/admin/image-upload-input";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowLeft } from "lucide-react";
@@ -55,18 +56,20 @@ export default async function EditProductPage({
           <Input name="slug" defaultValue={product.slug} required />
         </div>
 
-        <div className="space-y-2">
-          <label className="text-sm font-semibold">Primary Image URL</label>
-          <Input name="imageUrl" defaultValue={primaryImage} placeholder="https://images.unsplash.com/photo-..." />
-        </div>
+        <ImageUploadInput
+          label="Product Image (Upload File to Supabase Storage or URL)"
+          name="imageUrl"
+          fileInputName="imageFile"
+          defaultValue={primaryImage}
+        />
 
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <label className="text-sm font-semibold">Price ($)</label>
+            <label className="text-sm font-semibold">Price (£)</label>
             <Input name="price" type="number" step="0.01" defaultValue={product.price} required />
           </div>
           <div className="space-y-2">
-            <label className="text-sm font-semibold">Compare At Price ($)</label>
+            <label className="text-sm font-semibold">Compare At Price (£)</label>
             <Input name="compareAtPrice" type="number" step="0.01" defaultValue={product.compare_at_price || ""} />
           </div>
         </div>

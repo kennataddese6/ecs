@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { requireAdmin } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { uploadImageToStorage } from "@/lib/supabase/storage";
 
 export async function createNewsAction(formData: FormData): Promise<void> {
   await requireAdmin();
@@ -13,8 +14,17 @@ export async function createNewsAction(formData: FormData): Promise<void> {
   const slug = formData.get("slug") as string;
   const excerpt = formData.get("excerpt") as string;
   const content = formData.get("content") as string;
-  const featuredImage = formData.get("featuredImage") as string;
   const published = formData.get("published") === "true";
+
+  const imageFile = formData.get("imageFile") as File | null;
+  let featuredImage = (formData.get("featuredImage") as string) || "";
+
+  if (imageFile && imageFile.size > 0) {
+    const uploadedUrl = await uploadImageToStorage(imageFile, "news-images");
+    if (uploadedUrl) {
+      featuredImage = uploadedUrl;
+    }
+  }
 
   if (!title || !slug || !content) {
     redirect(`/admin/news/new?error=${encodeURIComponent("Title, slug, and content are required.")}`);
@@ -47,8 +57,17 @@ export async function updateNewsAction(articleId: string, formData: FormData): P
   const slug = formData.get("slug") as string;
   const excerpt = formData.get("excerpt") as string;
   const content = formData.get("content") as string;
-  const featuredImage = formData.get("featuredImage") as string;
   const published = formData.get("published") === "true";
+
+  const imageFile = formData.get("imageFile") as File | null;
+  let featuredImage = (formData.get("featuredImage") as string) || "";
+
+  if (imageFile && imageFile.size > 0) {
+    const uploadedUrl = await uploadImageToStorage(imageFile, "news-images");
+    if (uploadedUrl) {
+      featuredImage = uploadedUrl;
+    }
+  }
 
   const { error } = await supabase
     .from("news")

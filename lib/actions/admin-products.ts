@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { requireAdmin } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { uploadImageToStorage } from "@/lib/supabase/storage";
 
 export async function createProductAction(formData: FormData): Promise<void> {
   await requireAdmin();
@@ -19,9 +20,18 @@ export async function createProductAction(formData: FormData): Promise<void> {
   const stockQuantity = parseInt(formData.get("stockQuantity") as string, 10) || 0;
   const sku = formData.get("sku") as string;
   const categoryId = (formData.get("categoryId") as string) || null;
-  const imageUrl = formData.get("imageUrl") as string;
   const featured = formData.get("featured") === "true";
   const active = formData.get("active") === "true";
+
+  const imageFile = formData.get("imageFile") as File | null;
+  let imageUrl = (formData.get("imageUrl") as string) || "";
+
+  if (imageFile && imageFile.size > 0) {
+    const uploadedUrl = await uploadImageToStorage(imageFile, "product-images");
+    if (uploadedUrl) {
+      imageUrl = uploadedUrl;
+    }
+  }
 
   if (!name || !slug || isNaN(price)) {
     redirect(`/admin/products/new?error=${encodeURIComponent("Name, slug, and valid price are required.")}`);
@@ -75,9 +85,18 @@ export async function updateProductAction(productId: string, formData: FormData)
   const stockQuantity = parseInt(formData.get("stockQuantity") as string, 10) || 0;
   const sku = formData.get("sku") as string;
   const categoryId = (formData.get("categoryId") as string) || null;
-  const imageUrl = formData.get("imageUrl") as string;
   const featured = formData.get("featured") === "true";
   const active = formData.get("active") === "true";
+
+  const imageFile = formData.get("imageFile") as File | null;
+  let imageUrl = (formData.get("imageUrl") as string) || "";
+
+  if (imageFile && imageFile.size > 0) {
+    const uploadedUrl = await uploadImageToStorage(imageFile, "product-images");
+    if (uploadedUrl) {
+      imageUrl = uploadedUrl;
+    }
+  }
 
   const { error } = await supabase
     .from("products")

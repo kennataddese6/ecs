@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { getNewsBySlug } from "@/lib/services/news";
 import { updateNewsAction } from "@/lib/actions/admin-news";
+import { ImageUploadInput } from "@/components/admin/image-upload-input";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowLeft } from "lucide-react";
@@ -12,9 +13,8 @@ export default async function EditNewsArticlePage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const supabase = await createClient();
+  const article = await getNewsBySlug(id);
 
-  const { data: article } = await supabase.from("news").select("*").eq("id", id).single();
   if (!article) notFound();
 
   const updateWithId = updateNewsAction.bind(null, id);
@@ -52,10 +52,12 @@ export default async function EditNewsArticlePage({
           />
         </div>
 
-        <div className="space-y-2">
-          <label className="text-sm font-semibold">Featured Image URL</label>
-          <Input name="featuredImage" defaultValue={article.featured_image || ""} />
-        </div>
+        <ImageUploadInput
+          label="Featured Article Image (Upload File to Supabase Storage or URL)"
+          name="featuredImage"
+          fileInputName="imageFile"
+          defaultValue={article.featured_image || ""}
+        />
 
         <div className="space-y-2">
           <label className="text-sm font-semibold">Content (HTML / Markdown)</label>
