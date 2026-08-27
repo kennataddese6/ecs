@@ -95,6 +95,8 @@ export interface Database {
           category_id: string | null;
           featured: boolean;
           active: boolean;
+          is_deliverable?: boolean;
+          delivery_fee_per_unit?: number;
           created_at: string;
           updated_at: string;
         };
@@ -110,6 +112,8 @@ export interface Database {
           category_id?: string | null;
           featured?: boolean;
           active?: boolean;
+          is_deliverable?: boolean;
+          delivery_fee_per_unit?: number;
           created_at?: string;
           updated_at?: string;
         };
@@ -125,6 +129,8 @@ export interface Database {
           category_id?: string | null;
           featured?: boolean;
           active?: boolean;
+          is_deliverable?: boolean;
+          delivery_fee_per_unit?: number;
           created_at?: string;
           updated_at?: string;
         };

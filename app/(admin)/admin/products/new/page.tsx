@@ -1,10 +1,10 @@
+import Link from "next/link";
+import { getAllAdminCategories } from "@/lib/services/admin";
+import { createProductAction } from "@/lib/actions/admin-products";
 import { ImageUploadInput } from "@/components/admin/image-upload-input";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { createProductAction } from "@/lib/actions/admin-products";
-import { getAllAdminCategories } from "@/lib/services/admin";
-import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
+import { ArrowLeft, Truck } from "lucide-react";
 
 export default async function NewProductPage({
   searchParams,
@@ -54,6 +54,44 @@ export default async function NewProductPage({
           <div className="space-y-2">
             <label className="text-sm font-semibold">Compare At Price (£)</label>
             <Input name="compareAtPrice" type="number" step="0.01" placeholder="34.00" />
+          </div>
+        </div>
+
+        {/* UK Delivery & Shipping Settings */}
+        <div className="p-4 rounded-xl bg-muted/40 border border-border space-y-3">
+          <div className="flex items-center space-x-2">
+            <Truck className="h-4 w-4 text-primary" />
+            <h3 className="text-xs font-bold uppercase tracking-wider">UK Delivery & Shipping Pricing</h3>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <label className="text-xs font-semibold">Delivery Availability</label>
+              <label className="flex items-center space-x-2 text-sm font-medium cursor-pointer pt-1">
+                <input
+                  type="checkbox"
+                  name="isDeliverable"
+                  value="true"
+                  defaultChecked
+                  className="rounded border-input text-primary"
+                />
+                <span>Deliverable via UK Courier</span>
+              </label>
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold">Delivery Fee per Unit (£)</label>
+              <Input
+                name="deliveryFeePerUnit"
+                type="number"
+                step="0.01"
+                defaultValue="5.00"
+                placeholder="5.00"
+              />
+              <p className="text-[10px] text-muted-foreground">
+                e.g. £5 per unit adds £5 for 1 item, £10 for 2 items at checkout. Set 0 for free delivery.
+              </p>
+            </div>
           </div>
         </div>
 

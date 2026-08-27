@@ -26,16 +26,16 @@ export async function generateMetadata({
 
   return {
     title: product.name,
-    description: product.description || `Buy ${product.name} at LUMEN Store.`,
+    description: product.description || `Buy ${product.name} at Enat Market.`,
     openGraph: {
-      title: `${product.name} | LUMEN Store`,
-      description: product.description || `Buy ${product.name} at LUMEN Store.`,
+      title: `${product.name} | Enat Market`,
+      description: product.description || `Buy ${product.name} at Enat Market.`,
       images: [{ url: imageUrl, alt: product.name }],
     },
     twitter: {
       card: "summary_large_image",
-      title: `${product.name} | LUMEN Store`,
-      description: product.description || `Buy ${product.name} at LUMEN Store.`,
+      title: `${product.name} | Enat Market`,
+      description: product.description || `Buy ${product.name} at Enat Market.`,
       images: [imageUrl],
     },
   };
@@ -63,6 +63,9 @@ export default async function ProductDetailPage({
     ? Math.round(((product.compare_at_price! - product.price) / product.compare_at_price!) * 100)
     : 0;
 
+  const isDeliverable = product.is_deliverable ?? true;
+  const deliveryFee = product.delivery_fee_per_unit ?? 0;
+
   const mainImageUrl = product.product_images?.[0]?.image_url || "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=800&auto=format&fit=crop";
 
   const jsonLd = {
@@ -75,7 +78,7 @@ export default async function ProductDetailPage({
     offers: {
       "@type": "Offer",
       price: product.price,
-      priceCurrency: "USD",
+      priceCurrency: "GBP",
       availability: isOutOfStock
         ? "https://schema.org/OutOfStock"
         : "https://schema.org/InStock",
@@ -134,7 +137,7 @@ export default async function ProductDetailPage({
             )}
           </div>
 
-          <div>
+          <div className="flex flex-wrap gap-2">
             {isOutOfStock ? (
               <Badge variant="outline" className="text-destructive border-destructive/40 font-semibold px-3 py-1 text-sm">
                 Out of Stock
@@ -146,6 +149,20 @@ export default async function ProductDetailPage({
             ) : (
               <Badge variant="outline" className="text-emerald-500 border-emerald-500/40 font-semibold px-3 py-1 text-sm">
                 In Stock & Ready to Ship
+              </Badge>
+            )}
+
+            {!isDeliverable ? (
+              <Badge variant="outline" className="text-destructive border-destructive/40 font-semibold px-3 py-1 text-sm">
+                In-Store Pickup Only
+              </Badge>
+            ) : deliveryFee === 0 ? (
+              <Badge variant="outline" className="text-emerald-500 border-emerald-500/40 font-semibold px-3 py-1 text-sm">
+                Free UK Courier Shipping
+              </Badge>
+            ) : (
+              <Badge variant="outline" className="text-primary border-primary/40 font-semibold px-3 py-1 text-sm">
+                +£{deliveryFee.toFixed(2)} UK Delivery per unit
               </Badge>
             )}
           </div>
@@ -167,15 +184,21 @@ export default async function ProductDetailPage({
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-border text-xs text-muted-foreground font-medium">
             <div className="flex items-center space-x-2">
               <Truck className="h-4 w-4 text-primary flex-shrink-0" />
-              <span>Free Express Shipping</span>
+              <span>
+                {!isDeliverable
+                  ? "In-Store Pickup"
+                  : deliveryFee === 0
+                  ? "Free UK Express Shipping"
+                  : `£${deliveryFee.toFixed(2)} UK Delivery / Unit`}
+              </span>
             </div>
             <div className="flex items-center space-x-2">
               <ShieldCheck className="h-4 w-4 text-primary flex-shrink-0" />
-              <span>2-Year Full Warranty</span>
+              <span>100% Authentic Quality</span>
             </div>
             <div className="flex items-center space-x-2">
               <RotateCcw className="h-4 w-4 text-primary flex-shrink-0" />
-              <span>30-Day Easy Returns</span>
+              <span>Easy Return Policy</span>
             </div>
           </div>
         </div>

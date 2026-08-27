@@ -22,6 +22,8 @@ export async function createProductAction(formData: FormData): Promise<void> {
   const categoryId = (formData.get("categoryId") as string) || null;
   const featured = formData.get("featured") === "true";
   const active = formData.get("active") === "true";
+  const isDeliverable = formData.get("isDeliverable") === "true";
+  const deliveryFeePerUnit = parseFloat((formData.get("deliveryFeePerUnit") as string) || "0");
 
   const imageFile = formData.get("imageFile") as File | null;
   let imageUrl = (formData.get("imageUrl") as string) || "";
@@ -50,6 +52,8 @@ export async function createProductAction(formData: FormData): Promise<void> {
       category_id: categoryId,
       featured,
       active,
+      is_deliverable: isDeliverable,
+      delivery_fee_per_unit: isNaN(deliveryFeePerUnit) ? 0 : deliveryFeePerUnit,
     })
     .select("id")
     .single();
@@ -87,6 +91,8 @@ export async function updateProductAction(productId: string, formData: FormData)
   const categoryId = (formData.get("categoryId") as string) || null;
   const featured = formData.get("featured") === "true";
   const active = formData.get("active") === "true";
+  const isDeliverable = formData.get("isDeliverable") === "true";
+  const deliveryFeePerUnit = parseFloat((formData.get("deliveryFeePerUnit") as string) || "0");
 
   const imageFile = formData.get("imageFile") as File | null;
   let imageUrl = (formData.get("imageUrl") as string) || "";
@@ -111,6 +117,8 @@ export async function updateProductAction(productId: string, formData: FormData)
       category_id: categoryId,
       featured,
       active,
+      is_deliverable: isDeliverable,
+      delivery_fee_per_unit: isNaN(deliveryFeePerUnit) ? 0 : deliveryFeePerUnit,
     })
     .eq("id", productId);
 

@@ -17,6 +17,9 @@ export function ProductCard({ product }: { product: ProductWithImages }) {
     ? Math.round(((product.compare_at_price! - product.price) / product.compare_at_price!) * 100)
     : 0;
 
+  const isDeliverable = product.is_deliverable ?? true;
+  const deliveryFee = product.delivery_fee_per_unit ?? 0;
+
   return (
     <Card className="group overflow-hidden flex flex-col h-full hover:border-primary/50 transition-all duration-300 shadow-sm hover:shadow-md bg-card">
       <Link href={`/products/${product.slug}`} className="relative aspect-square overflow-hidden bg-muted block">
@@ -72,8 +75,18 @@ export function ProductCard({ product }: { product: ProductWithImages }) {
           </Link>
         </div>
 
-        <div>
+        <div className="flex items-baseline justify-between pt-1">
           <PriceDisplay price={product.price} compareAtPrice={product.compare_at_price} />
+
+          <span className="text-[11px] font-semibold text-muted-foreground">
+            {!isDeliverable ? (
+              <span className="text-destructive font-bold">Pickup Only</span>
+            ) : deliveryFee === 0 ? (
+              <span className="text-emerald-500 font-bold">Free UK Delivery</span>
+            ) : (
+              `+£${deliveryFee.toFixed(2)} UK Delivery`
+            )}
+          </span>
         </div>
       </CardContent>
 
