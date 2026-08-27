@@ -55,7 +55,7 @@ const DEMO_ADMIN_PRODUCTS = [
   },
 ];
 
-const DEMO_ADMIN_ORDERS: any[] = [];
+const DEMO_ADMIN_ORDERS: Record<string, unknown>[] = [];
 
 export async function getAdminStats() {
   try {

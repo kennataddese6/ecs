@@ -9,13 +9,11 @@ import { CartItemWithProduct } from "@/lib/types";
 import { CartItem } from "@/components/shop/cart-item";
 import { PriceDisplay } from "@/components/shop/price-display";
 
+const emptySubscribe = () => () => {};
+
 export function CartDrawer({ items }: { items: CartItemWithProduct[] }) {
   const [isOpen, setIsOpen] = React.useState(false);
-  const [mounted, setMounted] = React.useState(false);
-
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = React.useSyncExternalStore(emptySubscribe, () => true, () => false);
 
   const totalItems = items.reduce((acc, item) => acc + item.quantity, 0);
   const subtotal = items.reduce(

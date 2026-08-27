@@ -63,14 +63,14 @@ export default async function AdminProductsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-extrabold tracking-tight">Products Catalog</h1>
           <p className="text-sm text-muted-foreground mt-1">
             Manage inventory, pricing, and active store products.
           </p>
         </div>
-        <Button asChild>
+        <Button asChild className="w-full sm:w-auto">
           <Link href="/admin/products/new">
             <Plus className="h-4 w-4 mr-2" /> Add Product
           </Link>

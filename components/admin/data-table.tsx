@@ -33,29 +33,31 @@ export function DataTable<T extends { id: string }>({
   }
 
   return (
-    <div className="rounded-xl border border-border bg-card overflow-hidden">
-      <Table>
-        <TableHeader>
-          <TableRow className="bg-muted/50">
-            {columns.map((col, idx) => (
-              <TableHead key={idx} className="font-semibold">
-                {col.header}
-              </TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data.map((row) => (
-            <TableRow key={row.id} className="hover:bg-muted/30 transition-colors">
+    <div className="rounded-xl border border-border bg-card overflow-hidden w-full max-w-full min-w-0">
+      <div className="w-full overflow-x-auto scrollbar-none touch-pan-x">
+        <Table>
+          <TableHeader>
+            <TableRow className="bg-muted/50">
               {columns.map((col, idx) => (
-                <TableCell key={idx}>
-                  {col.cell ? col.cell(row) : col.accessorKey ? String(row[col.accessorKey] ?? "") : null}
-                </TableCell>
+                <TableHead key={idx} className="font-semibold whitespace-nowrap">
+                  {col.header}
+                </TableHead>
               ))}
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {data.map((row) => (
+              <TableRow key={row.id} className="hover:bg-muted/30 transition-colors">
+                {columns.map((col, idx) => (
+                  <TableCell key={idx} className="align-middle">
+                    {col.cell ? col.cell(row) : col.accessorKey ? String(row[col.accessorKey] ?? "") : null}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }

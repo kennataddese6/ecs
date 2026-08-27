@@ -58,7 +58,9 @@ export default async function CategoryShopPage({
         )}
       </div>
 
-      <CategoryNav categories={allCategories} activeSlug={category.slug} />
+      <div className="w-full min-w-0">
+        <CategoryNav categories={allCategories} activeSlug={category.slug} />
+      </div>
 
       <ShopSortControls total={total} />
 

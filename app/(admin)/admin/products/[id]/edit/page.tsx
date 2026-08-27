@@ -61,7 +61,7 @@ export default async function EditProductPage({
           defaultValue={primaryImage}
         />
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-2">
             <label className="text-sm font-semibold">Price (£)</label>
             <Input name="price" type="number" step="0.01" defaultValue={product.price} required />
@@ -110,7 +110,7 @@ export default async function EditProductPage({
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-2">
             <label className="text-sm font-semibold">Stock Quantity</label>
             <Input name="stockQuantity" type="number" defaultValue={product.stock_quantity} required />

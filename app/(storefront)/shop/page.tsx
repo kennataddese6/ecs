@@ -44,9 +44,11 @@ export default async function ShopCatalogPage({
         </p>
       </div>
 
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-        <CategoryNav categories={categories} />
-        <div className="w-full sm:w-72">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 w-full min-w-0">
+        <div className="flex-1 min-w-0 w-full">
+          <CategoryNav categories={categories} />
+        </div>
+        <div className="w-full sm:w-72 shrink-0">
           <SearchBar placeholder="Search catalog..." />
         </div>
       </div>

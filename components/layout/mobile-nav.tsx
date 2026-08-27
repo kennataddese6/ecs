@@ -13,14 +13,12 @@ interface MobileNavProps {
   totalCartItems: number;
 }
 
+const emptySubscribe = () => () => {};
+
 export function MobileNav({ user }: MobileNavProps) {
   const [isOpen, setIsOpen] = React.useState(false);
   const [isSearchOpen, setIsSearchOpen] = React.useState(false);
-  const [mounted, setMounted] = React.useState(false);
-
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = React.useSyncExternalStore(emptySubscribe, () => true, () => false);
 
   const dashboardHref = user?.isAdmin ? "/admin" : "/account";
   const dashboardLabel = user?.isAdmin ? "Admin Dashboard" : "Dashboard";

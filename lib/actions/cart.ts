@@ -216,7 +216,7 @@ export async function updateCartQuantityAction(cartItemId: string, newQuantity: 
   const existingCookie = cookieStore.get("lumen_guest_cart")?.value;
   if (existingCookie) {
     try {
-      let cookieItems: Array<{ id: string; product_id: string; quantity: number }> = JSON.parse(existingCookie);
+      const cookieItems: Array<{ id: string; product_id: string; quantity: number }> = JSON.parse(existingCookie);
       const targetItem = cookieItems.find((i) => i.id === cartItemId || i.product_id === cartItemId);
       if (targetItem) {
         targetItem.quantity = newQuantity;

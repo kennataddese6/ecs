@@ -137,6 +137,17 @@ body {
   border: 1px solid hsl(var(--border));
 }
 
+/* Custom scrollbar utilities */
+.no-scrollbar::-webkit-scrollbar,
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar,
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 .gradient-text {
   background: linear-gradient(135deg, #b56d29 0%, #042b12 100%);
   -webkit-background-clip: text;
@@ -148,3 +159,4 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+

@@ -7,7 +7,7 @@ import { PriceDisplay } from "@/components/shop/price-display";
 import { updateOrderStatusAction } from "@/lib/actions/admin-orders";
 import Link from "next/link";
 import { ShippingAddress } from "@/lib/types";
-import { ExternalLink, FileCheck, Building2, CreditCard, CheckCircle2, Truck } from "lucide-react";
+import { ExternalLink, FileCheck, Building2, CreditCard, CheckCircle2 } from "lucide-react";
 
 type OrderRow = Awaited<ReturnType<typeof getAllAdminOrders>>[number];
 
@@ -202,20 +202,22 @@ export default async function AdminOrdersPage({
         </div>
       )}
 
-      <div className="flex space-x-2 border-b border-border pb-3 overflow-x-auto text-xs font-semibold">
-        {["all", "pending", "processing", "shipped", "delivered", "completed", "cancelled"].map((st) => (
-          <Link
-            key={st}
-            href={`/admin/orders${st === "all" ? "" : `?status=${st}`}`}
-            className={`px-3 py-1.5 rounded-lg capitalize transition-colors whitespace-nowrap ${
-              currentStatus === st
-                ? "bg-primary text-primary-foreground font-bold shadow-sm"
-                : "bg-muted text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            {st}
-          </Link>
-        ))}
+      <div className="w-full min-w-0 overflow-hidden py-1">
+        <div className="flex items-center space-x-2 border-b border-border pb-3 overflow-x-auto scrollbar-none touch-pan-x text-xs font-semibold w-full min-w-0">
+          {["all", "pending", "processing", "shipped", "delivered", "completed", "cancelled"].map((st) => (
+            <Link
+              key={st}
+              href={`/admin/orders${st === "all" ? "" : `?status=${st}`}`}
+              className={`shrink-0 px-3 py-1.5 rounded-lg capitalize transition-colors whitespace-nowrap ${
+                currentStatus === st
+                  ? "bg-primary text-primary-foreground font-bold shadow-sm"
+                  : "bg-muted text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              {st}
+            </Link>
+          ))}
+        </div>
       </div>
 
       <DataTable columns={columns} data={orders} emptyTitle="No customer orders matching status filter" />
