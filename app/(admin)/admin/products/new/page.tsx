@@ -1,10 +1,10 @@
-import Link from "next/link";
-import { getAllAdminCategories } from "@/lib/services/admin";
-import { createProductAction } from "@/lib/actions/admin-products";
 import { ImageUploadInput } from "@/components/admin/image-upload-input";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { createProductAction } from "@/lib/actions/admin-products";
+import { getAllAdminCategories } from "@/lib/services/admin";
 import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
 
 export default async function NewProductPage({
   searchParams,
@@ -44,7 +44,7 @@ export default async function NewProductPage({
           <Input name="slug" placeholder="yirgacheffe-specialty-coffee" required />
         </div>
 
-        <ImageUploadInput label="Product Image (Upload File to Supabase Storage or URL)" name="imageUrl" fileInputName="imageFile" />
+        <ImageUploadInput label="Product Image" name="imageUrl" fileInputName="imageFile" />
 
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">

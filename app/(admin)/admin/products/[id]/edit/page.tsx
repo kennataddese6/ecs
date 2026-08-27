@@ -1,12 +1,12 @@
-import Link from "next/link";
-import { notFound } from "next/navigation";
-import { getProductById } from "@/lib/services/products";
-import { getAllAdminCategories } from "@/lib/services/admin";
-import { updateProductAction } from "@/lib/actions/admin-products";
 import { ImageUploadInput } from "@/components/admin/image-upload-input";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { updateProductAction } from "@/lib/actions/admin-products";
+import { getAllAdminCategories } from "@/lib/services/admin";
+import { getProductById } from "@/lib/services/products";
 import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
+import { notFound } from "next/navigation";
 
 export default async function EditProductPage({
   params,
@@ -57,7 +57,7 @@ export default async function EditProductPage({
         </div>
 
         <ImageUploadInput
-          label="Product Image (Upload File to Supabase Storage or URL)"
+          label="Product Image"
           name="imageUrl"
           fileInputName="imageFile"
           defaultValue={primaryImage}

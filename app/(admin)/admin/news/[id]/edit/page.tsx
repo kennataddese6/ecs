@@ -1,11 +1,11 @@
-import Link from "next/link";
-import { notFound } from "next/navigation";
-import { getNewsBySlug } from "@/lib/services/news";
-import { updateNewsAction } from "@/lib/actions/admin-news";
 import { ImageUploadInput } from "@/components/admin/image-upload-input";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { updateNewsAction } from "@/lib/actions/admin-news";
+import { getNewsBySlug } from "@/lib/services/news";
 import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
+import { notFound } from "next/navigation";
 
 export default async function EditNewsArticlePage({
   params,
@@ -53,7 +53,7 @@ export default async function EditNewsArticlePage({
         </div>
 
         <ImageUploadInput
-          label="Featured Article Image (Upload File to Supabase Storage or URL)"
+          label="Featured Article Image"
           name="featuredImage"
           fileInputName="imageFile"
           defaultValue={article.featured_image || ""}

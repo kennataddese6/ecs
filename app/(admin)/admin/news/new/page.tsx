@@ -1,9 +1,9 @@
-import Link from "next/link";
-import { createNewsAction } from "@/lib/actions/admin-news";
 import { ImageUploadInput } from "@/components/admin/image-upload-input";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { createNewsAction } from "@/lib/actions/admin-news";
 import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
 
 export default function NewNewsArticlePage() {
   return (
@@ -40,7 +40,7 @@ export default function NewNewsArticlePage() {
         </div>
 
         <ImageUploadInput
-          label="Featured Article Image (Upload File to Supabase Storage or URL)"
+          label="Featured Article Image"
           name="featuredImage"
           fileInputName="imageFile"
         />
