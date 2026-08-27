@@ -7,15 +7,15 @@ interface PriceDisplayProps {
 }
 
 export function PriceDisplay({ price, compareAtPrice, className }: PriceDisplayProps) {
-  const formattedPrice = new Intl.NumberFormat("en-US", {
+  const formattedPrice = new Intl.NumberFormat("en-GB", {
     style: "currency",
-    currency: "USD",
+    currency: "GBP",
   }).format(price);
 
   const formattedComparePrice = compareAtPrice
-    ? new Intl.NumberFormat("en-US", {
+    ? new Intl.NumberFormat("en-GB", {
         style: "currency",
-        currency: "USD",
+        currency: "GBP",
       }).format(compareAtPrice)
     : null;
 

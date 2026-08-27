@@ -13,9 +13,14 @@ export default async function CartPage() {
     (acc, item) => acc + (item.product?.price || 0) * item.quantity,
     0
   );
-  const shipping = subtotal > 100 ? 0 : subtotal > 0 ? 15 : 0;
-  const tax = subtotal * 0.08;
-  const total = subtotal + shipping + tax;
+  const estimatedShipping = items.reduce((acc, item) => {
+    const isDeliverable = item.product?.is_deliverable ?? true;
+    const feePerUnit = item.product?.delivery_fee_per_unit ?? 0;
+    return acc + (isDeliverable ? feePerUnit * item.quantity : 0);
+  }, 0);
+
+  const tax = subtotal * 0.05;
+  const total = subtotal + estimatedShipping + tax;
 
   if (items.length === 0) {
     return (
@@ -50,22 +55,22 @@ export default async function CartPage() {
               <PriceDisplay price={subtotal} />
             </div>
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Estimated Shipping</span>
-              <span>{shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}</span>
+              <span className="text-muted-foreground">Estimated UK Courier Delivery</span>
+              <span className="font-semibold">{estimatedShipping === 0 ? "FREE" : `£${estimatedShipping.toFixed(2)}`}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Estimated Tax (8%)</span>
+              <span className="text-muted-foreground">Estimated Tax (VAT 5%)</span>
               <PriceDisplay price={tax} />
             </div>
             <div className="border-t border-border pt-3 flex justify-between font-bold text-base">
               <span>Total</span>
-              <PriceDisplay price={total} className="text-lg" />
+              <PriceDisplay price={total} className="text-lg text-primary" />
             </div>
           </div>
 
-          <Button size="lg" className="w-full font-semibold" asChild>
+          <Button size="lg" className="w-full font-semibold shadow-md" asChild>
             <Link href="/checkout">
-              Proceed to Checkout <ArrowRight className="ml-2 h-4 w-4" />
+              Proceed to UK Checkout <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
         </div>
