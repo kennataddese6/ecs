@@ -6,13 +6,13 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { PriceDisplay } from "@/components/shop/price-display";
-import { CheckCircle2, Package } from "lucide-react";
+import { CheckCircle2, Package, Building2, FileCheck } from "lucide-react";
 import { ShippingAddress } from "@/lib/types";
 
 export default async function CheckoutSuccessPage({
   searchParams,
 }: {
-  searchParams: Promise<{ session_id?: string; order_id?: string }>;
+  searchParams: Promise<{ session_id?: string; order_id?: string; payment_method?: string }>;
 }) {
   const params = await searchParams;
   const { session_id: sessionId, order_id: orderId } = params;
@@ -52,6 +52,7 @@ export default async function CheckoutSuccessPage({
   }
 
   const shippingAddr = order.shipping_address as unknown as ShippingAddress;
+  const isBankTransfer = order.payment_method === "bank_transfer" || !!order.payment_proof_url;
 
   return (
     <div className="max-w-3xl mx-auto py-12 space-y-8 text-center sm:text-left">
@@ -59,19 +60,49 @@ export default async function CheckoutSuccessPage({
         <div className="h-16 w-16 bg-emerald-500/20 text-emerald-500 rounded-full flex items-center justify-center mx-auto">
           <CheckCircle2 className="h-10 w-10" />
         </div>
-        <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">Order Confirmed!</h1>
-        <p className="text-muted-foreground text-sm max-w-md mx-auto">
-          Thank you for your purchase. We&apos;ve received your order and are preparing it for shipment.
+        <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
+          {isBankTransfer ? "Bank Transfer Order Received!" : "Order Confirmed!"}
+        </h1>
+        <p className="text-muted-foreground text-sm max-w-md mx-auto leading-relaxed">
+          {isBankTransfer
+            ? "Thank you for your order! We have received your purchase and payment proof. Our admin team will verify your transfer and notify you upon dispatch."
+            : "Thank you for your purchase. We've received your order and are preparing it for shipment."}
         </p>
+
         <div className="pt-2 flex flex-wrap justify-center gap-3">
           <Badge variant="secondary" className="text-xs py-1 px-3">
             Order #: {order.order_number}
           </Badge>
           <Badge className="bg-emerald-500 text-white text-xs py-1 px-3">
-            Payment Status: {order.payment_status}
+            Payment Status: {order.payment_status === "pending_verification" ? "Pending Verification (BACS)" : order.payment_status}
           </Badge>
         </div>
       </div>
+
+      {isBankTransfer && (
+        <div className="p-6 rounded-2xl bg-card border border-primary/20 space-y-3 shadow-sm">
+          <div className="flex items-center space-x-2 font-bold text-sm text-foreground">
+            <Building2 className="h-4 w-4 text-primary" />
+            <span>Bank Transfer Reference & Verification Status</span>
+          </div>
+          <p className="text-xs text-muted-foreground leading-relaxed">
+            Your transfer receipt was attached to your order. If you need to re-upload or contact customer support regarding your payment, reach us at <strong>shop@enatmarket.co.uk</strong> or call <strong>07830 682710</strong>.
+          </p>
+          {order.payment_proof_url && (
+            <div className="pt-1">
+              <a
+                href={order.payment_proof_url}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center space-x-1.5 text-xs font-bold text-primary hover:underline bg-primary/10 px-3 py-1 rounded-lg border border-primary/20"
+              >
+                <FileCheck className="h-3.5 w-3.5" />
+                <span>View Uploaded Transfer Receipt</span>
+              </a>
+            </div>
+          )}
+        </div>
+      )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <div className="bg-card border border-border p-6 rounded-2xl space-y-2">
@@ -108,7 +139,7 @@ export default async function CheckoutSuccessPage({
         </div>
 
         <div className="flex justify-between items-center pt-2 font-bold text-base">
-          <span>Total Paid</span>
+          <span>Total Amount</span>
           <PriceDisplay price={order.total} className="text-lg text-primary" />
         </div>
       </div>

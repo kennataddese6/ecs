@@ -88,3 +88,17 @@ export async function getCart(): Promise<{ cartId: string | null; items: CartIte
 
   return { cartId: null, items: [] };
 }
+
+export async function clearCart(cartId?: string | null): Promise<void> {
+  try {
+    const supabase = await createClient();
+    if (cartId && cartId !== "cookie-cart") {
+      await supabase.from("cart_items").delete().eq("cart_id", cartId);
+    }
+  } catch (e) {}
+
+  try {
+    const cookieStore = await cookies();
+    cookieStore.delete("lumen_guest_cart");
+  } catch (e) {}
+}

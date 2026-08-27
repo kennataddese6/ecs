@@ -1,11 +1,12 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { getCart } from "@/lib/services/cart";
+import { getCart, clearCart } from "@/lib/services/cart";
 import { stripe } from "@/lib/stripe";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { isValidUKPostcode, isValidUKPhoneNumber, formatUKPostcode, formatUKPhoneNumber } from "@/lib/utils/uk-validation";
+import { uploadImageToStorage } from "@/lib/supabase/storage";
 
 export async function createCheckoutSessionAction(formData: FormData): Promise<void> {
   await new Promise((res) => setTimeout(res, 50));
@@ -13,7 +14,9 @@ export async function createCheckoutSessionAction(formData: FormData): Promise<v
   const { data: { user } } = await supabase.auth.getUser();
 
   const fulfillmentMethod = (formData.get("fulfillmentMethod") as string) || "delivery";
+  const paymentMethod = (formData.get("paymentMethod") as string) || "bank_transfer";
   const isCollection = fulfillmentMethod === "collection";
+  const isBankTransfer = paymentMethod === "bank_transfer";
 
   const customerName = (formData.get("customerName") as string) || "";
   const customerEmail = (formData.get("customerEmail") as string) || "";
@@ -23,6 +26,17 @@ export async function createCheckoutSessionAction(formData: FormData): Promise<v
   const state = (formData.get("state") as string) || (isCollection ? "Greater London" : "");
   const postalCode = (formData.get("postalCode") as string) || (isCollection ? "N/A" : "");
   const country = (formData.get("country") as string) || "United Kingdom";
+
+  // Upload proof of payment file if attached
+  const paymentProofFile = formData.get("paymentProofFile") as File | null;
+  let paymentProofUrl: string | null = null;
+
+  if (paymentProofFile && paymentProofFile.size > 0) {
+    const uploadedUrl = await uploadImageToStorage(paymentProofFile, "payment-proofs");
+    if (uploadedUrl) {
+      paymentProofUrl = uploadedUrl;
+    }
+  }
 
   if (!customerName || !customerEmail) {
     redirect(`/checkout?error=${encodeURIComponent("Please complete all required customer details.")}`);
@@ -139,6 +153,7 @@ export async function createCheckoutSessionAction(formData: FormData): Promise<v
   const tax = subtotal * 0.05; // 5% UK VAT rate on eligible items
   const total = subtotal + totalShippingCost + tax;
   const orderNumber = `ORD-UK-${Date.now()}-${Math.floor(1000 + Math.random() * 9000)}`;
+  const initialPaymentStatus = isBankTransfer ? "pending_verification" : "unpaid";
 
   const { data: order, error: orderError } = await supabase
     .from("orders")
@@ -157,12 +172,18 @@ export async function createCheckoutSessionAction(formData: FormData): Promise<v
         fulfillment_method: isCollection ? "In-Person Store Collection" : "UK Courier Delivery",
       },
       status: "pending",
-      payment_status: "unpaid",
+      payment_status: initialPaymentStatus,
+      payment_method: isBankTransfer ? "bank_transfer" : "card",
+      payment_proof_url: paymentProofUrl,
       subtotal,
       shipping_cost: totalShippingCost,
       tax,
       total,
-      notes: isCollection ? "Customer selected In-Person Store Collection." : null,
+      notes: isBankTransfer
+        ? "Order placed via Direct Bank Transfer (Proof Uploaded)."
+        : isCollection
+        ? "Customer selected In-Person Store Collection."
+        : null,
     })
     .select("id")
     .single();
@@ -177,11 +198,20 @@ export async function createCheckoutSessionAction(formData: FormData): Promise<v
     await supabase.from("order_items").insert(orderItemsWithId);
   }
 
+  // Clear cart on successful order creation
+  await clearCart();
+
   const headersList = await headers();
   const host = headersList.get("host") || "localhost:3000";
   const protocol = host.includes("localhost") ? "http" : "https";
   const origin = `${protocol}://${host}`;
 
+  // If Bank Transfer, complete order immediately and redirect to success confirmation page
+  if (isBankTransfer) {
+    redirect(`${origin}/checkout/success?order_id=${finalOrderId}&payment_method=bank_transfer`);
+  }
+
+  // If Card (Stripe), attempt Stripe checkout session creation
   try {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
@@ -202,7 +232,6 @@ export async function createCheckoutSessionAction(formData: FormData): Promise<v
       redirect(session.url);
     }
   } catch (err: unknown) {
-    // If Stripe keys are not set up or offline preview mode, redirect directly to success order page
     redirect(`${origin}/checkout/success?order_id=${finalOrderId}`);
   }
 

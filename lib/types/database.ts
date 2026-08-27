@@ -16,7 +16,7 @@ export type OrderStatus =
   | "cancelled"
   | "refunded";
 
-export type PaymentStatus = "unpaid" | "paid" | "failed" | "refunded";
+export type PaymentStatus = "unpaid" | "paid" | "failed" | "refunded" | "pending_verification";
 
 export interface Database {
   public: {
@@ -224,6 +224,8 @@ export interface Database {
           shipping_address: Json;
           status: OrderStatus;
           payment_status: PaymentStatus;
+          payment_method?: string | null;
+          payment_proof_url?: string | null;
           stripe_payment_intent_id: string | null;
           subtotal: number;
           shipping_cost: number;
@@ -243,6 +245,8 @@ export interface Database {
           shipping_address: Json;
           status?: OrderStatus;
           payment_status?: PaymentStatus;
+          payment_method?: string | null;
+          payment_proof_url?: string | null;
           stripe_payment_intent_id?: string | null;
           subtotal: number;
           shipping_cost?: number;
@@ -262,6 +266,8 @@ export interface Database {
           shipping_address?: Json;
           status?: OrderStatus;
           payment_status?: PaymentStatus;
+          payment_method?: string | null;
+          payment_proof_url?: string | null;
           stripe_payment_intent_id?: string | null;
           subtotal?: number;
           shipping_cost?: number;
