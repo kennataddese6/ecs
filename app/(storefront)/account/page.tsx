@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { User, Package, KeyRound, LogOut } from "lucide-react";
+import { User, Package, KeyRound, LogOut, ShieldCheck } from "lucide-react";
 import { logoutAction, updateCustomerPasswordAction, updateCustomerProfileAction } from "@/lib/actions/auth";
 
 export default async function AccountPage({
@@ -13,6 +13,7 @@ export default async function AccountPage({
 }) {
   const user = await requireUser();
   const params = await searchParams;
+  const isAdmin = user.id === "admin-demo-id" || user.email === "admin@lumen.com" || user.user_metadata?.role === "admin";
 
   return (
     <div className="py-8 max-w-4xl mx-auto space-y-8">
@@ -29,6 +30,25 @@ export default async function AccountPage({
           </Button>
         </form>
       </div>
+
+      {isAdmin && (
+        <div className="p-4 rounded-2xl bg-primary/10 border border-primary/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm">
+          <div className="flex items-center space-x-3">
+            <div className="h-10 w-10 rounded-xl bg-primary text-primary-foreground flex items-center justify-center font-bold">
+              <ShieldCheck className="h-5 w-5" />
+            </div>
+            <div>
+              <h3 className="font-bold text-sm text-foreground">Administrator Account</h3>
+              <p className="text-xs text-muted-foreground">You have full access to products, orders, news, and system settings.</p>
+            </div>
+          </div>
+          <Button size="sm" className="font-bold shadow" asChild>
+            <Link href="/admin">
+              Go to Admin Dashboard &rarr;
+            </Link>
+          </Button>
+        </div>
+      )}
 
       {params.error && (
         <div className="p-4 rounded-xl bg-destructive/10 text-destructive text-sm font-medium border border-destructive/20">

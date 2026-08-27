@@ -3,13 +3,13 @@
 import * as React from "react";
 import ReactDOM from "react-dom";
 import Link from "next/link";
-import { Menu, X, User, Search } from "lucide-react";
+import { Menu, X, LayoutDashboard, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { SearchBar } from "@/components/common/search-bar";
 
 interface MobileNavProps {
-  user: { id: string; email?: string } | null;
+  user: { id: string; email?: string; isAdmin?: boolean } | null;
   totalCartItems: number;
 }
 
@@ -21,6 +21,9 @@ export function MobileNav({ user }: MobileNavProps) {
   React.useEffect(() => {
     setMounted(true);
   }, []);
+
+  const dashboardHref = user?.isAdmin ? "/admin" : "/account";
+  const dashboardLabel = user?.isAdmin ? "Admin Dashboard" : "Dashboard";
 
   const searchOverlay = isSearchOpen && mounted ? (
     ReactDOM.createPortal(
@@ -73,8 +76,8 @@ export function MobileNav({ user }: MobileNavProps) {
 
           {user ? (
             <Button size="sm" asChild onClick={() => setIsOpen(false)}>
-              <Link href="/account">
-                <User className="h-4 w-4 mr-2" /> Account
+              <Link href={dashboardHref}>
+                <LayoutDashboard className="h-4 w-4 mr-2" /> {dashboardLabel}
               </Link>
             </Button>
           ) : (

@@ -6,7 +6,7 @@ import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { CartDrawer } from "@/components/shop/cart-drawer";
 import { SearchBar } from "@/components/common/search-bar";
 import { MobileNav } from "@/components/layout/mobile-nav";
-import { User, LogOut } from "lucide-react";
+import { LayoutDashboard, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { logoutAction } from "@/lib/actions/auth";
 
@@ -14,6 +14,10 @@ export async function Navbar() {
   const user = await getCurrentUser();
   const { items } = await getCart();
   const totalCartItems = items.reduce((acc, item) => acc + item.quantity, 0);
+
+  const isAdmin = user && (user.id === "admin-demo-id" || user.email === "admin@lumen.com" || user.user_metadata?.role === "admin");
+  const dashboardHref = isAdmin ? "/admin" : "/account";
+  const dashboardLabel = isAdmin ? "Admin Dashboard" : "Dashboard";
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border/80 bg-background/80 backdrop-blur-md transition-all">
@@ -64,8 +68,8 @@ export async function Navbar() {
           {user ? (
             <div className="flex items-center space-x-2">
               <Button variant="ghost" size="sm" asChild>
-                <Link href="/account">
-                  <User className="h-4 w-4 mr-1.5" /> Account
+                <Link href={dashboardHref}>
+                  <LayoutDashboard className="h-4 w-4 mr-1.5" /> {dashboardLabel}
                 </Link>
               </Button>
               <form action={logoutAction}>
@@ -84,7 +88,10 @@ export async function Navbar() {
         {/* Mobile Controls & Drawer */}
         <div className="flex md:hidden items-center space-x-2">
           <CartDrawer items={items} />
-          <MobileNav user={user ? { id: user.id, email: user.email } : null} totalCartItems={totalCartItems} />
+          <MobileNav
+            user={user ? { id: user.id, email: user.email, isAdmin: !!isAdmin } : null}
+            totalCartItems={totalCartItems}
+          />
         </div>
       </div>
     </header>
