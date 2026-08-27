@@ -4,6 +4,7 @@ import { getProductById } from "@/lib/services/products";
 import { getAllAdminCategories } from "@/lib/services/admin";
 import { updateProductAction } from "@/lib/actions/admin-products";
 import { ImageUploadInput } from "@/components/admin/image-upload-input";
+import { SubmitButton } from "@/components/common/submit-button";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowLeft, Truck } from "lucide-react";
@@ -160,9 +161,9 @@ export default async function EditProductPage({
           </label>
         </div>
 
-        <Button type="submit" className="w-full pt-2">
+        <SubmitButton className="w-full pt-2" loadingText="Updating Product...">
           Update Product
-        </Button>
+        </SubmitButton>
       </form>
     </div>
   );

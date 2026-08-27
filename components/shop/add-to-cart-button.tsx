@@ -38,7 +38,10 @@ export function AddToCartButton({ productId, quantity = 1, className, ...props }
         {...props}
       >
         {isPending ? (
-          <Loader2 className="h-4 w-4 animate-spin mr-2" />
+          <>
+            <Loader2 className="h-4 w-4 animate-spin mr-2" />
+            <span>Adding to Cart...</span>
+          </>
         ) : added ? (
           <>
             <Check className="h-4 w-4 mr-2" /> Added to Cart
@@ -49,7 +52,7 @@ export function AddToCartButton({ productId, quantity = 1, className, ...props }
           </>
         )}
       </Button>
-      {errorMsg && <p className="text-xs text-destructive text-center">{errorMsg}</p>}
+      {errorMsg && <p className="text-xs text-destructive text-center font-medium">{errorMsg}</p>}
     </div>
   );
 }

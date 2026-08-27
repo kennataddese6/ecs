@@ -1,6 +1,7 @@
 import { requireUser } from "@/lib/auth";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { SubmitButton } from "@/components/common/submit-button";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { User, Package, KeyRound, LogOut, ShieldCheck } from "lucide-react";
@@ -86,12 +87,12 @@ export default async function AccountPage({
 
               <div className="space-y-2">
                 <label className="text-xs font-semibold uppercase tracking-wider">Phone Number</label>
-                <Input name="phone" placeholder="+1 (555) 000-0000" defaultValue={user.user_metadata?.phone || ""} />
+                <Input name="phone" placeholder="07830 682710" defaultValue={user.user_metadata?.phone || ""} />
               </div>
 
-              <Button type="submit" size="sm">
+              <SubmitButton size="sm" loadingText="Saving Profile...">
                 Save Profile Changes
-              </Button>
+              </SubmitButton>
             </form>
           </CardContent>
         </Card>
@@ -134,9 +135,9 @@ export default async function AccountPage({
                   <Input name="confirmPassword" type="password" placeholder="••••••••" required minLength={6} />
                 </div>
 
-                <Button type="submit" size="sm" variant="secondary" className="w-full">
+                <SubmitButton size="sm" variant="secondary" className="w-full" loadingText="Updating Password...">
                   Update Password
-                </Button>
+                </SubmitButton>
               </form>
             </CardContent>
           </Card>

@@ -21,6 +21,7 @@ import {
   Upload,
   FileCheck,
   X,
+  Loader2,
 } from "lucide-react";
 
 interface UKCheckoutFormProps {
@@ -535,11 +536,16 @@ export function UKCheckoutForm({ user, items, error }: UKCheckoutFormProps) {
           disabled={hasNonDeliverable || !isPostcodeValid || !isPhoneValid || isSubmitting}
           className="w-full font-bold shadow-lg shadow-primary/25 h-12 text-base"
         >
-          {isSubmitting
-            ? "Processing Order..."
-            : paymentMethod === "bank_transfer"
-            ? `Submit Bank Transfer Order (£${total.toFixed(2)}) \u2192`
-            : `Pay £${total.toFixed(2)} via Card \u2192`}
+          {isSubmitting ? (
+            <>
+              <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+              <span>Processing Order...</span>
+            </>
+          ) : paymentMethod === "bank_transfer" ? (
+            `Submit Bank Transfer Order (£${total.toFixed(2)}) \u2192`
+          ) : (
+            `Pay £${total.toFixed(2)} via Card \u2192`
+          )}
         </Button>
       </div>
     </form>

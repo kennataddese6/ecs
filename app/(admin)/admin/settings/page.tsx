@@ -1,7 +1,7 @@
 import { requireAdmin } from "@/lib/auth";
 import { updatePasswordAction } from "@/lib/actions/auth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { SubmitButton } from "@/components/common/submit-button";
 import { Input } from "@/components/ui/input";
 import { ShieldCheck, KeyRound } from "lucide-react";
 
@@ -73,7 +73,9 @@ export default async function AdminSettingsPage({
               <Input name="confirmPassword" type="password" placeholder="••••••••" required minLength={6} />
             </div>
 
-            <Button type="submit">Update Password</Button>
+            <SubmitButton loadingText="Updating Password...">
+              Update Password
+            </SubmitButton>
           </form>
         </CardContent>
       </Card>

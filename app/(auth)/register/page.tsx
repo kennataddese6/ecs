@@ -3,7 +3,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { registerAction } from "@/lib/actions/auth";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { SubmitButton } from "@/components/common/submit-button";
 import { Input } from "@/components/ui/input";
 
 export default async function RegisterPage({
@@ -47,9 +47,9 @@ export default async function RegisterPage({
             <Input name="password" type="password" placeholder="••••••••" required minLength={6} />
           </div>
 
-          <Button type="submit" className="w-full font-semibold">
+          <SubmitButton className="w-full font-semibold" loadingText="Creating Account...">
             Create Account
-          </Button>
+          </SubmitButton>
         </form>
 
         <div className="mt-6 text-center text-xs text-muted-foreground">

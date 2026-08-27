@@ -1,11 +1,12 @@
-import { ImageUploadInput } from "@/components/admin/image-upload-input";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { updateNewsAction } from "@/lib/actions/admin-news";
-import { getNewsBySlug } from "@/lib/services/news";
-import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { getNewsBySlug } from "@/lib/services/news";
+import { updateNewsAction } from "@/lib/actions/admin-news";
+import { ImageUploadInput } from "@/components/admin/image-upload-input";
+import { SubmitButton } from "@/components/common/submit-button";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { ArrowLeft } from "lucide-react";
 
 export default async function EditNewsArticlePage({
   params,
@@ -80,9 +81,9 @@ export default async function EditNewsArticlePage({
           <span>Published Article</span>
         </label>
 
-        <Button type="submit" className="w-full pt-2">
+        <SubmitButton className="w-full pt-2" loadingText="Updating Article...">
           Update Article
-        </Button>
+        </SubmitButton>
       </form>
     </div>
   );

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getAllAdminCategories } from "@/lib/services/admin";
 import { createProductAction } from "@/lib/actions/admin-products";
 import { ImageUploadInput } from "@/components/admin/image-upload-input";
+import { SubmitButton } from "@/components/common/submit-button";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowLeft, Truck } from "lucide-react";
@@ -142,9 +143,9 @@ export default async function NewProductPage({
           </label>
         </div>
 
-        <Button type="submit" className="w-full pt-2">
+        <SubmitButton className="w-full pt-2" loadingText="Creating Product...">
           Save Product
-        </Button>
+        </SubmitButton>
       </form>
     </div>
   );

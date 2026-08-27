@@ -3,7 +3,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { loginAction } from "@/lib/actions/auth";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { SubmitButton } from "@/components/common/submit-button";
 import { Input } from "@/components/ui/input";
 
 export default async function LoginPage({
@@ -59,9 +59,9 @@ export default async function LoginPage({
             <Input name="password" type="password" placeholder="••••••••" required />
           </div>
 
-          <Button type="submit" className="w-full font-semibold">
+          <SubmitButton className="w-full font-semibold" loadingText="Signing In...">
             Sign In
-          </Button>
+          </SubmitButton>
         </form>
 
         <div className="mt-6 text-center text-xs text-muted-foreground">
