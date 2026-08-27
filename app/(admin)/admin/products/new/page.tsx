@@ -3,6 +3,7 @@ import { getAllAdminCategories } from "@/lib/services/admin";
 import { createProductAction } from "@/lib/actions/admin-products";
 import { ImageUploadInput } from "@/components/admin/image-upload-input";
 import { SubmitButton } from "@/components/common/submit-button";
+import { FormError } from "@/components/ui/form-message";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowLeft, Truck } from "lucide-react";
@@ -28,11 +29,7 @@ export default async function NewProductPage({
         <p className="text-sm text-muted-foreground mt-1">Add a new item to your store catalog.</p>
       </div>
 
-      {params.error && (
-        <div className="p-4 rounded-xl bg-destructive/10 text-destructive text-sm font-medium border border-destructive/20">
-          {params.error}
-        </div>
-      )}
+      <FormError message={params.error} />
 
       <form action={createProductAction} className="space-y-4 bg-card border border-border p-6 rounded-xl shadow-sm">
         <div className="space-y-2">

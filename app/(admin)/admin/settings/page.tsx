@@ -2,6 +2,7 @@ import { requireAdmin } from "@/lib/auth";
 import { updatePasswordAction } from "@/lib/actions/auth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SubmitButton } from "@/components/common/submit-button";
+import { FormError, FormSuccess } from "@/components/ui/form-message";
 import { Input } from "@/components/ui/input";
 import { ShieldCheck, KeyRound } from "lucide-react";
 
@@ -22,17 +23,8 @@ export default async function AdminSettingsPage({
         </p>
       </div>
 
-      {params.error && (
-        <div className="p-4 rounded-xl bg-destructive/10 text-destructive text-sm font-medium border border-destructive/20">
-          {params.error}
-        </div>
-      )}
-
-      {params.success && (
-        <div className="p-4 rounded-xl bg-emerald-500/10 text-emerald-500 text-sm font-medium border border-emerald-500/20">
-          {params.success}
-        </div>
-      )}
+      <FormError message={params.error} />
+      <FormSuccess message={params.success} />
 
       <Card>
         <CardHeader className="flex flex-row items-center space-x-3 pb-2">

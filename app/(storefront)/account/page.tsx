@@ -2,6 +2,7 @@ import { requireUser } from "@/lib/auth";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { SubmitButton } from "@/components/common/submit-button";
+import { FormError, FormSuccess } from "@/components/ui/form-message";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { User, Package, KeyRound, LogOut, ShieldCheck } from "lucide-react";
@@ -51,17 +52,8 @@ export default async function AccountPage({
         </div>
       )}
 
-      {params.error && (
-        <div className="p-4 rounded-xl bg-destructive/10 text-destructive text-sm font-medium border border-destructive/20">
-          {params.error}
-        </div>
-      )}
-
-      {params.success && (
-        <div className="p-4 rounded-xl bg-emerald-500/10 text-emerald-500 text-sm font-medium border border-emerald-500/20">
-          {params.success}
-        </div>
-      )}
+      <FormError message={params.error} />
+      <FormSuccess message={params.success} />
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card className="md:col-span-2">

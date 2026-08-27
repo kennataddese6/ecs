@@ -2,11 +2,18 @@ import Link from "next/link";
 import { createNewsAction } from "@/lib/actions/admin-news";
 import { ImageUploadInput } from "@/components/admin/image-upload-input";
 import { SubmitButton } from "@/components/common/submit-button";
+import { FormError } from "@/components/ui/form-message";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowLeft } from "lucide-react";
 
-export default function NewNewsArticlePage() {
+export default async function NewNewsArticlePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string }>;
+}) {
+  const params = await searchParams;
+
   return (
     <div className="max-w-2xl space-y-6">
       <Button variant="ghost" size="sm" asChild>
@@ -19,6 +26,8 @@ export default function NewNewsArticlePage() {
         <h1 className="text-3xl font-extrabold tracking-tight">Create News Article</h1>
         <p className="text-sm text-muted-foreground mt-1">Publish store news or editorial announcements.</p>
       </div>
+
+      <FormError message={params.error} />
 
       <form action={createNewsAction} className="space-y-4 bg-card border border-border p-6 rounded-xl shadow-sm">
         <div className="space-y-2">

@@ -4,6 +4,7 @@ import * as React from "react";
 import { CartItemWithProduct } from "@/lib/types";
 import { createCheckoutSessionAction } from "@/lib/actions/checkout";
 import { isValidUKPostcode, isValidUKPhoneNumber, formatUKPostcode } from "@/lib/utils/uk-validation";
+import { FormError } from "@/components/ui/form-message";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PriceDisplay } from "@/components/shop/price-display";
@@ -175,12 +176,7 @@ export function UKCheckoutForm({ user, items, error }: UKCheckoutFormProps) {
           </div>
         ) : null}
 
-        {error && (
-          <div className="p-4 rounded-xl bg-destructive/10 text-destructive text-sm font-medium border border-destructive/20 flex items-center space-x-2">
-            <AlertTriangle className="h-5 w-5 flex-shrink-0" />
-            <span>{error}</span>
-          </div>
-        )}
+        <FormError message={error} />
 
         {hasNonDeliverable && (
           <div className="p-4 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 text-xs font-medium border border-amber-500/20 space-y-2">

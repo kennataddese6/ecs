@@ -5,6 +5,7 @@ import { getAllAdminCategories } from "@/lib/services/admin";
 import { updateProductAction } from "@/lib/actions/admin-products";
 import { ImageUploadInput } from "@/components/admin/image-upload-input";
 import { SubmitButton } from "@/components/common/submit-button";
+import { FormError } from "@/components/ui/form-message";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowLeft, Truck } from "lucide-react";
@@ -40,11 +41,7 @@ export default async function EditProductPage({
         <p className="text-sm text-muted-foreground mt-1">Update details for {product.name}.</p>
       </div>
 
-      {sParams.error && (
-        <div className="p-4 rounded-xl bg-destructive/10 text-destructive text-sm font-medium border border-destructive/20">
-          {sParams.error}
-        </div>
-      )}
+      <FormError message={sParams.error} />
 
       <form action={updateWithId} className="space-y-4 bg-card border border-border p-6 rounded-xl shadow-sm">
         <div className="space-y-2">

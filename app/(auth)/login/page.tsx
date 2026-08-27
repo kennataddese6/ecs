@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { loginAction } from "@/lib/actions/auth";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { SubmitButton } from "@/components/common/submit-button";
+import { FormError, FormSuccess } from "@/components/ui/form-message";
 import { Input } from "@/components/ui/input";
 
 export default async function LoginPage({
@@ -28,18 +29,9 @@ export default async function LoginPage({
         <CardTitle className="text-2xl font-bold">Welcome Back</CardTitle>
         <CardDescription>Sign in to your account to continue</CardDescription>
       </CardHeader>
-      <CardContent>
-        {params.error && (
-          <div className="p-3 mb-4 rounded-lg bg-destructive/10 text-destructive text-xs font-medium border border-destructive/20">
-            {params.error}
-          </div>
-        )}
-
-        {params.success && (
-          <div className="p-3 mb-4 rounded-lg bg-emerald-500/10 text-emerald-500 text-xs font-medium border border-emerald-500/20">
-            {params.success}
-          </div>
-        )}
+      <CardContent className="space-y-4">
+        <FormError message={params.error} />
+        <FormSuccess message={params.success} />
 
         <form action={loginAction} className="space-y-4">
           <input type="hidden" name="redirectTo" value={params.redirectTo || "/account"} />

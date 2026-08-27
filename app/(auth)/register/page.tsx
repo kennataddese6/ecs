@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { registerAction } from "@/lib/actions/auth";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { SubmitButton } from "@/components/common/submit-button";
+import { FormError } from "@/components/ui/form-message";
 import { Input } from "@/components/ui/input";
 
 export default async function RegisterPage({
@@ -24,12 +25,8 @@ export default async function RegisterPage({
         <CardTitle className="text-2xl font-bold">Create an Account</CardTitle>
         <CardDescription>Join our platform to track orders and save cart items</CardDescription>
       </CardHeader>
-      <CardContent>
-        {params.error && (
-          <div className="p-3 mb-4 rounded-lg bg-destructive/10 text-destructive text-xs font-medium border border-destructive/20">
-            {params.error}
-          </div>
-        )}
+      <CardContent className="space-y-4">
+        <FormError message={params.error} />
 
         <form action={registerAction} className="space-y-4">
           <div className="space-y-2">

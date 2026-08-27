@@ -4,16 +4,20 @@ import { getNewsBySlug } from "@/lib/services/news";
 import { updateNewsAction } from "@/lib/actions/admin-news";
 import { ImageUploadInput } from "@/components/admin/image-upload-input";
 import { SubmitButton } from "@/components/common/submit-button";
+import { FormError } from "@/components/ui/form-message";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowLeft } from "lucide-react";
 
 export default async function EditNewsArticlePage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ error?: string }>;
 }) {
   const { id } = await params;
+  const sParams = await searchParams;
   const article = await getNewsBySlug(id);
 
   if (!article) notFound();
@@ -32,6 +36,8 @@ export default async function EditNewsArticlePage({
         <h1 className="text-3xl font-extrabold tracking-tight">Edit News Article</h1>
         <p className="text-sm text-muted-foreground mt-1">Update details for {article.title}.</p>
       </div>
+
+      <FormError message={sParams.error} />
 
       <form action={updateWithId} className="space-y-4 bg-card border border-border p-6 rounded-xl shadow-sm">
         <div className="space-y-2">
