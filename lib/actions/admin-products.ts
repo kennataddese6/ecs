@@ -59,7 +59,11 @@ export async function createProductAction(formData: FormData): Promise<void> {
     .single();
 
   if (error || !newProd) {
-    redirect(`/admin/products/new?error=${encodeURIComponent(error?.message || "Failed to create product.")}`);
+    const msg = error?.message || "Failed to create product.";
+    if (msg.includes("public.products") || msg.includes("schema cache")) {
+      redirect(`/admin/products/new?error=${encodeURIComponent("The 'public.products' table does not exist in your Supabase project yet. Please run supabase/schema.sql in your Supabase SQL Editor.")}`);
+    }
+    redirect(`/admin/products/new?error=${encodeURIComponent(msg)}`);
   }
 
   if (imageUrl) {
@@ -123,6 +127,9 @@ export async function updateProductAction(productId: string, formData: FormData)
     .eq("id", productId);
 
   if (error) {
+    if (error.message.includes("public.products") || error.message.includes("schema cache")) {
+      redirect(`/admin/products/${productId}/edit?error=${encodeURIComponent("The 'public.products' table does not exist in your Supabase project yet. Please run supabase/schema.sql in your Supabase SQL Editor.")}`);
+    }
     redirect(`/admin/products/${productId}/edit?error=${encodeURIComponent(error.message)}`);
   }
 

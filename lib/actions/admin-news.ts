@@ -41,6 +41,9 @@ export async function createNewsAction(formData: FormData): Promise<void> {
   });
 
   if (error) {
+    if (error.message.includes("public.news") || error.message.includes("schema cache")) {
+      redirect(`/admin/news/new?error=${encodeURIComponent("The 'public.news' table does not exist in your Supabase project yet. Please run the SQL migration script located in supabase/schema.sql in your Supabase SQL Editor.")}`);
+    }
     redirect(`/admin/news/new?error=${encodeURIComponent(error.message)}`);
   }
 
@@ -83,6 +86,9 @@ export async function updateNewsAction(articleId: string, formData: FormData): P
     .eq("id", articleId);
 
   if (error) {
+    if (error.message.includes("public.news") || error.message.includes("schema cache")) {
+      redirect(`/admin/news/${articleId}/edit?error=${encodeURIComponent("The 'public.news' table does not exist in your Supabase project yet. Please run supabase/schema.sql in your Supabase SQL Editor.")}`);
+    }
     redirect(`/admin/news/${articleId}/edit?error=${encodeURIComponent(error.message)}`);
   }
 
