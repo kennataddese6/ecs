@@ -12,22 +12,30 @@ export async function createCheckoutSessionAction(formData: FormData): Promise<v
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
+  const fulfillmentMethod = (formData.get("fulfillmentMethod") as string) || "delivery";
+  const isCollection = fulfillmentMethod === "collection";
+
   const customerName = (formData.get("customerName") as string) || "";
   const customerEmail = (formData.get("customerEmail") as string) || "";
   const customerPhone = (formData.get("customerPhone") as string) || "";
-  const street = (formData.get("street") as string) || "";
-  const city = (formData.get("city") as string) || "";
-  const state = (formData.get("state") as string) || "";
-  const postalCode = (formData.get("postalCode") as string) || "";
+  const street = (formData.get("street") as string) || (isCollection ? "Enat Market Store Collection" : "");
+  const city = (formData.get("city") as string) || (isCollection ? "London" : "");
+  const state = (formData.get("state") as string) || (isCollection ? "Greater London" : "");
+  const postalCode = (formData.get("postalCode") as string) || (isCollection ? "N/A" : "");
   const country = (formData.get("country") as string) || "United Kingdom";
 
-  if (!customerName || !customerEmail || !street || !city || !postalCode) {
-    redirect(`/checkout?error=${encodeURIComponent("Please complete all required UK shipping fields.")}`);
+  if (!customerName || !customerEmail) {
+    redirect(`/checkout?error=${encodeURIComponent("Please complete all required customer details.")}`);
   }
 
-  // Validate UK Postcode
-  if (!isValidUKPostcode(postalCode)) {
-    redirect(`/checkout?error=${encodeURIComponent("Invalid UK postcode format. Please enter a valid postcode (e.g. SW1A 1AA or EC1A 1BB).")}`);
+  // If UK Courier Delivery, validate UK shipping address & postcode
+  if (!isCollection) {
+    if (!street || !city || !postalCode) {
+      redirect(`/checkout?error=${encodeURIComponent("Please complete all required UK shipping address fields.")}`);
+    }
+    if (!isValidUKPostcode(postalCode)) {
+      redirect(`/checkout?error=${encodeURIComponent("Invalid UK postcode format. Please enter a valid postcode (e.g. SW1A 1AA or EC1A 1BB).")}`);
+    }
   }
 
   // Validate UK Phone Number
@@ -35,7 +43,7 @@ export async function createCheckoutSessionAction(formData: FormData): Promise<v
     redirect(`/checkout?error=${encodeURIComponent("Invalid UK phone number. Please enter a valid UK number (e.g. 07830 682710 or 0203 576 0507).")}`);
   }
 
-  const formattedPostcode = formatUKPostcode(postalCode);
+  const formattedPostcode = isCollection ? "STORE PICKUP" : formatUKPostcode(postalCode);
   const formattedPhone = formatUKPhoneNumber(customerPhone);
 
   const { cartId, items } = await getCart();
@@ -81,14 +89,16 @@ export async function createCheckoutSessionAction(formData: FormData): Promise<v
       redirect(`/cart?error=${encodeURIComponent(`Insufficient stock for "${product.name}". Available: ${product.stock_quantity}.`)}`);
     }
 
-    // Check deliverability
-    const isDeliverable = product.is_deliverable ?? true;
-    if (!isDeliverable) {
-      redirect(`/checkout?error=${encodeURIComponent(`"${product.name}" is for in-store pickup only and cannot be delivered via UK courier.`)}`);
+    // If UK Courier Delivery, check deliverability
+    if (!isCollection) {
+      const isDeliverable = product.is_deliverable ?? true;
+      if (!isDeliverable) {
+        redirect(`/checkout?error=${encodeURIComponent(`"${product.name}" is for in-store pickup only and cannot be delivered via UK courier.`)}`);
+      }
     }
 
     const verifiedPrice = Number(product.price);
-    const unitDeliveryFee = Number(product.delivery_fee_per_unit ?? 0);
+    const unitDeliveryFee = isCollection ? 0 : Number(product.delivery_fee_per_unit ?? 0);
 
     subtotal += verifiedPrice * item.quantity;
     totalShippingCost += unitDeliveryFee * item.quantity;
@@ -112,8 +122,8 @@ export async function createCheckoutSessionAction(formData: FormData): Promise<v
     });
   }
 
-  // If shipping cost exists, add as a line item to Stripe
-  if (totalShippingCost > 0) {
+  // If shipping cost exists and delivery is selected, add shipping as a line item to Stripe
+  if (!isCollection && totalShippingCost > 0) {
     stripeLineItems.push({
       price_data: {
         currency: "gbp",
@@ -144,6 +154,7 @@ export async function createCheckoutSessionAction(formData: FormData): Promise<v
         state,
         postal_code: formattedPostcode,
         country: "United Kingdom",
+        fulfillment_method: isCollection ? "In-Person Store Collection" : "UK Courier Delivery",
       },
       status: "pending",
       payment_status: "unpaid",
@@ -151,6 +162,7 @@ export async function createCheckoutSessionAction(formData: FormData): Promise<v
       shipping_cost: totalShippingCost,
       tax,
       total,
+      notes: isCollection ? "Customer selected In-Person Store Collection." : null,
     })
     .select("id")
     .single();
@@ -182,6 +194,7 @@ export async function createCheckoutSessionAction(formData: FormData): Promise<v
         order_id: finalOrderId,
         cart_id: cartId,
         user_id: user?.id || "",
+        fulfillment_method: isCollection ? "collection" : "delivery",
       },
     });
 
