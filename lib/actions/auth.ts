@@ -75,36 +75,34 @@ export async function loginAction(formData: FormData): Promise<void> {
     redirect(`/login?error=${encodeURIComponent("Email and password are required.")}`);
   }
 
-  if (email.toLowerCase() === "admin@lumen.com" && password === "AdminLumen2026!") {
-    const cookieStore = await cookies();
-    cookieStore.set("lumen_demo_role", "admin", { path: "/" });
+  const supabase = await createClient();
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  if (error || !data.user) {
+    redirect(`/login?error=${encodeURIComponent(error?.message || "Invalid login credentials.")}`);
+  }
+
+  await mergeGuestCartToUser(data.user.id);
+
+  // Check if admin user
+  if (data.user.user_metadata?.role === "admin") {
     redirect("/admin");
   }
 
-  try {
-    const supabase = await createClient();
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", data.user.id)
+    .single();
 
-    if (!error && data.user) {
-      await mergeGuestCartToUser(data.user.id);
-      redirect(redirectTo);
-    }
-  } catch (e) {
-    if (e instanceof Error && e.message.includes("NEXT_REDIRECT")) {
-      throw e;
-    }
-  }
-
-  if (email.toLowerCase() === "admin@lumen.com") {
-    const cookieStore = await cookies();
-    cookieStore.set("lumen_demo_role", "admin", { path: "/" });
+  if (profile?.role === "admin") {
     redirect("/admin");
   }
 
-  redirect(`/login?error=${encodeURIComponent("Invalid login credentials.")}`);
+  redirect(redirectTo);
 }
 
 export async function registerAction(formData: FormData): Promise<void> {
@@ -140,8 +138,6 @@ export async function registerAction(formData: FormData): Promise<void> {
 }
 
 export async function logoutAction(): Promise<void> {
-  const cookieStore = await cookies();
-  cookieStore.delete("lumen_demo_role");
   try {
     const supabase = await createClient();
     await supabase.auth.signOut();

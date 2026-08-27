@@ -1,5 +1,4 @@
 import { createClient } from "@/lib/supabase/server";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 export async function getCurrentUser() {
@@ -8,16 +7,6 @@ export async function getCurrentUser() {
     const { data: { user } } = await supabase.auth.getUser();
     if (user) return user;
   } catch (e) {}
-
-  const cookieStore = await cookies();
-  const demoRole = cookieStore.get("lumen_demo_role")?.value;
-  if (demoRole === "admin") {
-    return {
-      id: "admin-demo-id",
-      email: "admin@lumen.com",
-      user_metadata: { full_name: "LUMEN Administrator", role: "admin" },
-    } as any;
-  }
 
   return null;
 }
@@ -36,7 +25,8 @@ export async function requireAdmin() {
     redirect("/login?redirectTo=/admin");
   }
 
-  if (user.id === "admin-demo-id" || user.email === "admin@lumen.com") {
+  // Check role in user_metadata first
+  if (user.user_metadata?.role === "admin") {
     return { user, profile: { id: user.id, email: user.email, role: "admin" } };
   }
 
@@ -44,7 +34,7 @@ export async function requireAdmin() {
     const supabase = await createClient();
     const { data: profile } = await supabase
       .from("profiles")
-      .select("role")
+      .select("id, email, role")
       .eq("id", user.id)
       .single();
 

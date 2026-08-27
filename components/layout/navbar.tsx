@@ -15,7 +15,7 @@ export async function Navbar() {
   const { items } = await getCart();
   const totalCartItems = items.reduce((acc, item) => acc + item.quantity, 0);
 
-  const isAdmin = user && (user.id === "admin-demo-id" || user.email === "admin@lumen.com" || user.user_metadata?.role === "admin");
+  const isAdmin = user && user.user_metadata?.role === "admin";
   const dashboardHref = isAdmin ? "/admin" : "/account";
   const dashboardLabel = isAdmin ? "Admin Dashboard" : "Dashboard";
 

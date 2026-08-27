@@ -16,7 +16,7 @@ export default async function LoginPage({
   const params = await searchParams;
 
   if (user) {
-    if (user.id === "admin-demo-id" || user.email === "admin@lumen.com") {
+    if (user.user_metadata?.role === "admin") {
       redirect("/admin");
     }
     const dest = params.redirectTo && params.redirectTo !== "/account" ? params.redirectTo : "/account";

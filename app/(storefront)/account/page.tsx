@@ -15,7 +15,7 @@ export default async function AccountPage({
 }) {
   const user = await requireUser();
   const params = await searchParams;
-  const isAdmin = user.id === "admin-demo-id" || user.email === "admin@lumen.com" || user.user_metadata?.role === "admin";
+  const isAdmin = user.user_metadata?.role === "admin";
 
   return (
     <div className="py-8 max-w-4xl mx-auto space-y-8">
