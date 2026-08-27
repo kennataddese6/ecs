@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -14,13 +14,11 @@ import {
   ArrowLeft,
   Menu,
   X,
-  Users,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 
 const navItems = [
   { name: "Overview", href: "/admin", icon: LayoutDashboard },
-  { name: "Staff", href: "/admin/staff", icon: Users },
   { name: "Products", href: "/admin/products", icon: Package },
   { name: "Categories", href: "/admin/categories", icon: FolderTree },
   { name: "Orders", href: "/admin/orders", icon: ShoppingBag },
