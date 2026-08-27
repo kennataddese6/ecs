@@ -3,82 +3,59 @@ import { createClient } from "@/lib/supabase/server";
 const DEMO_ADMIN_PRODUCTS = [
   {
     id: "prod-1",
-    name: "LUMEN Studio Master Wireless Headphones",
-    slug: "lumen-studio-master-wireless-headphones",
-    price: 349.00,
-    compare_at_price: 420.00,
-    stock_quantity: 15,
-    sku: "AUD-001",
+    name: "Yirgacheffe Grade-1 Organic Roasted Coffee Beans (1kg)",
+    slug: "yirgacheffe-grade-1-coffee-beans",
+    price: 28.50,
+    compare_at_price: 34.00,
+    stock_quantity: 45,
+    sku: "ETH-COF-001",
     featured: true,
     active: true,
-    categories: { name: "Premium Audio" },
+    categories: { name: "Ethiopian Coffee & Buna" },
     created_at: new Date().toISOString(),
   },
   {
     id: "prod-2",
-    name: "Tuscan Grain Leather Tote",
-    slug: "tuscan-grain-leather-tote",
-    price: 280.00,
-    compare_at_price: 320.00,
-    stock_quantity: 8,
-    sku: "ACC-001",
+    name: "Royal Handwoven Habesha Kemis with Gold Border",
+    slug: "royal-handwoven-habesha-kemis",
+    price: 145.00,
+    compare_at_price: 185.00,
+    stock_quantity: 12,
+    sku: "ETH-CLO-001",
     featured: true,
     active: true,
-    categories: { name: "Artisan Accessories" },
+    categories: { name: "Traditional Habesha Apparel" },
     created_at: new Date().toISOString(),
   },
   {
     id: "prod-3",
-    name: "Chronos Titanium Automatic Watch",
-    slug: "chronos-titanium-automatic-watch",
-    price: 890.00,
-    compare_at_price: 990.00,
-    stock_quantity: 4,
-    sku: "ACC-002",
+    name: "Traditional Spiced Clarified Butter (Niter Kibe - 500g)",
+    slug: "traditional-spiced-clarified-butter-niter-kibe",
+    price: 19.50,
+    compare_at_price: 24.00,
+    stock_quantity: 30,
+    sku: "ETH-SPC-001",
     featured: true,
     active: true,
-    categories: { name: "Artisan Accessories" },
+    categories: { name: "Spices & Niter Kibe" },
     created_at: new Date().toISOString(),
   },
   {
     id: "prod-4",
-    name: "Minimalist Wool Cashmere Overcoat",
-    slug: "minimalist-wool-cashmere-overcoat",
-    price: 450.00,
-    compare_at_price: 550.00,
-    stock_quantity: 12,
-    sku: "APP-001",
+    name: "Sidama Specialty Grade Whole Coffee Beans (1kg)",
+    slug: "sidama-specialty-whole-coffee-beans",
+    price: 26.00,
+    compare_at_price: 32.00,
+    stock_quantity: 40,
+    sku: "ETH-COF-002",
     featured: true,
     active: true,
-    categories: { name: "Luxury Apparel" },
+    categories: { name: "Ethiopian Coffee & Buna" },
     created_at: new Date().toISOString(),
   },
 ];
 
-const DEMO_ADMIN_ORDERS = [
-  {
-    id: "ord-1001",
-    order_number: "LMN-84920",
-    customer_email: "alexander.wright@example.com",
-    shipping_name: "Alexander Wright",
-    status: "processing",
-    payment_status: "paid",
-    total: 349.00,
-    created_at: new Date().toISOString(),
-    order_items: [{ id: "item-1", product_name: "LUMEN Studio Master Wireless Headphones", unit_price: 349.00, quantity: 1 }],
-  },
-  {
-    id: "ord-1002",
-    order_number: "LMN-84921",
-    customer_email: "elena.rodriguez@example.com",
-    shipping_name: "Elena Rodriguez",
-    status: "shipped",
-    payment_status: "paid",
-    total: 890.00,
-    created_at: new Date(Date.now() - 86400000).toISOString(),
-    order_items: [{ id: "item-2", product_name: "Chronos Titanium Automatic Watch", unit_price: 890.00, quantity: 1 }],
-  },
-];
+const DEMO_ADMIN_ORDERS: any[] = [];
 
 export async function getAdminStats() {
   try {
@@ -123,13 +100,13 @@ export async function getAdminStats() {
   } catch (e) {}
 
   return {
-    productsCount: 4,
-    activeProductsCount: 4,
-    lowStockProductsCount: 1,
-    ordersCount: 2,
+    productsCount: DEMO_ADMIN_PRODUCTS.length,
+    activeProductsCount: DEMO_ADMIN_PRODUCTS.length,
+    lowStockProductsCount: 0,
+    ordersCount: 0,
     pendingOrdersCount: 0,
-    customersCount: 12,
-    totalRevenue: 1239.00,
+    customersCount: 0,
+    totalRevenue: 0.00,
     recentOrders: DEMO_ADMIN_ORDERS,
     recentProducts: DEMO_ADMIN_PRODUCTS,
   };
@@ -164,14 +141,11 @@ export async function getAllAdminOrders(statusFilter?: string) {
     }
 
     const { data, error } = await query;
-    if (!error && data && data.length > 0) {
+    if (!error && data) {
       return data;
     }
   } catch (e) {}
 
-  if (statusFilter && statusFilter !== "all") {
-    return DEMO_ADMIN_ORDERS.filter((o) => o.status === statusFilter);
-  }
   return DEMO_ADMIN_ORDERS;
 }
 
@@ -191,7 +165,7 @@ export async function getAllAdminNews() {
   return [
     {
       id: "news-1",
-      title: "The Art of Acoustic Engineering: Inside the Studio Master",
+      title: "The Timeless Ritual of the Ethiopian Coffee Ceremony (Buna)",
       slug: "art-of-acoustic-engineering",
       published: true,
       published_at: new Date().toISOString(),
@@ -199,7 +173,7 @@ export async function getAllAdminNews() {
     },
     {
       id: "news-2",
-      title: "Florentine Leathercraft: Sustainable Tanning Techniques",
+      title: "Preserving Handwoven Habesha Textiles: The Art of Shemma Craft",
       slug: "florentine-leathercraft-sustainable-tanning",
       published: true,
       published_at: new Date().toISOString(),
@@ -222,9 +196,9 @@ export async function getAllAdminCategories() {
   } catch (e) {}
 
   return [
-    { id: "cat-1", name: "Premium Audio", slug: "audio", description: "Audio gear", active: true },
-    { id: "cat-2", name: "Luxury Apparel", slug: "apparel", description: "Tailored outerwear", active: true },
-    { id: "cat-3", name: "Artisan Accessories", slug: "accessories", description: "Leather goods", active: true },
-    { id: "cat-4", name: "Home & Living", slug: "home", description: "Modern living", active: true },
+    { id: "cat-1", name: "Ethiopian Coffee & Buna", slug: "coffee", description: "Coffee & Buna accessories", active: true },
+    { id: "cat-2", name: "Traditional Habesha Apparel", slug: "apparel", description: "Habesha Kemis", active: true },
+    { id: "cat-3", name: "Spices & Niter Kibe", slug: "spices", description: "Berbere & Niter Kibe", active: true },
+    { id: "cat-4", name: "Artisan Mesob & Crafts", slug: "crafts", description: "Mesob baskets", active: true },
   ];
 }
