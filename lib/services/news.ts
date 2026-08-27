@@ -6,19 +6,19 @@ export type NewsArticle = Database["public"]["Tables"]["news"]["Row"];
 const DEMO_NEWS: NewsArticle[] = [
   {
     id: "news-1",
-    title: "The Art of Acoustic Engineering: Inside the Studio Master",
-    slug: "art-of-acoustic-engineering",
-    excerpt: "Exploring how custom beryllium drivers and precision chambering deliver studio transparency.",
+    title: "The Timeless Ritual of the Ethiopian Coffee Ceremony (Buna)",
+    slug: "timeless-ritual-ethiopian-coffee-ceremony-buna",
+    excerpt: "Exploring the cultural heritage, roasting secrets, and warm hospitality behind Ethiopia's sacred coffee tradition.",
     content: `
-      <p class="text-lg leading-relaxed mb-6">Acoustic transparency is achieved when electronic interference is eliminated entirely, allowing raw harmonic detail to shine through without coloration.</p>
+      <p class="text-lg leading-relaxed mb-6">In Ethiopian culture, Buna is far more than a morning beverage—it is a sacred daily gathering celebrating community, friendship, and hospitality.</p>
 
-      <h2 class="text-2xl font-bold mt-8 mb-4">Precision Engineering & Beryllium Drivers</h2>
-      <p class="leading-relaxed mb-6">In designing the LUMEN Studio Master, our engineering team focused on weight-to-rigidity ratios in diaphragm construction. By deploying ultra-thin beryllium foil, dynamic transience response approaches instantaneous precision.</p>
+      <h2 class="text-2xl font-bold mt-8 mb-4">Roasting Green Beans to Perfection</h2>
+      <p class="leading-relaxed mb-6">The ceremony begins with washing fresh green coffee beans before slow-roasting them over open embers in a flat pan (Menkeshkesha). As the beans crackle, the fragrant smoke is wafted to guests as a blessing.</p>
 
-      <h2 class="text-2xl font-bold mt-8 mb-4">Chamber Geometry & Noise Isolation</h2>
-      <p class="leading-relaxed mb-6">Traditional acoustic enclosures trap standing waves that cloud mid-range vocals. Our proprietary resonance-damping geometry diffuses back-wave reflections before they affect driver motion.</p>
+      <h2 class="text-2xl font-bold mt-8 mb-4">Brewing in the Clay Jebena</h2>
+      <p class="leading-relaxed mb-6">Ground beans are brewed inside a traditional black clay Jebena pot. Poured from height into handleless porcelain Cini cups, the coffee is served in three rounds: Abol (first cup), Tona (second), and Baraka (the final blessing).</p>
     `,
-    featured_image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1200&auto=format&fit=crop",
+    featured_image: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=1200&auto=format&fit=crop",
     published: true,
     published_at: new Date().toISOString(),
     created_at: new Date().toISOString(),
@@ -26,19 +26,19 @@ const DEMO_NEWS: NewsArticle[] = [
   },
   {
     id: "news-2",
-    title: "Florentine Leathercraft: Sustainable Tanning Techniques",
-    slug: "florentine-leathercraft-sustainable-tanning",
-    excerpt: "A deep dive into natural vegetable tanning processes preserving leather durability and patina over time.",
+    title: "Preserving Handwoven Habesha Textiles: The Art of Shemma Craft",
+    slug: "preserving-handwoven-habesha-textiles-shemma-craft",
+    excerpt: "A deep dive into traditional pit loom weaving, organic cotton spinning, and gold Tilet embroidery.",
     content: `
-      <p class="text-lg leading-relaxed mb-6">Vegetable tanning uses natural plant tannins derived from chestnut and mimosa bark instead of harsh chromium salts, yielding full-grain leather that ages with distinct patina.</p>
+      <p class="text-lg leading-relaxed mb-6">For centuries, Ethiopian weavers (Shemane) have transformed pure hand-spun cotton into ethereal Habesha Kemis dresses and Netela scarves.</p>
 
-      <h2 class="text-2xl font-bold mt-8 mb-4">The Florentine Heritage</h2>
-      <p class="leading-relaxed mb-6">Nestled along the banks of the Arno River, Tuscan tanneries have preserved slow-steeping methods for over three centuries. Each hide spends up to forty days in organic wooden vats.</p>
+      <h2 class="text-2xl font-bold mt-8 mb-4">Pit Looms & Organic Cotton Thread</h2>
+      <p class="leading-relaxed mb-6">Operating rhythmic wooden pit looms, weavers pass shuttle bobbins across warp threads to create lightweight yet durable cotton fabrics suitable for ceremonial celebrations.</p>
 
-      <h2 class="text-2xl font-bold mt-8 mb-4">Tactile Longevity & Environmental Stewardship</h2>
-      <p class="leading-relaxed mb-6">Unlike synthetic coatings that crack after seasons of exposure, vegetable-tanned hides absorb natural oils, deepening in character and resilience over decades of daily carry.</p>
+      <h2 class="text-2xl font-bold mt-8 mb-4">Intricate Tilet Embroidery</h2>
+      <p class="leading-relaxed mb-6">The crowning glory of every royal gown is the Tilet—woven woven borders featuring rich geometric motifs in gold, crimson, and forest green symbolizing nobility and heritage.</p>
     `,
-    featured_image: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?q=80&w=1200&auto=format&fit=crop",
+    featured_image: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=1200&auto=format&fit=crop",
     published: true,
     published_at: new Date().toISOString(),
     created_at: new Date().toISOString(),

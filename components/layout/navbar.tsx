@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { getCurrentUser } from "@/lib/auth";
 import { getCart } from "@/lib/services/cart";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
@@ -19,11 +20,18 @@ export async function Navbar() {
       <div className="max-w-7xl mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Brand Logo */}
         <div className="flex items-center space-x-8">
-          <Link href="/" className="flex items-center space-x-2 font-extrabold text-xl tracking-tight group">
-            <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-black shadow-md group-hover:scale-105 transition-transform">
-              E
+          <Link href="/" className="flex items-center space-x-3 font-extrabold text-xl tracking-tight group">
+            <div className="relative h-10 w-10 overflow-hidden rounded-xl bg-card border border-border/80 shadow-sm flex items-center justify-center p-1 group-hover:scale-105 transition-transform">
+              <Image
+                src="/logo.png"
+                alt="Enat Market Logo"
+                width={36}
+                height={36}
+                className="object-contain h-full w-full"
+                priority
+              />
             </div>
-            <span className="gradient-text font-black tracking-wider text-lg">ENAT MARKET</span>
+            <span className="gradient-text font-black tracking-wider text-xl">ENAT MARKET</span>
           </Link>
 
           {/* Desktop Links */}

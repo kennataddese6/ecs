@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
@@ -29,8 +30,14 @@ export function AdminSidebar() {
     <aside className="w-64 border-r border-border bg-card/60 flex flex-col min-h-screen">
       <div className="p-6 border-b border-border flex items-center justify-between">
         <Link href="/admin" className="flex items-center space-x-2 font-bold text-lg">
-          <div className="h-7 w-7 rounded bg-primary flex items-center justify-center text-primary-foreground font-extrabold text-xs">
-            A
+          <div className="relative h-8 w-8 overflow-hidden rounded-lg bg-card border border-border/80 p-0.5 shadow-sm">
+            <Image
+              src="/logo.png"
+              alt="Enat Market Logo"
+              width={32}
+              height={32}
+              className="object-contain h-full w-full"
+            />
           </div>
           <span>Admin Portal</span>
         </Link>

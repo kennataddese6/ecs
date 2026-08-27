@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Lock, Mail, Phone } from "lucide-react";
 
 export function Footer() {
@@ -7,14 +8,20 @@ export function Footer() {
       <div className="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8 space-y-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="space-y-4">
-            <Link href="/" className="flex items-center space-x-2 font-black text-xl tracking-wider">
-              <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-black shadow-md">
-                E
+            <Link href="/" className="flex items-center space-x-3 font-black text-xl tracking-wider">
+              <div className="relative h-10 w-10 overflow-hidden rounded-xl bg-card border border-border/80 shadow-sm flex items-center justify-center p-1">
+                <Image
+                  src="/logo.png"
+                  alt="Enat Market Logo"
+                  width={36}
+                  height={36}
+                  className="object-contain h-full w-full"
+                />
               </div>
-              <span className="gradient-text font-black tracking-wider text-lg">ENAT MARKET</span>
+              <span className="gradient-text font-black tracking-wider text-xl">ENAT MARKET</span>
             </Link>
             <p className="text-xs text-muted-foreground leading-relaxed max-w-xs">
-              Your trusted marketplace for premium curated lifestyle products, food items, and daily essentials.
+              Your trusted authentic Habesha marketplace for Ethiopian specialty items, coffee beans, traditional textiles, spices, and daily household goods.
             </p>
             <div className="space-y-1.5 pt-1 text-xs text-muted-foreground">
               <div className="flex items-center space-x-2">
@@ -37,19 +44,20 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="font-bold text-sm mb-4 tracking-wider uppercase">Collection</h4>
+            <h4 className="font-bold text-sm mb-4 tracking-wider uppercase">Collections</h4>
             <ul className="space-y-2.5 text-xs text-muted-foreground font-medium">
               <li><Link href="/shop" className="hover:text-foreground transition-colors">All Products</Link></li>
-              <li><Link href="/shop/audio" className="hover:text-foreground transition-colors">Premium Audio</Link></li>
-              <li><Link href="/shop/apparel" className="hover:text-foreground transition-colors">Luxury Apparel</Link></li>
-              <li><Link href="/shop/accessories" className="hover:text-foreground transition-colors">Artisan Accessories</Link></li>
+              <li><Link href="/shop/apparel" className="hover:text-foreground transition-colors">Traditional Habesha Apparel</Link></li>
+              <li><Link href="/shop/coffee" className="hover:text-foreground transition-colors">Ethiopian Coffee & Buna</Link></li>
+              <li><Link href="/shop/spices" className="hover:text-foreground transition-colors">Gourmet Spices & Niter Kibe</Link></li>
+              <li><Link href="/shop/crafts" className="hover:text-foreground transition-colors">Artisan Mesob & Crafts</Link></li>
             </ul>
           </div>
 
           <div>
             <h4 className="font-bold text-sm mb-4 tracking-wider uppercase">Editorial & Company</h4>
             <ul className="space-y-2.5 text-xs text-muted-foreground font-medium">
-              <li><Link href="/news" className="hover:text-foreground transition-colors">Latest News & Journal</Link></li>
+              <li><Link href="/news" className="hover:text-foreground transition-colors">Cultural Journal & Stories</Link></li>
               <li><Link href="/about" className="hover:text-foreground transition-colors">Our Heritage & Story</Link></li>
               <li><Link href="/contact" className="hover:text-foreground transition-colors">Contact Support</Link></li>
             </ul>

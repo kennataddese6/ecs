@@ -30,10 +30,10 @@ export default async function HomePage() {
   const { articles: latestNews } = await getPublishedNews({ limit: 3 });
 
   const categoryVisuals: Record<string, string> = {
-    audio: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=800&auto=format&fit=crop",
-    apparel: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?q=80&w=800&auto=format&fit=crop",
-    accessories: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=800&auto=format&fit=crop",
-    home: "https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?q=80&w=800&auto=format&fit=crop",
+    coffee: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=800&auto=format&fit=crop",
+    apparel: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=800&auto=format&fit=crop",
+    spices: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?q=80&w=800&auto=format&fit=crop",
+    crafts: "https://images.unsplash.com/photo-1606744824163-985d376605aa?q=80&w=800&auto=format&fit=crop",
   };
 
   return (
@@ -47,16 +47,16 @@ export default async function HomePage() {
           <div className="space-y-6">
             <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold tracking-widest uppercase">
               <Sparkles className="h-3.5 w-3.5" />
-              <span>Enat Market Collection</span>
+              <span>Authentic Habesha Store</span>
             </div>
 
             <h1 className="text-4xl sm:text-6xl font-black tracking-tight leading-tight">
-              Quality Essentials. <br />
+              Ethiopian Heritage. <br />
               <span className="gradient-text">Delivered to Your Door.</span>
             </h1>
 
             <p className="text-muted-foreground text-base sm:text-xl font-normal leading-relaxed max-w-xl">
-              Discover curated electronics, fashion apparel, lifestyle products, and authentic goods at Enat Market.
+              Discover authentic Yirgacheffe coffee beans, handwoven Habesha Kemis dresses, traditional Niter Kibe spiced butter, and artisan Mesob crafts.
             </p>
 
             <div className="pt-4 flex flex-wrap gap-4 items-center">
@@ -75,33 +75,33 @@ export default async function HomePage() {
             <div className="pt-8 border-t border-border/60 grid grid-cols-3 gap-4 text-xs font-semibold text-muted-foreground">
               <div>
                 <span className="block text-lg font-bold text-foreground">100%</span>
-                <span>Authentic Guarantee</span>
+                <span>Authentic Ethiopian</span>
               </div>
               <div>
                 <span className="block text-lg font-bold text-foreground">Fast UK</span>
-                <span>Delivery Service</span>
+                <span>Courier Delivery</span>
               </div>
               <div>
-                <span className="block text-lg font-bold text-foreground">Customer Care</span>
-                <span>Dedicated Support</span>
+                <span className="block text-lg font-bold text-foreground">Premium</span>
+                <span>Guaranteed Quality</span>
               </div>
             </div>
           </div>
 
           <div className="relative aspect-square sm:aspect-[4/3] lg:aspect-square rounded-2xl overflow-hidden shadow-2xl border border-border bg-muted group">
             <Image
-              src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1200&auto=format&fit=crop"
-              alt="Enat Market Featured Selection"
+              src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=1200&auto=format&fit=crop"
+              alt="Ethiopian Yirgacheffe Coffee Beans & Buna Ceremony"
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-700"
               priority
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-8 text-white">
               <Badge className="w-fit mb-2 bg-white/20 backdrop-blur-md text-white border-none">
-                Featured Spotlight
+                Spotlight Item
               </Badge>
-              <h3 className="text-2xl font-bold">LUMEN Studio Master Wireless</h3>
-              <p className="text-xs text-white/80 mt-1">Acoustic clarity redefined with active noise cancellation.</p>
+              <h3 className="text-2xl font-bold">Yirgacheffe Grade-1 Coffee Beans</h3>
+              <p className="text-xs text-white/80 mt-1">Single-origin roasted beans with floral jasmine & bergamot citrus notes.</p>
             </div>
           </div>
         </div>
@@ -110,8 +110,8 @@ export default async function HomePage() {
       {/* 2. PRIMARY CTA TO SHOP / BAR */}
       <section className="bg-card border border-border rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
         <div className="space-y-1 text-center md:text-left">
-          <h3 className="text-xl font-bold tracking-tight">Looking for something specific?</h3>
-          <p className="text-sm text-muted-foreground">Explore our full product catalog with instant filtering and search.</p>
+          <h3 className="text-xl font-bold tracking-tight">Looking for authentic Ethiopian goods?</h3>
+          <p className="text-sm text-muted-foreground">Explore Habesha dresses, coffee beans, Berbere spices, and Mesob crafts.</p>
         </div>
         <Button size="lg" className="font-semibold shadow-md whitespace-nowrap" asChild>
           <Link href="/shop">
@@ -137,7 +137,7 @@ export default async function HomePage() {
       {/* 4. CATEGORIES SHOWCASE */}
       <section className="space-y-8">
         <div className="border-b border-border pb-4">
-          <Badge variant="secondary" className="mb-2 font-bold uppercase tracking-wider">Taxonomy</Badge>
+          <Badge variant="secondary" className="mb-2 font-bold uppercase tracking-wider">Categories</Badge>
           <h2 className="text-3xl font-extrabold tracking-tight">Shop by Category</h2>
         </div>
 
@@ -146,7 +146,7 @@ export default async function HomePage() {
             <CategoryNav categories={[]} />
           ) : (
             categories.map((cat) => {
-              const bgImage = cat.image_url || categoryVisuals[cat.slug.toLowerCase()] || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=800&auto=format&fit=crop";
+              const bgImage = cat.image_url || categoryVisuals[cat.slug.toLowerCase()] || "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=800&auto=format&fit=crop";
               return (
                 <Link
                   key={cat.id}
@@ -179,24 +179,24 @@ export default async function HomePage() {
       <section className="relative overflow-hidden rounded-3xl bg-card border border-border p-8 sm:p-16 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center shadow-xl">
         <div className="relative aspect-square sm:aspect-video lg:aspect-square rounded-2xl overflow-hidden border border-border bg-muted">
           <Image
-            src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?q=80&w=1200&auto=format&fit=crop"
-            alt="Enat Market Quality Assurance"
+            src="https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=1200&auto=format&fit=crop"
+            alt="Authentic Habesha Kemis Weaving"
             fill
             className="object-cover"
           />
         </div>
 
         <div className="space-y-6">
-          <Badge className="bg-primary text-primary-foreground">Brand Philosophy</Badge>
+          <Badge className="bg-primary text-primary-foreground">Our Philosophy</Badge>
           <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">
-            Curated for Quality, Delivered for Convenience.
+            Authentic Craftsmanship, Warmth & Tradition.
           </h2>
           <p className="text-muted-foreground text-base leading-relaxed">
-            Every product at Enat Market is selected to offer authentic value, premium quality, and dependable service for your household.
+            Every item in Enat Market represents genuine Ethiopian heritage—from hand-spun Shemma dresses to small-batch Niter Kibe spiced butter and single-origin Yirgacheffe coffee beans.
           </p>
           <div className="pt-2">
             <Button size="lg" variant="outline" asChild>
-              <Link href="/about">Read Our Story &rarr;</Link>
+              <Link href="/about">Read Our Heritage Story &rarr;</Link>
             </Button>
           </div>
         </div>
@@ -206,8 +206,8 @@ export default async function HomePage() {
       <section className="space-y-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-border pb-4">
           <div>
-            <Badge variant="secondary" className="mb-2 font-bold uppercase tracking-wider">New Arrivals</Badge>
-            <h2 className="text-3xl font-extrabold tracking-tight">Fresh Additions to the Store</h2>
+            <Badge variant="secondary" className="mb-2 font-bold uppercase tracking-wider">Fresh Additions</Badge>
+            <h2 className="text-3xl font-extrabold tracking-tight">New Arrivals in Store</h2>
           </div>
           <Button variant="ghost" className="font-semibold" asChild>
             <Link href="/shop">Browse All &rarr;</Link>
@@ -222,24 +222,24 @@ export default async function HomePage() {
           <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold">
             <Truck className="h-5 w-5" />
           </div>
-          <h4 className="font-bold text-base">Reliable Delivery</h4>
-          <p className="text-xs text-muted-foreground">Fast UK courier shipping on all orders.</p>
+          <h4 className="font-bold text-base">Reliable UK Courier</h4>
+          <p className="text-xs text-muted-foreground">Fast tracked shipping across the UK on all orders.</p>
         </div>
 
         <div className="bg-card border border-border p-6 rounded-2xl space-y-3 shadow-sm hover:border-primary/50 transition-colors">
           <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold">
             <ShieldCheck className="h-5 w-5" />
           </div>
-          <h4 className="font-bold text-base">Guaranteed Quality</h4>
-          <p className="text-xs text-muted-foreground">Vetted products from authentic suppliers.</p>
+          <h4 className="font-bold text-base">100% Authentic Goods</h4>
+          <p className="text-xs text-muted-foreground">Handpicked traditional products direct from Ethiopian artisans.</p>
         </div>
 
         <div className="bg-card border border-border p-6 rounded-2xl space-y-3 shadow-sm hover:border-primary/50 transition-colors">
           <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold">
             <Headphones className="h-5 w-5" />
           </div>
-          <h4 className="font-bold text-base">Dedicated Customer Service</h4>
-          <p className="text-xs text-muted-foreground">Reach us directly at shop@enatmarket.co.uk or 07830682710.</p>
+          <h4 className="font-bold text-base">Dedicated Customer Support</h4>
+          <p className="text-xs text-muted-foreground">Reach us via email shop@enatmarket.co.uk or 07830 682710.</p>
         </div>
 
         <div className="bg-card border border-border p-6 rounded-2xl space-y-3 shadow-sm hover:border-primary/50 transition-colors">
@@ -247,7 +247,7 @@ export default async function HomePage() {
             <RotateCcw className="h-5 w-5" />
           </div>
           <h4 className="font-bold text-base">Easy Returns Support</h4>
-          <p className="text-xs text-muted-foreground">Simple return process for eligible items.</p>
+          <p className="text-xs text-muted-foreground">Hassle-free return policy for eligible products.</p>
         </div>
       </section>
 
@@ -256,11 +256,11 @@ export default async function HomePage() {
         <section className="space-y-8">
           <div className="flex items-center justify-between border-b border-border pb-4">
             <div>
-              <Badge variant="secondary" className="mb-2 font-bold uppercase tracking-wider">Editorial Journal</Badge>
-              <h2 className="text-3xl font-extrabold tracking-tight">Latest Stories & Insights</h2>
+              <Badge variant="secondary" className="mb-2 font-bold uppercase tracking-wider">Cultural Journal</Badge>
+              <h2 className="text-3xl font-extrabold tracking-tight">Latest Stories & Traditions</h2>
             </div>
             <Button variant="ghost" className="font-semibold" asChild>
-              <Link href="/news">View All News &rarr;</Link>
+              <Link href="/news">View All Articles &rarr;</Link>
             </Button>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -274,10 +274,10 @@ export default async function HomePage() {
       {/* 9. NEWSLETTER / CONTACT CTA */}
       <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary/10 via-card to-card border border-primary/20 p-8 sm:p-16 text-center space-y-6 shadow-xl">
         <div className="max-w-2xl mx-auto space-y-3">
-          <Badge className="bg-primary text-primary-foreground">Exclusive Updates</Badge>
-          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">Subscribe to Enat Market</h2>
+          <Badge className="bg-primary text-primary-foreground">Stay Connected</Badge>
+          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">Join Enat Market</h2>
           <p className="text-muted-foreground text-sm sm:text-base">
-            Subscribe to receive product announcements, special offers, and store updates.
+            Subscribe for fresh shipment alerts, seasonal Habesha Kemis drops, and authentic recipe guides.
           </p>
         </div>
         <NewsletterForm />
