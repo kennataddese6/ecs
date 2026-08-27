@@ -14,13 +14,17 @@ import {
   ArrowLeft,
   Menu,
   X,
-  Users,
+  UserCheck,
+  GraduationCap,
+  HeartHandshake,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 
 const navItems = [
   { name: "Overview", href: "/admin", icon: LayoutDashboard },
-  { name: "Staff", href: "/admin/staff", icon: Users },
+  { name: "Staff", href: "/admin/staff", icon: UserCheck },
+  { name: "Students", href: "/admin/students", icon: GraduationCap },
+  { name: "Parents", href: "/admin/parents", icon: HeartHandshake },
   { name: "Products", href: "/admin/products", icon: Package },
   { name: "Categories", href: "/admin/categories", icon: FolderTree },
   { name: "Orders", href: "/admin/orders", icon: ShoppingBag },

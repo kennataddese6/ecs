@@ -378,6 +378,82 @@ export interface Database {
           updated_at?: string;
         };
       };
+      parents: {
+        Row: {
+          id: string;
+          full_name: string;
+          email: string;
+          mobile_number: string;
+          address: string;
+          relationship_to_child: string;
+          emergency_phone: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          full_name: string;
+          email: string;
+          mobile_number: string;
+          address: string;
+          relationship_to_child: string;
+          emergency_phone?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          full_name?: string;
+          email?: string;
+          mobile_number?: string;
+          address?: string;
+          relationship_to_child?: string;
+          emergency_phone?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+      };
+      students: {
+        Row: {
+          id: string;
+          full_name: string;
+          date_of_birth: string;
+          gender: string;
+          room_department: string;
+          parent_id: string;
+          staff_id: string;
+          allergies: string | null;
+          medical_notes: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          full_name: string;
+          date_of_birth: string;
+          gender: string;
+          room_department: string;
+          parent_id: string;
+          staff_id: string;
+          allergies?: string | null;
+          medical_notes?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          full_name?: string;
+          date_of_birth?: string;
+          gender?: string;
+          room_department?: string;
+          parent_id?: string;
+          staff_id?: string;
+          allergies?: string | null;
+          medical_notes?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+      };
       news: {
         Row: {
           id: string;
