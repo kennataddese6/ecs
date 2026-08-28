@@ -42,12 +42,12 @@ export default async function HomePage() {
       {/* 1. TRUE 100% FULL-WIDTH CENTERED HERO SECTION (WALL-TO-WALL COVERAGE, NO BOX WRAPPERS) */}
       <section className="relative w-full overflow-hidden bg-black text-white py-20 sm:py-32 lg:py-40">
         {/* Full-bleed background image across 100% of screen width */}
-        <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 z-0 overflow-hidden flex items-center justify-center">
           <Image
-            src="https://images.unsplash.com/photo-1587734195503-904fca47e0e9?q=80&w=2400&auto=format&fit=crop"
-            alt="Ethiopian Yirgacheffe Roasted Coffee Beans"
+            src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=2400&auto=format&fit=crop"
+            alt="Ethiopian Yirgacheffe Heart Latte Coffee & Roasted Beans"
             fill
-            className="object-cover object-center opacity-50 scale-105"
+            className="object-cover object-center opacity-45 rotate-90 scale-[1.7] sm:scale-[1.45] transition-transform duration-700"
             priority
           />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-black/75 to-black/85" />
