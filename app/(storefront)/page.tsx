@@ -44,10 +44,10 @@ export default async function HomePage() {
         {/* Full-bleed background image across 100% of screen width */}
         <div className="absolute inset-0 z-0">
           <Image
-            src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=2400&auto=format&fit=crop"
-            alt="Ethiopian Yirgacheffe Coffee Beans & Heritage Ritual"
+            src="https://images.unsplash.com/photo-1587734195503-904fca47e0e9?q=80&w=2400&auto=format&fit=crop"
+            alt="Ethiopian Yirgacheffe Roasted Coffee Beans"
             fill
-            className="object-cover object-center opacity-40 scale-105"
+            className="object-cover object-center opacity-50 scale-105"
             priority
           />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-black/75 to-black/85" />
