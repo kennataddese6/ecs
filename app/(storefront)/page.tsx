@@ -18,6 +18,11 @@ import {
   Sparkles,
   ChevronRight,
   Compass,
+  Star,
+  Coffee,
+  ShoppingBag,
+  Award,
+  Flame,
 } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -37,108 +42,186 @@ export default async function HomePage() {
   };
 
   return (
-    <div className="space-y-24 pb-16">
-      {/* 1. HERO SECTION */}
-      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-card via-card to-muted border border-border/80 p-8 sm:p-16 lg:p-20 shadow-2xl">
-        <div className="absolute top-0 right-0 -mt-12 -mr-12 w-96 h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-0 -mb-12 -ml-12 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
+    <div className="space-y-20 pb-16">
+      {/* 1. LUXURY HERO SECTION */}
+      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-card via-card/95 to-amber-950/10 border border-amber-500/20 p-6 sm:p-12 lg:p-16 shadow-2xl backdrop-blur-md">
+        {/* Glow ambient background graphics */}
+        <div className="absolute top-0 right-0 -mt-20 -mr-20 w-[500px] h-[500px] bg-gradient-to-bl from-amber-500/20 via-primary/10 to-transparent rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 -mb-20 -ml-20 w-[450px] h-[450px] bg-gradient-to-tr from-emerald-600/15 via-amber-600/10 to-transparent rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(#b56d29_1px,transparent_1px)] [background-size:24px_24px] opacity-[0.04] pointer-events-none" />
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
-          <div className="space-y-6">
-            <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold tracking-widest uppercase">
-              <Sparkles className="h-3.5 w-3.5" />
-              <span>Authentic Habesha Store</span>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center relative z-10">
+          {/* Hero Left Content Column */}
+          <div className="lg:col-span-7 space-y-6">
+            <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-gradient-to-r from-amber-500/15 via-primary/10 to-amber-500/15 border border-amber-500/30 text-amber-700 dark:text-amber-300 text-xs font-extrabold tracking-widest uppercase shadow-xs">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500" />
+              </span>
+              <Sparkles className="h-3.5 w-3.5 text-amber-500" />
+              <span>Authentic Ethiopian Direct Imports</span>
             </div>
 
-            <h1 className="text-4xl sm:text-6xl font-black tracking-tight leading-tight">
+            <h1 className="text-4xl sm:text-6xl font-black tracking-tight leading-[1.1] text-foreground">
               Ethiopian Heritage. <br />
-              <span className="gradient-text">Delivered to Your Door.</span>
+              <span className="gradient-text font-black">Delivered To Your Door.</span>
             </h1>
 
-            <p className="text-muted-foreground text-base sm:text-xl font-normal leading-relaxed max-w-xl">
-              Discover authentic Yirgacheffe coffee beans, handwoven Habesha Kemis dresses, traditional Niter Kibe spiced butter, and artisan Mesob crafts.
+            <p className="text-muted-foreground text-base sm:text-lg font-medium leading-relaxed max-w-xl">
+              Experience hand-roasted Yirgacheffe coffee beans, hand-spun Habesha Kemis dresses, traditional Niter Kibe spiced butter, and artisan Mesob crafts.
             </p>
 
-            <div className="pt-4 flex flex-wrap gap-4 items-center">
-              <Button size="lg" className="h-13 px-8 text-base font-bold shadow-lg shadow-primary/25" asChild>
+            {/* Hero Quick Category Pills */}
+            <div className="flex flex-wrap gap-2 pt-1">
+              <Link
+                href="/shop/coffee"
+                className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-card border border-border/80 hover:border-primary/50 text-xs font-bold text-foreground transition-all shadow-2xs hover:-translate-y-0.5"
+              >
+                <span>☕</span>
+                <span>Yirgacheffe Coffee</span>
+              </Link>
+              <Link
+                href="/shop/apparel"
+                className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-card border border-border/80 hover:border-primary/50 text-xs font-bold text-foreground transition-all shadow-2xs hover:-translate-y-0.5"
+              >
+                <span>👗</span>
+                <span>Habesha Kemis</span>
+              </Link>
+              <Link
+                href="/shop/spices"
+                className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-card border border-border/80 hover:border-primary/50 text-xs font-bold text-foreground transition-all shadow-2xs hover:-translate-y-0.5"
+              >
+                <span>🌶️</span>
+                <span>Berbere & Spices</span>
+              </Link>
+              <Link
+                href="/shop/crafts"
+                className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-card border border-border/80 hover:border-primary/50 text-xs font-bold text-foreground transition-all shadow-2xs hover:-translate-y-0.5"
+              >
+                <span>🧺</span>
+                <span>Mesob Crafts</span>
+              </Link>
+            </div>
+
+            {/* Hero CTAs */}
+            <div className="pt-2 flex flex-wrap gap-4 items-center">
+              <Button size="lg" className="h-13 px-8 text-base font-extrabold shadow-xl shadow-primary/25 rounded-2xl cursor-pointer" asChild>
                 <Link href="/shop">
-                  Discover Collection <ArrowRight className="ml-2 h-5 w-5" />
+                  Discover Storefront <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
-              <Button size="lg" variant="outline" className="h-13 px-8 text-base font-semibold" asChild>
+              <Button size="lg" variant="outline" className="h-13 px-8 text-base font-bold rounded-2xl border-border/80 bg-card/60 backdrop-blur-sm cursor-pointer" asChild>
                 <Link href="/news">
-                  Read Journal <Compass className="ml-2 h-5 w-5" />
+                  Cultural Journal <Compass className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
             </div>
 
-            <div className="pt-8 border-t border-border/60 grid grid-cols-3 gap-4 text-xs font-semibold text-muted-foreground">
-              <div>
-                <span className="block text-lg font-bold text-foreground">100%</span>
-                <span>Authentic Ethiopian</span>
+            {/* Hero Value Stats Strip */}
+            <div className="pt-6 border-t border-border/60 grid grid-cols-3 gap-4 text-xs font-medium text-muted-foreground">
+              <div className="space-y-0.5">
+                <span className="block text-lg font-black text-foreground">100%</span>
+                <span className="font-semibold">Direct Artisan Import</span>
               </div>
-              <div>
-                <span className="block text-lg font-bold text-foreground">Fast UK</span>
-                <span>Courier Delivery</span>
+              <div className="space-y-0.5">
+                <span className="block text-lg font-black text-foreground">24-48 HR</span>
+                <span className="font-semibold">UK Express Tracked</span>
               </div>
-              <div>
-                <span className="block text-lg font-bold text-foreground">Premium</span>
-                <span>Guaranteed Quality</span>
+              <div className="space-y-0.5">
+                <span className="block text-lg font-black text-foreground">850+</span>
+                <span className="font-semibold">Happy UK Families</span>
               </div>
             </div>
           </div>
 
-          <div className="relative aspect-square sm:aspect-[4/3] lg:aspect-square rounded-2xl overflow-hidden shadow-2xl border border-border bg-muted group">
-            <Image
-              src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=1200&auto=format&fit=crop"
-              alt="Ethiopian Yirgacheffe Coffee Beans & Buna Ceremony"
-              fill
-              className="object-cover group-hover:scale-105 transition-transform duration-700"
-              priority
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-8 text-white">
-              <Badge className="w-fit mb-2 bg-white/20 backdrop-blur-md text-white border-none">
-                Spotlight Item
-              </Badge>
-              <h3 className="text-2xl font-bold">Yirgacheffe Grade-1 Coffee Beans</h3>
-              <p className="text-xs text-white/80 mt-1">Single-origin roasted beans with floral jasmine & bergamot citrus notes.</p>
+          {/* Hero Right Visual Showcase Card */}
+          <div className="lg:col-span-5 relative">
+            <div className="relative aspect-[4/4] rounded-3xl overflow-hidden shadow-2xl border border-amber-500/30 bg-card group">
+              <Image
+                src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=1200&auto=format&fit=crop"
+                alt="Ethiopian Yirgacheffe Coffee Beans & Buna Ceremony"
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-700"
+                priority
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-7 text-white">
+                <div className="flex items-center space-x-2 mb-2">
+                  <Badge className="bg-amber-500 text-black font-extrabold text-[11px] uppercase tracking-wider">
+                    <Flame className="h-3 w-3 mr-1 fill-current" /> Spotlight Product
+                  </Badge>
+                  <Badge variant="outline" className="bg-black/50 backdrop-blur-md text-white border-white/20 text-[11px]">
+                    Single Origin Grade-1
+                  </Badge>
+                </div>
+                <h3 className="text-2xl font-black text-white tracking-tight">Yirgacheffe Coffee Beans</h3>
+                <p className="text-xs text-white/80 mt-1 line-clamp-2">Directly imported from Sidama highlands with notes of jasmine, bergamot & dark chocolate.</p>
+
+                <div className="mt-4 flex items-center justify-between pt-3 border-t border-white/20">
+                  <span className="text-lg font-black text-amber-400">£14.99 / 500g</span>
+                  <Button size="sm" className="bg-white text-black hover:bg-amber-400 font-bold rounded-xl text-xs" asChild>
+                    <Link href="/shop/coffee">View Product &rarr;</Link>
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            {/* Floating Glass Ratings Badge */}
+            <div className="absolute -bottom-4 -left-4 hidden sm:flex items-center space-x-3 rounded-2xl bg-card/90 backdrop-blur-md border border-border/80 p-3.5 shadow-xl">
+              <div className="h-9 w-9 rounded-xl bg-amber-500/15 text-amber-600 flex items-center justify-center font-bold">
+                <Star className="h-5 w-5 fill-amber-400 text-amber-400" />
+              </div>
+              <div>
+                <div className="flex items-center space-x-1">
+                  <span className="font-extrabold text-sm text-foreground">4.9 / 5.0</span>
+                  <span className="text-[10px] text-muted-foreground">(850+ reviews)</span>
+                </div>
+                <p className="text-[11px] font-semibold text-muted-foreground">Authentic Ethiopian Quality</p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 2. PRIMARY CTA TO SHOP / BAR */}
-      <section className="bg-card border border-border rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
+      {/* 2. PRIMARY CTA DISCOVERY BANNER */}
+      <section className="bg-gradient-to-r from-card via-card to-amber-500/10 border border-border/80 rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-md backdrop-blur-sm">
         <div className="space-y-1 text-center md:text-left">
-          <h3 className="text-xl font-bold tracking-tight">Looking for authentic Ethiopian goods?</h3>
-          <p className="text-sm text-muted-foreground">Explore Habesha dresses, coffee beans, Berbere spices, and Mesob crafts.</p>
+          <div className="flex items-center justify-center md:justify-start space-x-2 text-xs font-bold text-primary uppercase tracking-wider mb-1">
+            <Award className="h-4 w-4" />
+            <span>Direct Ethiopian Artisans Marketplace</span>
+          </div>
+          <h3 className="text-xl sm:text-2xl font-black tracking-tight">Looking for authentic Ethiopian traditional goods in the UK?</h3>
+          <p className="text-sm text-muted-foreground">Explore handwoven Habesha Kemis, freshly ground Berbere, and artisanal Jebena sets.</p>
         </div>
-        <Button size="lg" className="font-semibold shadow-md whitespace-nowrap" asChild>
+        <Button size="lg" className="font-extrabold shadow-lg rounded-xl whitespace-nowrap cursor-pointer" asChild>
           <Link href="/shop">
-            Browse All Products <ChevronRight className="ml-2 h-4 w-4" />
+            Browse All Products <ChevronRight className="ml-1.5 h-4 w-4" />
           </Link>
         </Button>
       </section>
 
-      {/* 3. FEATURED PRODUCTS */}
+      {/* 3. FEATURED PRODUCTS SHOWCASE */}
       <section className="space-y-8">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-border pb-4">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-border/80 pb-4">
           <div>
-            <Badge variant="secondary" className="mb-2">Curated Selection</Badge>
-            <h2 className="text-3xl font-extrabold tracking-tight">Featured Products</h2>
+            <Badge variant="secondary" className="mb-2 font-bold uppercase tracking-widest text-[10px] bg-primary/10 text-primary">
+              Handpicked Favorites
+            </Badge>
+            <h2 className="text-3xl font-black tracking-tight">Featured Products</h2>
           </div>
-          <Button variant="ghost" className="font-semibold" asChild>
+          <Button variant="ghost" className="font-bold text-primary hover:text-primary hover:bg-primary/10 rounded-xl" asChild>
             <Link href="/shop">View Full Catalog &rarr;</Link>
           </Button>
         </div>
         <ProductGrid products={featuredProducts} />
       </section>
 
-      {/* 4. CATEGORIES SHOWCASE */}
+      {/* 4. SHOP BY CATEGORY SHOWCASE */}
       <section className="space-y-8">
-        <div className="border-b border-border pb-4">
-          <Badge variant="secondary" className="mb-2 font-bold uppercase tracking-wider">Categories</Badge>
-          <h2 className="text-3xl font-extrabold tracking-tight">Shop by Category</h2>
+        <div className="border-b border-border/80 pb-4">
+          <Badge variant="secondary" className="mb-2 font-bold uppercase tracking-widest text-[10px] bg-primary/10 text-primary">
+            Curated Collections
+          </Badge>
+          <h2 className="text-3xl font-black tracking-tight">Shop by Category</h2>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -151,21 +234,22 @@ export default async function HomePage() {
                 <Link
                   key={cat.id}
                   href={`/shop/${cat.slug}`}
-                  className="group relative aspect-[4/5] rounded-2xl overflow-hidden border border-border shadow-md"
+                  className="group relative aspect-[4/5] rounded-3xl overflow-hidden border border-border/80 shadow-md hover:shadow-xl hover:border-primary/50 transition-all duration-300"
                 >
                   <Image
                     src={bgImage}
                     alt={cat.name}
                     fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-500"
+                    className="object-cover group-hover:scale-110 transition-transform duration-700"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex flex-col justify-end p-6 text-white">
-                    <h3 className="text-xl font-bold group-hover:text-primary transition-colors">{cat.name}</h3>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent flex flex-col justify-end p-6 text-white">
+                    <span className="text-[10px] uppercase font-extrabold tracking-widest text-amber-400 mb-1">Category</span>
+                    <h3 className="text-xl font-black text-white group-hover:text-amber-400 transition-colors">{cat.name}</h3>
                     {cat.description && (
-                      <p className="text-xs text-white/80 line-clamp-2 mt-1">{cat.description}</p>
+                      <p className="text-xs text-white/80 line-clamp-2 mt-1 font-medium">{cat.description}</p>
                     )}
-                    <span className="text-xs font-semibold text-primary mt-3 flex items-center">
-                      Explore Category <ArrowRight className="ml-1 h-3 w-3" />
+                    <span className="text-xs font-bold text-amber-400 mt-3 flex items-center group-hover:translate-x-1 transition-transform">
+                      Explore Category <ArrowRight className="ml-1 h-3.5 w-3.5" />
                     </span>
                   </div>
                 </Link>
@@ -175,91 +259,99 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* 5. PROMOTIONAL / EDITORIAL SECTION */}
-      <section className="relative overflow-hidden rounded-3xl bg-card border border-border p-8 sm:p-16 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center shadow-xl">
-        <div className="relative aspect-square sm:aspect-video lg:aspect-square rounded-2xl overflow-hidden border border-border bg-muted">
+      {/* 5. CULTURAL HERITAGE EDITORIAL BANNER */}
+      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-card via-card to-amber-950/20 border border-border/80 p-8 sm:p-14 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center shadow-xl">
+        <div className="relative aspect-square sm:aspect-video lg:aspect-square rounded-2xl overflow-hidden border border-border bg-muted shadow-md group">
           <Image
             src="/habesha-cloth.png"
-            alt="Authentic Habesha Kemis Weaving"
+            alt="Authentic Habesha Kemis Weaving & Shemma Artisans"
             fill
-            className="object-cover"
+            className="object-cover group-hover:scale-105 transition-transform duration-700"
           />
+          <div className="absolute bottom-4 left-4 right-4 p-4 rounded-xl bg-black/60 backdrop-blur-md text-white text-xs border border-white/10">
+            <span className="font-bold text-amber-400 block mb-0.5">Authentic Handwoven Shemma</span>
+            <span>Made with 100% Ethiopian organic cotton by traditional weavers in Addis Ababa.</span>
+          </div>
         </div>
 
         <div className="space-y-6">
-          <Badge className="bg-primary text-primary-foreground">Our Philosophy</Badge>
-          <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">
+          <Badge className="bg-primary text-primary-foreground font-bold">Our Heritage Philosophy</Badge>
+          <h2 className="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
             Authentic Craftsmanship, Warmth & Tradition.
           </h2>
-          <p className="text-muted-foreground text-base leading-relaxed">
-            Every item in Enat Market represents genuine Ethiopian heritage—from hand-spun Shemma dresses to small-batch Niter Kibe spiced butter and single-origin Yirgacheffe coffee beans.
+          <p className="text-muted-foreground text-base leading-relaxed font-medium">
+            Every item at Enat Market represents genuine Ethiopian heritage—from hand-spun Shemma dresses to small-batch Niter Kibe spiced butter and single-origin Yirgacheffe coffee beans.
           </p>
           <div className="pt-2">
-            <Button size="lg" variant="outline" asChild>
+            <Button size="lg" variant="outline" className="font-bold rounded-xl border-border/80 bg-card cursor-pointer" asChild>
               <Link href="/about">Read Our Heritage Story &rarr;</Link>
             </Button>
           </div>
         </div>
       </section>
 
-      {/* 6. BEST SELLERS / NEW ARRIVALS */}
+      {/* 6. NEW ARRIVALS CATALOG */}
       <section className="space-y-8">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-border pb-4">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-border/80 pb-4">
           <div>
-            <Badge variant="secondary" className="mb-2 font-bold uppercase tracking-wider">Fresh Additions</Badge>
-            <h2 className="text-3xl font-extrabold tracking-tight">New Arrivals in Store</h2>
+            <Badge variant="secondary" className="mb-2 font-bold uppercase tracking-widest text-[10px] bg-primary/10 text-primary">
+              Fresh Additions
+            </Badge>
+            <h2 className="text-3xl font-black tracking-tight">New Arrivals in Store</h2>
           </div>
-          <Button variant="ghost" className="font-semibold" asChild>
-            <Link href="/shop">Browse All &rarr;</Link>
+          <Button variant="ghost" className="font-bold text-primary hover:text-primary hover:bg-primary/10 rounded-xl" asChild>
+            <Link href="/shop">Browse All Products &rarr;</Link>
           </Button>
         </div>
         <ProductGrid products={newArrivals} />
       </section>
 
-      {/* 7. BRAND / VALUE PROPOSITION SECTION */}
+      {/* 7. VALUE PROPOSITIONS GRID */}
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-card border border-border p-6 rounded-2xl space-y-3 shadow-sm hover:border-primary/50 transition-colors">
-          <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold">
-            <Truck className="h-5 w-5" />
+        <div className="bg-card border border-border/80 p-6 rounded-2xl space-y-3 shadow-xs hover:border-primary/50 hover:shadow-md transition-all duration-300">
+          <div className="h-11 w-11 rounded-xl bg-primary/15 text-primary flex items-center justify-center font-bold">
+            <Truck className="h-5.5 w-5.5" />
           </div>
           <h4 className="font-bold text-base">Reliable UK Courier</h4>
-          <p className="text-xs text-muted-foreground">Fast tracked shipping across the UK on all orders.</p>
+          <p className="text-xs text-muted-foreground leading-relaxed">Fast tracked shipping across the UK on all orders with 24-48 hr dispatch.</p>
         </div>
 
-        <div className="bg-card border border-border p-6 rounded-2xl space-y-3 shadow-sm hover:border-primary/50 transition-colors">
-          <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold">
-            <ShieldCheck className="h-5 w-5" />
+        <div className="bg-card border border-border/80 p-6 rounded-2xl space-y-3 shadow-xs hover:border-primary/50 hover:shadow-md transition-all duration-300">
+          <div className="h-11 w-11 rounded-xl bg-primary/15 text-primary flex items-center justify-center font-bold">
+            <ShieldCheck className="h-5.5 w-5.5" />
           </div>
           <h4 className="font-bold text-base">100% Authentic Goods</h4>
-          <p className="text-xs text-muted-foreground">Handpicked traditional products direct from Ethiopian artisans.</p>
+          <p className="text-xs text-muted-foreground leading-relaxed">Handpicked traditional goods direct from Ethiopian master artisans.</p>
         </div>
 
-        <div className="bg-card border border-border p-6 rounded-2xl space-y-3 shadow-sm hover:border-primary/50 transition-colors">
-          <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold">
-            <Headphones className="h-5 w-5" />
+        <div className="bg-card border border-border/80 p-6 rounded-2xl space-y-3 shadow-xs hover:border-primary/50 hover:shadow-md transition-all duration-300">
+          <div className="h-11 w-11 rounded-xl bg-primary/15 text-primary flex items-center justify-center font-bold">
+            <Headphones className="h-5.5 w-5.5" />
           </div>
-          <h4 className="font-bold text-base">Dedicated Customer Support</h4>
-          <p className="text-xs text-muted-foreground">Reach us via email shop@enatmarket.co.uk or 07830 682710.</p>
+          <h4 className="font-bold text-base">Dedicated Customer Care</h4>
+          <p className="text-xs text-muted-foreground leading-relaxed">Reach our friendly UK team via email shop@enatmarket.co.uk or 07830 682710.</p>
         </div>
 
-        <div className="bg-card border border-border p-6 rounded-2xl space-y-3 shadow-sm hover:border-primary/50 transition-colors">
-          <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold">
-            <RotateCcw className="h-5 w-5" />
+        <div className="bg-card border border-border/80 p-6 rounded-2xl space-y-3 shadow-xs hover:border-primary/50 hover:shadow-md transition-all duration-300">
+          <div className="h-11 w-11 rounded-xl bg-primary/15 text-primary flex items-center justify-center font-bold">
+            <RotateCcw className="h-5.5 w-5.5" />
           </div>
-          <h4 className="font-bold text-base">Easy Returns Support</h4>
-          <p className="text-xs text-muted-foreground">Hassle-free return policy for eligible products.</p>
+          <h4 className="font-bold text-base">Easy Returns Guarantee</h4>
+          <p className="text-xs text-muted-foreground leading-relaxed">Hassle-free 14-day return policy for all eligible storefront items.</p>
         </div>
       </section>
 
-      {/* 8. NEWS PREVIEW */}
+      {/* 8. CULTURAL JOURNAL PREVIEW */}
       {latestNews.length > 0 && (
         <section className="space-y-8">
-          <div className="flex items-center justify-between border-b border-border pb-4">
+          <div className="flex items-center justify-between border-b border-border/80 pb-4">
             <div>
-              <Badge variant="secondary" className="mb-2 font-bold uppercase tracking-wider">Cultural Journal</Badge>
-              <h2 className="text-3xl font-extrabold tracking-tight">Latest Stories & Traditions</h2>
+              <Badge variant="secondary" className="mb-2 font-bold uppercase tracking-widest text-[10px] bg-primary/10 text-primary">
+                Cultural Journal
+              </Badge>
+              <h2 className="text-3xl font-black tracking-tight">Latest Stories & Traditions</h2>
             </div>
-            <Button variant="ghost" className="font-semibold" asChild>
+            <Button variant="ghost" className="font-bold text-primary hover:text-primary hover:bg-primary/10 rounded-xl" asChild>
               <Link href="/news">View All Articles &rarr;</Link>
             </Button>
           </div>
@@ -271,13 +363,13 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* 9. NEWSLETTER / CONTACT CTA */}
-      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary/10 via-card to-card border border-primary/20 p-8 sm:p-16 text-center space-y-6 shadow-xl">
+      {/* 9. VIP NEWSLETTER JOIN */}
+      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary/15 via-card to-amber-950/20 border border-primary/30 p-8 sm:p-14 text-center space-y-6 shadow-xl">
         <div className="max-w-2xl mx-auto space-y-3">
-          <Badge className="bg-primary text-primary-foreground">Stay Connected</Badge>
-          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">Join Enat Market</h2>
-          <p className="text-muted-foreground text-sm sm:text-base">
-            Subscribe for fresh shipment alerts, seasonal Habesha Kemis drops, and authentic recipe guides.
+          <Badge className="bg-primary text-primary-foreground font-bold">Join Our Family</Badge>
+          <h2 className="text-3xl sm:text-4xl font-black tracking-tight">Stay Connected With Enat Market</h2>
+          <p className="text-muted-foreground text-sm sm:text-base font-medium">
+            Subscribe for fresh shipment alerts, seasonal Habesha Kemis drops, and authentic Ethiopian recipe guides.
           </p>
         </div>
         <NewsletterForm />

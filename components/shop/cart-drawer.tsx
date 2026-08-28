@@ -82,15 +82,15 @@ export function CartDrawer({ items }: { items: CartItemWithProduct[] }) {
   return (
     <>
       <Button
-        variant="ghost"
+        variant="outline"
         size="icon"
-        className="relative"
+        className="relative h-9 w-9 rounded-xl border-border/80 bg-card hover:bg-primary/10 hover:border-primary/40 hover:text-primary transition-all duration-300 shadow-2xs group cursor-pointer"
         onClick={() => setIsOpen(true)}
         aria-label="Open cart drawer"
       >
-        <ShoppingBag className="h-5 w-5" />
+        <ShoppingBag className="h-4.5 w-4.5 text-foreground group-hover:text-primary transition-colors duration-300" />
         {totalItems > 0 && (
-          <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs font-bold h-4 w-4 rounded-full flex items-center justify-center">
+          <span className="absolute -top-1.5 -right-1.5 bg-primary text-primary-foreground text-[10px] font-extrabold h-4.5 w-4.5 rounded-full flex items-center justify-center shadow-xs">
             {totalItems}
           </span>
         )}

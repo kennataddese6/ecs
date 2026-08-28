@@ -90,23 +90,29 @@ export function MobileNav({ user }: MobileNavProps) {
   ) : null;
 
   return (
-    <div className="flex md:hidden items-center space-x-1">
+    <div className="flex md:hidden items-center space-x-1.5">
       <Button
-        variant="ghost"
+        variant="outline"
         size="icon"
+        className="h-9 w-9 rounded-xl border-border/80 bg-card hover:bg-primary/10 hover:border-primary/40 hover:text-primary transition-all duration-300 shadow-2xs group cursor-pointer"
         onClick={() => setIsSearchOpen(!isSearchOpen)}
         aria-label="Toggle search"
       >
-        <Search className="h-5 w-5 text-muted-foreground" />
+        <Search className="h-4.5 w-4.5 text-foreground group-hover:text-primary transition-colors duration-300" />
       </Button>
 
       <Button
-        variant="ghost"
+        variant="outline"
         size="icon"
+        className="h-9 w-9 rounded-xl border-border/80 bg-card hover:bg-primary/10 hover:border-primary/40 hover:text-primary transition-all duration-300 shadow-2xs group cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}
         aria-label="Toggle menu"
       >
-        {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+        {isOpen ? (
+          <X className="h-5 w-5 text-foreground group-hover:text-primary transition-colors duration-300" />
+        ) : (
+          <Menu className="h-5 w-5 text-foreground group-hover:text-primary transition-colors duration-300" />
+        )}
       </Button>
 
       {searchOverlay}
