@@ -44,7 +44,7 @@ export default async function NewProductPage({
 
         <ImageUploadInput label="Product Image" name="imageUrl" fileInputName="imageFile" />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="space-y-2">
             <label className="text-sm font-semibold">Price (£)</label>
             <Input name="price" type="number" step="0.01" placeholder="28.50" required />
@@ -52,6 +52,10 @@ export default async function NewProductPage({
           <div className="space-y-2">
             <label className="text-sm font-semibold">Compare At Price (£)</label>
             <Input name="compareAtPrice" type="number" step="0.01" placeholder="34.00" />
+          </div>
+          <div className="space-y-2">
+            <label className="text-sm font-semibold">Unit / Pack Size (kg, Litre, g)</label>
+            <Input name="unitLabel" placeholder="e.g. 1 kg, 500 g, 1 Litre, 250 ml" defaultValue="1 kg" />
           </div>
         </div>
 

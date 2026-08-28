@@ -93,6 +93,7 @@ export interface Database {
           stock_quantity: number;
           sku: string | null;
           category_id: string | null;
+          unit_label?: string | null;
           featured: boolean;
           active: boolean;
           is_deliverable?: boolean;
@@ -110,6 +111,7 @@ export interface Database {
           stock_quantity?: number;
           sku?: string | null;
           category_id?: string | null;
+          unit_label?: string | null;
           featured?: boolean;
           active?: boolean;
           is_deliverable?: boolean;
@@ -127,6 +129,7 @@ export interface Database {
           stock_quantity?: number;
           sku?: string | null;
           category_id?: string | null;
+          unit_label?: string | null;
           featured?: boolean;
           active?: boolean;
           is_deliverable?: boolean;

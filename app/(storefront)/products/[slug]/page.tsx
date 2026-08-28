@@ -124,12 +124,17 @@ export default async function ProductDetailPage({
             )}
           </div>
 
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-4 flex-wrap gap-y-2">
             <PriceDisplay
               price={product.price}
               compareAtPrice={product.compare_at_price}
               className="text-2xl sm:text-3xl font-extrabold"
             />
+            {product.unit_label && (
+              <span className="text-sm sm:text-base font-bold text-muted-foreground">
+                / {product.unit_label}
+              </span>
+            )}
             {isSale && (
               <Badge className="bg-destructive text-destructive-foreground font-bold text-sm px-2.5 py-0.5">
                 Save {discountPercent}%

@@ -76,7 +76,12 @@ export function ProductCard({ product }: { product: ProductWithImages }) {
         </div>
 
         <div className="flex items-baseline justify-between pt-1">
-          <PriceDisplay price={product.price} compareAtPrice={product.compare_at_price} />
+          <div className="flex items-baseline space-x-1.5 flex-wrap">
+            <PriceDisplay price={product.price} compareAtPrice={product.compare_at_price} />
+            {product.unit_label && (
+              <span className="text-xs font-semibold text-muted-foreground">/ {product.unit_label}</span>
+            )}
+          </div>
 
           <span className="text-[11px] font-semibold text-muted-foreground">
             {!isDeliverable ? (

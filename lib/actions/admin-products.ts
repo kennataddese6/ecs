@@ -32,6 +32,7 @@ export async function createProductAction(formData: FormData): Promise<void> {
   const stockQuantity = parseInt(formData.get("stockQuantity") as string, 10) || 0;
   const sku = formData.get("sku") as string;
   const categoryId = (formData.get("categoryId") as string) || null;
+  const unitLabel = (formData.get("unitLabel") as string) || "1 Item";
   const featured = formData.get("featured") === "true";
   const active = formData.get("active") === "true";
   const isDeliverable = formData.get("isDeliverable") === "true";
@@ -62,6 +63,7 @@ export async function createProductAction(formData: FormData): Promise<void> {
       stock_quantity: stockQuantity,
       sku,
       category_id: categoryId,
+      unit_label: unitLabel,
       featured,
       active,
       is_deliverable: isDeliverable,
@@ -104,6 +106,7 @@ export async function updateProductAction(productId: string, formData: FormData)
   const stockQuantity = parseInt(formData.get("stockQuantity") as string, 10) || 0;
   const sku = formData.get("sku") as string;
   const categoryId = (formData.get("categoryId") as string) || null;
+  const unitLabel = (formData.get("unitLabel") as string) || "1 Item";
   const featured = formData.get("featured") === "true";
   const active = formData.get("active") === "true";
   const isDeliverable = formData.get("isDeliverable") === "true";
@@ -130,6 +133,7 @@ export async function updateProductAction(productId: string, formData: FormData)
       stock_quantity: stockQuantity,
       sku,
       category_id: categoryId,
+      unit_label: unitLabel,
       featured,
       active,
       is_deliverable: isDeliverable,

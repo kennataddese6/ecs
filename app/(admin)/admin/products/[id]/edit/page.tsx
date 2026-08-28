@@ -61,7 +61,7 @@ export default async function EditProductPage({
           defaultValue={primaryImage}
         />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="space-y-2">
             <label className="text-sm font-semibold">Price (£)</label>
             <Input name="price" type="number" step="0.01" defaultValue={product.price} required />
@@ -69,6 +69,10 @@ export default async function EditProductPage({
           <div className="space-y-2">
             <label className="text-sm font-semibold">Compare At Price (£)</label>
             <Input name="compareAtPrice" type="number" step="0.01" defaultValue={product.compare_at_price || ""} />
+          </div>
+          <div className="space-y-2">
+            <label className="text-sm font-semibold">Unit / Pack Size (kg, Litre, g)</label>
+            <Input name="unitLabel" placeholder="e.g. 1 kg, 500 g, 1 Litre, 250 ml" defaultValue={product.unit_label || "1 kg"} />
           </div>
         </div>
 
