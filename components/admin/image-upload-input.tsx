@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Image from "next/image";
-import { UploadCloud, X, Link as LinkIcon, Image as ImageIcon } from "lucide-react";
+import { UploadCloud, X, Link as LinkIcon, Image as ImageIcon, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -11,6 +11,15 @@ interface ImageUploadInputProps {
   fileInputName?: string;
   defaultValue?: string;
   label?: string;
+}
+
+const ALLOWED_EXTENSIONS = ["jpg", "jpeg", "png", "webp", "avif", "gif", "svg"];
+
+function isValidFormat(file: File): boolean {
+  if (!file) return false;
+  const ext = (file.name.split(".").pop() || "").toLowerCase();
+  const isTypeValid = file.type ? file.type.startsWith("image/") : false;
+  return isTypeValid || ALLOWED_EXTENSIONS.includes(ext);
 }
 
 export function ImageUploadInput({
@@ -22,11 +31,20 @@ export function ImageUploadInput({
   const [previewUrl, setPreviewUrl] = React.useState<string>(defaultValue);
   const [mode, setMode] = React.useState<"file" | "url">("file");
   const [urlInput, setUrlInput] = React.useState<string>(defaultValue);
+  const [errorMsg, setErrorMsg] = React.useState<string | null>(null);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setErrorMsg(null);
     const file = e.target.files?.[0];
     if (file) {
+      if (!isValidFormat(file)) {
+        setErrorMsg(`Invalid file type "${file.name}". Please upload a JPG, JPEG, PNG, WEBP, or AVIF image file.`);
+        if (fileInputRef.current) {
+          fileInputRef.current.value = "";
+        }
+        return;
+      }
       const localUrl = URL.createObjectURL(file);
       setPreviewUrl(localUrl);
     }
@@ -41,6 +59,7 @@ export function ImageUploadInput({
   const clearImage = () => {
     setPreviewUrl("");
     setUrlInput("");
+    setErrorMsg(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -78,6 +97,13 @@ export function ImageUploadInput({
           </button>
         </div>
       </div>
+
+      {errorMsg && (
+        <div className="p-3 rounded-xl bg-destructive/10 text-destructive text-xs font-medium border border-destructive/20 flex items-center space-x-2 animate-in fade-in">
+          <AlertCircle className="h-4 w-4 shrink-0" />
+          <span>{errorMsg}</span>
+        </div>
+      )}
 
       {/* Hidden value field for form submission */}
       <input type="hidden" name={name} value={urlInput || (previewUrl.startsWith("http") ? previewUrl : "")} />
@@ -126,15 +152,15 @@ export function ImageUploadInput({
                 <p className="text-xs font-semibold text-foreground">
                   Click to select or drag & drop image
                 </p>
-                <p className="text-[10px] text-muted-foreground">
-                  PNG, JPG, WEBP up to 10MB (Stores in Supabase Storage)
+                <p className="text-[10px] text-muted-foreground font-medium">
+                  JPG, JPEG, PNG, WEBP, AVIF up to 20MB
                 </p>
               </div>
               <input
                 ref={fileInputRef}
                 type="file"
                 name={fileInputName}
-                accept="image/*"
+                accept="image/jpeg,image/jpg,image/png,image/webp,image/avif,image/gif,image/svg+xml"
                 className="hidden"
                 onChange={handleFileChange}
               />

@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Image from "next/image";
-import { UploadCloud, X, Plus, ImageIcon, Link as LinkIcon } from "lucide-react";
+import { UploadCloud, X, Plus, ImageIcon, Link as LinkIcon, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -23,6 +23,15 @@ interface ImageItem {
   url: string;
   file?: File;
   isExisting?: boolean;
+}
+
+const ALLOWED_EXTENSIONS = ["jpg", "jpeg", "png", "webp", "avif", "gif", "svg"];
+
+function isValidFormat(file: File): boolean {
+  if (!file) return false;
+  const ext = (file.name.split(".").pop() || "").toLowerCase();
+  const isTypeValid = file.type ? file.type.startsWith("image/") : false;
+  return isTypeValid || ALLOWED_EXTENSIONS.includes(ext);
 }
 
 function parseExistingImages(rawList?: (ExistingImage | string)[]): ImageItem[] {
@@ -59,6 +68,7 @@ export function MultiImageUploadInput({
     return parseExistingImages(existingImages);
   });
 
+  const [errorMsg, setErrorMsg] = React.useState<string | null>(null);
   const [urlInput, setUrlInput] = React.useState("");
   const [showUrlInput, setShowUrlInput] = React.useState(false);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
@@ -68,9 +78,7 @@ export function MultiImageUploadInput({
     const parsed = parseExistingImages(existingImages);
     if (parsed.length > 0) {
       setItems((prev) => {
-        // Keep any newly added local files
         const localFiles = prev.filter((i) => i.file);
-        // Avoid duplicate URLs
         const existingUrls = new Set(parsed.map((p) => p.url));
         const customUrls = prev.filter((i) => !i.file && !i.isExisting && !existingUrls.has(i.url));
         return [...parsed, ...customUrls, ...localFiles];
@@ -91,22 +99,40 @@ export function MultiImageUploadInput({
         fileInputRef.current.files = dt.files;
       }
     } catch (e) {
-      // Graceful fallback for environments without DataTransfer
+      // Fallback
     }
   }, [items]);
 
   const handleFilesSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setErrorMsg(null);
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
-    const newItems: ImageItem[] = Array.from(files).map((file) => ({
-      id: `file-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
-      url: URL.createObjectURL(file),
-      file,
-      isExisting: false,
-    }));
+    const validFiles: File[] = [];
+    const invalidNames: string[] = [];
 
-    setItems((prev) => [...prev, ...newItems]);
+    Array.from(files).forEach((file) => {
+      if (isValidFormat(file)) {
+        validFiles.push(file);
+      } else {
+        invalidNames.push(file.name);
+      }
+    });
+
+    if (invalidNames.length > 0) {
+      setErrorMsg(`Invalid file type for: ${invalidNames.join(", ")}. Please upload JPG, JPEG, PNG, WEBP, or AVIF image files.`);
+    }
+
+    if (validFiles.length > 0) {
+      const newItems: ImageItem[] = validFiles.map((file) => ({
+        id: `file-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
+        url: URL.createObjectURL(file),
+        file,
+        isExisting: false,
+      }));
+
+      setItems((prev) => [...prev, ...newItems]);
+    }
   };
 
   const handleAddUrl = () => {
@@ -137,6 +163,13 @@ export function MultiImageUploadInput({
         </span>
       </div>
 
+      {errorMsg && (
+        <div className="p-3 rounded-xl bg-destructive/10 text-destructive text-xs font-medium border border-destructive/20 flex items-center space-x-2 animate-in fade-in">
+          <AlertCircle className="h-4 w-4 shrink-0" />
+          <span>{errorMsg}</span>
+        </div>
+      )}
+
       {/* Hidden inputs for URL strings */}
       {items.map((item) => (
         <React.Fragment key={item.id}>
@@ -149,7 +182,7 @@ export function MultiImageUploadInput({
         ref={fileInputRef}
         type="file"
         name="imageFiles"
-        accept="image/*"
+        accept="image/jpeg,image/jpg,image/png,image/webp,image/avif,image/gif,image/svg+xml"
         multiple
         className="hidden"
         onChange={handleFilesSelected}
@@ -196,7 +229,7 @@ export function MultiImageUploadInput({
             <UploadCloud className="h-5.5 w-5.5" />
           </div>
           <span className="text-xs font-bold text-foreground">Upload Photos</span>
-          <span className="text-[10px] text-muted-foreground">PNG, JPG, WEBP</span>
+          <span className="text-[10px] text-muted-foreground font-medium">JPG, JPEG, PNG, WEBP</span>
         </div>
       </div>
 
