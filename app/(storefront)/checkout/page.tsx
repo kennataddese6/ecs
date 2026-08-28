@@ -1,5 +1,6 @@
 import { getCurrentUser } from "@/lib/auth";
 import { getCart } from "@/lib/services/cart";
+import { getActiveBankAccounts } from "@/lib/services/bank-accounts";
 import { redirect } from "next/navigation";
 import { UKCheckoutForm } from "@/components/checkout/uk-checkout-form";
 
@@ -12,6 +13,7 @@ export default async function CheckoutPage({
 }) {
   const user = await getCurrentUser();
   const { items } = await getCart();
+  const bankAccounts = await getActiveBankAccounts();
   const params = await searchParams;
 
   if (items.length === 0) {
@@ -27,7 +29,7 @@ export default async function CheckoutPage({
         </p>
       </div>
 
-      <UKCheckoutForm user={user} items={items} error={params.error} />
+      <UKCheckoutForm user={user} items={items} bankAccounts={bankAccounts} error={params.error} />
     </div>
   );
 }

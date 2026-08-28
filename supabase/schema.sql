@@ -436,3 +436,21 @@ CREATE POLICY "Admin Update News Images"
 CREATE POLICY "Admin Delete News Images"
   ON storage.objects FOR DELETE
   USING (bucket_id = 'news-images' AND public.is_admin(auth.uid()));
+
+-- ============================================================================
+-- 10. BANK ACCOUNTS TABLE
+-- ============================================================================
+CREATE TABLE IF NOT EXISTS public.bank_accounts (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  bank_name text NOT NULL,
+  account_name text NOT NULL,
+  sort_code text NOT NULL,
+  account_number text NOT NULL,
+  iban text,
+  swift_bic text,
+  instructions text,
+  is_active boolean NOT NULL DEFAULT true,
+  is_primary boolean NOT NULL DEFAULT true,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
+);

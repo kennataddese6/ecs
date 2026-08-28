@@ -25,6 +25,8 @@ import {
   Loader2,
 } from "lucide-react";
 
+import { BankAccount } from "@/lib/types/bank-account";
+
 interface UKCheckoutFormProps {
   user: {
     email?: string;
@@ -34,10 +36,11 @@ interface UKCheckoutFormProps {
     };
   } | null;
   items: CartItemWithProduct[];
+  bankAccounts?: BankAccount[];
   error?: string;
 }
 
-export function UKCheckoutForm({ user, items, error }: UKCheckoutFormProps) {
+export function UKCheckoutForm({ user, items, bankAccounts = [], error }: UKCheckoutFormProps) {
   const [fulfillmentMethod, setFulfillmentMethod] = React.useState<"delivery" | "collection">("delivery");
   const [paymentMethod, setPaymentMethod] = React.useState<"bank_transfer" | "stripe">("bank_transfer");
   const [postcode, setPostcode] = React.useState<string>("");
@@ -363,28 +366,58 @@ export function UKCheckoutForm({ user, items, error }: UKCheckoutFormProps) {
                   <span>Enat Market Official UK Bank Account Details</span>
                 </h4>
                 <p className="text-xs text-muted-foreground">
-                  Please transfer the total amount <strong>£{total.toFixed(2)}</strong> to our Barclays UK bank account:
+                  Please transfer the total amount <strong>£{total.toFixed(2)}</strong> to our official UK bank account:
                 </p>
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-muted/60 p-4 rounded-xl text-xs font-medium">
-                <div>
-                  <span className="block text-[10px] text-muted-foreground uppercase font-semibold">Bank Name</span>
-                  <span className="font-bold text-foreground">Barclays Bank UK</span>
+              {(bankAccounts && bankAccounts.length > 0 ? bankAccounts : [
+                {
+                  id: "default",
+                  bank_name: "Barclays Bank UK",
+                  account_name: "Enat Market Ltd",
+                  sort_code: "20-00-00",
+                  account_number: "87654321",
+                  instructions: "Please use your Order Number (e.g. ORD-XXXX) as payment reference.",
+                  is_active: true,
+                  is_primary: true,
+                }
+              ]).map((acc) => (
+                <div key={acc.id} className="space-y-2 border border-border/60 bg-muted/40 p-4 rounded-xl">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-extrabold text-foreground">{acc.bank_name}</span>
+                    {acc.is_primary && (
+                      <span className="text-[10px] font-bold text-amber-500 bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20">
+                        Primary Account
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-medium pt-1">
+                    <div>
+                      <span className="block text-[10px] text-muted-foreground uppercase font-semibold">Account Name</span>
+                      <span className="font-bold text-foreground">{acc.account_name}</span>
+                    </div>
+                    <div>
+                      <span className="block text-[10px] text-muted-foreground uppercase font-semibold">Sort Code</span>
+                      <span className="font-bold text-foreground">{acc.sort_code}</span>
+                    </div>
+                    <div>
+                      <span className="block text-[10px] text-muted-foreground uppercase font-semibold">Account No.</span>
+                      <span className="font-bold text-foreground">{acc.account_number}</span>
+                    </div>
+                    <div>
+                      <span className="block text-[10px] text-muted-foreground uppercase font-semibold">IBAN / BIC</span>
+                      <span className="font-bold text-foreground">{acc.iban || acc.swift_bic || "N/A"}</span>
+                    </div>
+                  </div>
+
+                  {acc.instructions && (
+                    <p className="text-[11px] text-muted-foreground italic pt-1">
+                      Note: {acc.instructions}
+                    </p>
+                  )}
                 </div>
-                <div>
-                  <span className="block text-[10px] text-muted-foreground uppercase font-semibold">Account Name</span>
-                  <span className="font-bold text-foreground">Enat Market Ltd</span>
-                </div>
-                <div>
-                  <span className="block text-[10px] text-muted-foreground uppercase font-semibold">Sort Code</span>
-                  <span className="font-bold text-foreground">20-00-00</span>
-                </div>
-                <div>
-                  <span className="block text-[10px] text-muted-foreground uppercase font-semibold">Account No.</span>
-                  <span className="font-bold text-foreground">87654321</span>
-                </div>
-              </div>
+              ))}
 
               {/* Upload Proof of Transfer File Input */}
               <div className="space-y-2 pt-1">
