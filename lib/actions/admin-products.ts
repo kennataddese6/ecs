@@ -50,7 +50,7 @@ async function handleProductImagesSave(supabase: any, productId: string, formDat
   }
 
   if (finalImageUrls.length > 0) {
-    // Refresh product images record list
+    // Delete existing product images for this product ID
     await supabase.from("product_images").delete().eq("product_id", productId);
     const records = finalImageUrls.map((url, index) => ({
       product_id: productId,
@@ -139,7 +139,10 @@ export async function updateProductAction(productId: string, formData: FormData)
   const isDeliverable = formData.get("isDeliverable") === "true";
   const deliveryFeePerUnit = parseFloat((formData.get("deliveryFeePerUnit") as string) || "0");
 
-  const { error } = await supabase
+  let actualProductId = productId;
+
+  // Attempt update on existing Supabase product row
+  const { data: updatedRows, error } = await supabase
     .from("products")
     .update({
       name,
@@ -156,7 +159,8 @@ export async function updateProductAction(productId: string, formData: FormData)
       is_deliverable: isDeliverable,
       delivery_fee_per_unit: isNaN(deliveryFeePerUnit) ? 0 : deliveryFeePerUnit,
     })
-    .eq("id", productId);
+    .eq("id", productId)
+    .select("id");
 
   if (error) {
     if (error.message.includes("public.products") || error.message.includes("schema cache")) {
@@ -165,7 +169,34 @@ export async function updateProductAction(productId: string, formData: FormData)
     redirect(`/admin/products/${productId}/edit?error=${encodeURIComponent(error.message)}`);
   }
 
-  await handleProductImagesSave(supabase, productId, formData);
+  // If 0 rows were updated (e.g. editing a demo product 'prod-1'), insert real row into Supabase
+  if (!updatedRows || updatedRows.length === 0) {
+    const { data: insertedProd, error: insertError } = await supabase
+      .from("products")
+      .insert({
+        name,
+        slug,
+        description,
+        price,
+        compare_at_price: compareAtPrice,
+        stock_quantity: stockQuantity,
+        sku: sku || `SKU-${Date.now().toString().slice(-6)}`,
+        category_id: categoryId,
+        unit_label: unitLabel,
+        featured,
+        active,
+        is_deliverable: isDeliverable,
+        delivery_fee_per_unit: isNaN(deliveryFeePerUnit) ? 0 : deliveryFeePerUnit,
+      })
+      .select("id")
+      .single();
+
+    if (insertedProd) {
+      actualProductId = insertedProd.id;
+    }
+  }
+
+  await handleProductImagesSave(supabase, actualProductId, formData);
 
   revalidateProductPaths(slug);
   redirect("/admin/products");
