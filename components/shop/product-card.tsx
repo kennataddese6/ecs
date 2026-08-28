@@ -7,7 +7,7 @@ import { PriceDisplay } from "@/components/shop/price-display";
 import { AddToCartButton } from "@/components/shop/add-to-cart-button";
 
 export function ProductCard({ product }: { product: ProductWithImages }) {
-  const imageUrl = product.product_images?.[0]?.image_url || "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=800&auto=format&fit=crop";
+  const imageUrl = product.product_images?.[0]?.image_url || "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=800&auto=format&fit=crop";
 
   const isOutOfStock = product.stock_quantity <= 0;
   const isLowStock = product.stock_quantity > 0 && product.stock_quantity <= 5;

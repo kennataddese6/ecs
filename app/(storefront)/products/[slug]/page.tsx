@@ -22,7 +22,7 @@ export async function generateMetadata({
     return { title: "Product Not Found" };
   }
 
-  const imageUrl = product.product_images?.[0]?.image_url || "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=800&auto=format&fit=crop";
+  const imageUrl = product.product_images?.[0]?.image_url || "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=800&auto=format&fit=crop";
 
   return {
     title: product.name,
@@ -66,7 +66,7 @@ export default async function ProductDetailPage({
   const isDeliverable = product.is_deliverable ?? true;
   const deliveryFee = product.delivery_fee_per_unit ?? 0;
 
-  const mainImageUrl = product.product_images?.[0]?.image_url || "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=800&auto=format&fit=crop";
+  const mainImageUrl = product.product_images?.[0]?.image_url || "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=800&auto=format&fit=crop";
 
   const jsonLd = {
     "@context": "https://schema.org",

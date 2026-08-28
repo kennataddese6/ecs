@@ -1,64 +1,68 @@
--- Seed Demo Categories
+-- Seed Ethiopian Storefront Categories
 INSERT INTO public.categories (id, name, slug, description, image_url, active)
 VALUES 
-  ('c1000000-0000-0000-0000-000000000001', 'Audio', 'audio', 'High-fidelity acoustic instruments and wireless headphones.', 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=800&auto=format&fit=crop', true),
-  ('c2000000-0000-0000-0000-000000000002', 'Apparel', 'apparel', 'Tailored garments crafted from organic and recycled fibers.', 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?q=80&w=800&auto=format&fit=crop', true),
-  ('c3000000-0000-0000-0000-000000000003', 'Accessories', 'accessories', 'Handcrafted leather goods, horology, and eyewear.', 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=800&auto=format&fit=crop', true),
-  ('c4000000-0000-0000-0000-000000000004', 'Home Objects', 'home', 'Minimalist architectural objects and interior accessories.', 'https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?q=80&w=800&auto=format&fit=crop', true)
+  ('c1000000-0000-0000-0000-000000000001', 'Ethiopian Coffee & Buna', 'coffee', 'Single-origin Yirgacheffe & Sidama roasted coffee beans and Buna ceremony accessories.', 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=800&auto=format&fit=crop', true),
+  ('c2000000-0000-0000-0000-000000000002', 'Traditional Habesha Apparel', 'apparel', 'Hand-loomed organic cotton Habesha Kemis dresses and Netela shawls.', '/habesha-cloth.png', true),
+  ('c3000000-0000-0000-0000-000000000003', 'Spices & Niter Kibe', 'spices', 'Hand-blended Ethiopian Berbere, Mitmita, Korerima, and authentic Niter Kibe clarified butter.', 'https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?q=80&w=800&auto=format&fit=crop', true),
+  ('c4000000-0000-0000-0000-000000000004', 'Artisan Mesob & Crafts', 'crafts', 'Handwoven Mesob basketry, clay Jebena coffee pots, and Habesha cultural crafts.', 'https://images.unsplash.com/photo-1606744824163-985d376605aa?q=80&w=800&auto=format&fit=crop', true)
 ON CONFLICT (id) DO UPDATE SET active = true;
 
--- Seed Demo Products
-INSERT INTO public.products (id, name, slug, description, price, compare_at_price, stock_quantity, sku, category_id, featured, active)
+-- Seed Ethiopian Products
+INSERT INTO public.products (id, name, slug, description, price, compare_at_price, stock_quantity, sku, category_id, unit_label, featured, active)
 VALUES
   (
     'p1000000-0000-0000-0000-000000000001',
-    'LUMEN Studio Master Headphones',
-    'lumen-studio-master-headphones',
-    'Precision-tuned wireless headphones featuring custom beryllium drivers, active noise cancellation, and 40-hour battery life.',
-    349.00,
-    399.00,
-    15,
-    'LMN-AUD-001',
+    'Yirgacheffe Grade-1 Organic Roasted Coffee Beans',
+    'yirgacheffe-grade-1-coffee-beans',
+    'Authentic Ethiopian Yirgacheffe coffee beans roasted to perfection. Features floral jasmine aromas, bergamot citrus notes, and a silky smooth finish for traditional Buna preparation.',
+    28.50,
+    34.00,
+    45,
+    'ETH-COF-001',
     'c1000000-0000-0000-0000-000000000001',
+    '1 kg',
     true,
     true
   ),
   (
     'p2000000-0000-0000-0000-000000000002',
-    'Heritage Italian Leather Tote',
-    'heritage-italian-leather-tote',
-    'Hand-stitched full-grain Tuscan leather tote bag featuring solid brass hardware and an organic cotton interior lining.',
-    480.00,
-    550.00,
-    8,
-    'LMN-ACC-002',
-    'c3000000-0000-0000-0000-000000000003',
+    'Royal Handwoven Habesha Kemis with Gold Border',
+    'royal-handwoven-habesha-kemis',
+    'Exquisite Ethiopian hand-loomed sheer cotton dress (Shemma) adorned with intricate gold Tilet embroidery along the neckline, sleeves, and hem. Includes matching Netela scarf.',
+    145.00,
+    185.00,
+    12,
+    'ETH-CLO-001',
+    'c2000000-0000-0000-0000-000000000002',
+    '1 Dress',
     true,
     true
   ),
   (
     'p3000000-0000-0000-0000-000000000003',
-    'Obsidian Minimalist Smartwatch',
-    'obsidian-minimalist-smartwatch',
-    'Grade-5 titanium case with sapphire crystal display, biometric health tracking, and 7-day battery stamina.',
-    299.00,
-    null,
-    20,
-    'LMN-ACC-003',
+    'Traditional Spiced Clarified Butter (Niter Kibe)',
+    'traditional-spiced-clarified-butter-niter-kibe',
+    'Handcrafted Ethiopian clarified butter simmered with black cardamom (Korerima), sacred basil (Beso Bela), fenugreek, and garlic. Rich golden aroma essential for Doro Wat.',
+    19.50,
+    24.00,
+    30,
+    'ETH-SPC-001',
     'c3000000-0000-0000-0000-000000000003',
+    '500 g',
     true,
     true
   ),
   (
     'p4000000-0000-0000-0000-000000000004',
-    'Ceramic Architectural Table Lamp',
-    'ceramic-architectural-table-lamp',
-    'Hand-thrown matte ceramic base topped with a natural linen shade, featuring warm dimmable LED ambiance.',
-    185.00,
-    220.00,
-    12,
-    'LMN-HOM-004',
-    'c4000000-0000-0000-0000-000000000004',
+    'Sidama Specialty Grade Whole Coffee Beans',
+    'sidama-specialty-whole-coffee-beans',
+    'Single-origin Sidama coffee beans harvested from high-altitude smallholder farms. Rich body with lemon blossom notes and deep berry sweetness.',
+    26.00,
+    32.00,
+    40,
+    'ETH-COF-002',
+    'c1000000-0000-0000-0000-000000000001',
+    '1 kg',
     true,
     true
   )
@@ -67,32 +71,32 @@ ON CONFLICT (id) DO UPDATE SET active = true;
 -- Seed Product Images
 INSERT INTO public.product_images (id, product_id, image_url, alt_text, sort_order)
 VALUES
-  ('i1000000-0000-0000-0000-000000000001', 'p1000000-0000-0000-0000-000000000001', 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=800&auto=format&fit=crop', 'LUMEN Studio Master Headphones', 0),
-  ('i2000000-0000-0000-0000-000000000002', 'p2000000-0000-0000-0000-000000000002', 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=800&auto=format&fit=crop', 'Heritage Italian Leather Tote', 0),
-  ('i3000000-0000-0000-0000-000000000003', 'p3000000-0000-0000-0000-000000000003', 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=800&auto=format&fit=crop', 'Obsidian Minimalist Smartwatch', 0),
-  ('i4000000-0000-0000-0000-000000000004', 'p4000000-0000-0000-0000-000000000004', 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?q=80&w=800&auto=format&fit=crop', 'Ceramic Architectural Table Lamp', 0)
+  ('i1000000-0000-0000-0000-000000000001', 'p1000000-0000-0000-0000-000000000001', 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=1200&auto=format&fit=crop', 'Yirgacheffe Coffee Beans & Cup', 0),
+  ('i2000000-0000-0000-0000-000000000002', 'p2000000-0000-0000-0000-000000000002', '/habesha-cloth.png', 'Royal Habesha Kemis Traditional Dress', 0),
+  ('i3000000-0000-0000-0000-000000000003', 'p3000000-0000-0000-0000-000000000003', 'https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?q=80&w=1200&auto=format&fit=crop', 'Spiced Niter Kibe Butter & Berbere Spices', 0),
+  ('i4000000-0000-0000-0000-000000000004', 'p4000000-0000-0000-0000-000000000004', 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=1200&auto=format&fit=crop', 'Sidama Specialty Whole Coffee Beans', 0)
 ON CONFLICT (id) DO NOTHING;
 
--- Seed Demo News
+-- Seed Cultural News Articles
 INSERT INTO public.news (id, title, slug, excerpt, content, featured_image, published, published_at)
 VALUES
   (
     'n1000000-0000-0000-0000-000000000001',
-    'Introducing the LUMEN Autumn/Winter 2026 Collection',
-    'introducing-lumen-aw26-collection',
-    'Explore our latest drop combining high-grade acoustics, sustainable textiles, and minimalist industrial design.',
-    '<p>We are thrilled to unveil our AW26 capsule collection, engineered for performance and sculpted with elegance. Each object embodies our commitment to modern luxury.</p>',
-    'https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=800&auto=format&fit=crop',
+    'The Timeless Ritual of the Ethiopian Coffee Ceremony (Buna)',
+    'art-of-acoustic-engineering',
+    'Discover the spiritual and social heritage behind roasting fresh green coffee beans over hot coals in a traditional Jebena.',
+    '<p>The Ethiopian coffee ceremony (Buna) is far more than a beverage—it is a sacred daily gathering celebrating hospitality, community, and heritage. Fresh green Yirgacheffe beans are washed, hand-roasted over glowing coals until aromatic smoke fills the room, ground with a Mookecha, and brewed in a clay Jebena pot.</p>',
+    'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=800&auto=format&fit=crop',
     true,
     now()
   ),
   (
     'n2000000-0000-0000-0000-000000000002',
-    'The Art of Sustainable Craftsmanship',
-    'art-of-sustainable-craftsmanship',
-    'How we collaborate with local European tanneries and certified organic suppliers to eliminate waste.',
-    '<p>Luxury should never come at the expense of our planet. Discover how LUMEN ensures 100% supply chain transparency and zero plastic packaging.</p>',
-    'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?q=80&w=800&auto=format&fit=crop',
+    'Preserving Handwoven Habesha Textiles: The Art of Shemma Craft',
+    'florentine-leathercraft-sustainable-tanning',
+    'An in-depth look into traditional handloom weavers in Addis Ababa creating organic cotton Habesha Kemis with Tilet embroidery.',
+    '<p>Behind every authentic Habesha Kemis dress lies generations of master weaving tradition. Artisans spin 100% organic Ethiopian cotton into delicate Shemma fabric, hand-stitching vibrant Tilet borders that carry rich cultural symbols.</p>',
+    '/habesha-cloth.png',
     true,
     now()
   )
