@@ -27,6 +27,14 @@ export default async function AdminProductsPage() {
       cell: (row) => <PriceDisplay price={row.price} compareAtPrice={row.compare_at_price} />,
     },
     {
+      header: "Unit / Size",
+      cell: (row) => (
+        <Badge variant="outline" className="text-xs font-semibold">
+          {row.unit_label || "1 Item"}
+        </Badge>
+      ),
+    },
+    {
       header: "Stock",
       cell: (row) => (
         <span className={row.stock_quantity < 5 ? "text-destructive font-semibold" : "font-medium"}>
