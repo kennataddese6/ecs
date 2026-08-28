@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <div className="space-y-12 py-6 max-w-6xl mx-auto">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 py-8">
       <div className="text-center space-y-3 max-w-2xl mx-auto">
         <Badge variant="secondary" className="mb-1">Dedicated Customer Support</Badge>
         <h1 className="text-4xl sm:text-5xl font-black tracking-tight">Contact Enat Market</h1>

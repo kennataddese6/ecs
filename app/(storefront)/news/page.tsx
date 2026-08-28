@@ -34,10 +34,10 @@ export default async function NewsListingPage({
   const totalPages = Math.ceil(total / limit);
 
   return (
-    <div className="space-y-12 py-6">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 py-8">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-border pb-6">
         <div>
-          <Badge variant="secondary" className="mb-2">LUMEN Journal</Badge>
+          <Badge variant="secondary" className="mb-2">Enat Market Journal</Badge>
           <h1 className="text-4xl font-extrabold tracking-tight">Editorial & Stories</h1>
           <p className="text-muted-foreground text-sm mt-1">
             Perspectives on industrial design, acoustic engineering, and modern craft.

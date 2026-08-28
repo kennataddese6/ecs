@@ -7,7 +7,7 @@ export default function StorefrontLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen flex flex-col bg-background text-foreground relative overflow-hidden selection:bg-primary selection:text-primary-foreground">
+    <div className="min-h-screen flex flex-col bg-background text-foreground relative selection:bg-primary selection:text-primary-foreground">
       {/* Background Ambient Warm Glowing Atmosphere */}
       <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
         <div className="absolute -top-[20%] left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-gradient-to-b from-amber-500/12 via-primary/6 to-transparent rounded-full blur-3xl opacity-80 dark:opacity-40" />
@@ -17,7 +17,7 @@ export default function StorefrontLayout({
       </div>
 
       <Navbar />
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 min-w-0 overflow-x-hidden">
+      <main className="flex-1 w-full min-w-0">
         {children}
       </main>
       <Footer />

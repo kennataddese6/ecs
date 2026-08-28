@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <div className="space-y-24 py-6">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-24 py-8">
       {/* 1. HERO SECTION */}
       <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-card via-card to-muted border border-border p-8 sm:p-16 lg:p-20 shadow-2xl text-center space-y-6">
         <div className="max-w-3xl mx-auto space-y-4">

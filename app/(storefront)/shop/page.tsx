@@ -36,7 +36,7 @@ export default async function ShopCatalogPage({
   const totalPages = Math.ceil(total / limit);
 
   return (
-    <div className="space-y-8 py-4">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 py-8">
       <div>
         <h1 className="text-4xl font-extrabold tracking-tight">Shop Collection</h1>
         <p className="text-muted-foreground text-sm mt-1">
