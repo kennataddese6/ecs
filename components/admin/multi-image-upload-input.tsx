@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Image from "next/image";
-import { UploadCloud, X, Plus, ImageIcon, Link as LinkIcon } from "lucide-react";
+import { UploadCloud, X, Plus, ImageIcon, Link as LinkIcon, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -40,6 +40,39 @@ export function MultiImageUploadInput({
   const [showUrlInput, setShowUrlInput] = React.useState(false);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
+  // Sync state if existingImages prop updates
+  React.useEffect(() => {
+    if (existingImages && existingImages.length > 0) {
+      setItems((prev) => {
+        // Keep any newly added local file items, but update existing URLs
+        const localFileItems = prev.filter((i) => i.file);
+        const existingItems = existingImages.map((img) => ({
+          id: img.id,
+          url: img.image_url,
+          isExisting: true,
+        }));
+        return [...existingItems, ...localFileItems];
+      });
+    }
+  }, [existingImages]);
+
+  // Sync DataTransfer to fileInputRef whenever items change
+  React.useEffect(() => {
+    try {
+      const dt = new DataTransfer();
+      items.forEach((item) => {
+        if (item.file) {
+          dt.items.add(item.file);
+        }
+      });
+      if (fileInputRef.current) {
+        fileInputRef.current.files = dt.files;
+      }
+    } catch (e) {
+      // Graceful fallback for environments without DataTransfer constructor
+    }
+  }, [items]);
+
   const handleFilesSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
@@ -52,10 +85,6 @@ export function MultiImageUploadInput({
     }));
 
     setItems((prev) => [...prev, ...newItems]);
-    // Reset file input so same file can be chosen again if needed
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
   };
 
   const handleAddUrl = () => {
@@ -86,64 +115,14 @@ export function MultiImageUploadInput({
         </span>
       </div>
 
-      {/* Hidden input outputs for form submission */}
-      {items.map((item, index) => (
+      {/* Hidden input outputs for URL strings */}
+      {items.map((item) => (
         <React.Fragment key={item.id}>
-          {item.file ? (
-            <input type="file" name="imageFiles" className="hidden" />
-          ) : (
-            <input type="hidden" name="imageUrls" value={item.url} />
-          )}
+          {!item.file && <input type="hidden" name="imageUrls" value={item.url} />}
         </React.Fragment>
       ))}
 
-      {/* Grid of Product Gallery Previews */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-3">
-        {items.map((item, idx) => (
-          <div
-            key={item.id}
-            className="group relative aspect-square rounded-2xl overflow-hidden border border-border bg-card shadow-sm p-1.5 flex flex-col justify-between"
-          >
-            <div className="relative w-full h-full rounded-xl overflow-hidden bg-muted">
-              <Image
-                src={item.url}
-                alt={`Product Image ${idx + 1}`}
-                fill
-                className="object-cover"
-                unoptimized={item.url.startsWith("blob:") || item.url.startsWith("data:")}
-              />
-              <span className="absolute top-1.5 left-1.5 px-2 py-0.5 rounded-md bg-black/70 backdrop-blur-md text-[10px] font-extrabold text-amber-400">
-                #{idx + 1} {idx === 0 ? "(Primary)" : ""}
-              </span>
-            </div>
-
-            <Button
-              type="button"
-              variant="destructive"
-              size="icon"
-              className="absolute top-2 right-2 h-7 w-7 rounded-full shadow opacity-90 group-hover:opacity-100 transition-opacity"
-              onClick={() => removeItem(item.id)}
-              title="Delete Image"
-            >
-              <X className="h-4 w-4" />
-            </Button>
-          </div>
-        ))}
-
-        {/* Upload Button Box */}
-        <div
-          onClick={() => fileInputRef.current?.click()}
-          className="aspect-square rounded-2xl border-2 border-dashed border-border hover:border-primary/60 bg-muted/30 hover:bg-muted/60 transition-colors flex flex-col items-center justify-center p-3 text-center cursor-pointer space-y-1 group"
-        >
-          <div className="h-9 w-9 rounded-full bg-primary/10 text-primary flex items-center justify-center group-hover:scale-110 transition-transform">
-            <UploadCloud className="h-5 w-5" />
-          </div>
-          <span className="text-xs font-bold text-foreground">Upload Files</span>
-          <span className="text-[10px] text-muted-foreground">PNG, JPG, WEBP</span>
-        </div>
-      </div>
-
-      {/* Hidden File Input supporting multiple file selections */}
+      {/* Hidden File Input carrying actual File objects for form submission */}
       <input
         ref={fileInputRef}
         type="file"
@@ -153,6 +132,51 @@ export function MultiImageUploadInput({
         className="hidden"
         onChange={handleFilesSelected}
       />
+
+      {/* Grid of Product Gallery Previews */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-4">
+        {items.map((item, idx) => (
+          <div
+            key={item.id}
+            className="group relative aspect-square rounded-2xl overflow-hidden border-2 border-border bg-card shadow-sm p-1.5 flex flex-col justify-between"
+          >
+            <div className="relative w-full h-full rounded-xl overflow-hidden bg-muted">
+              <Image
+                src={item.url}
+                alt={`Product Image ${idx + 1}`}
+                fill
+                className="object-cover"
+                unoptimized={item.url.startsWith("blob:") || item.url.startsWith("data:")}
+              />
+              <span className="absolute top-1.5 left-1.5 px-2 py-0.5 rounded-md bg-black/75 backdrop-blur-md text-[10px] font-extrabold text-amber-400 z-10">
+                #{idx + 1} {idx === 0 ? "(Primary)" : ""}
+              </span>
+            </div>
+
+            {/* Red Delete X Icon Button */}
+            <button
+              type="button"
+              onClick={() => removeItem(item.id)}
+              className="absolute top-2 right-2 h-7 w-7 rounded-full bg-red-600 hover:bg-red-700 text-white shadow-lg flex items-center justify-center border border-white/50 transition-all z-20 cursor-pointer hover:scale-110"
+              title="Delete Image"
+            >
+              <X className="h-4 w-4 stroke-[2.5]" />
+            </button>
+          </div>
+        ))}
+
+        {/* Upload Button Box */}
+        <div
+          onClick={() => fileInputRef.current?.click()}
+          className="aspect-square rounded-2xl border-2 border-dashed border-border hover:border-primary/60 bg-muted/30 hover:bg-muted/60 transition-colors flex flex-col items-center justify-center p-3 text-center cursor-pointer space-y-1 group"
+        >
+          <div className="h-10 w-10 rounded-full bg-primary/10 text-primary flex items-center justify-center group-hover:scale-110 transition-transform">
+            <UploadCloud className="h-5.5 w-5.5" />
+          </div>
+          <span className="text-xs font-bold text-foreground">Upload Photos</span>
+          <span className="text-[10px] text-muted-foreground">PNG, JPG, WEBP</span>
+        </div>
+      </div>
 
       {/* Optional URL addition bar */}
       {showUrlInput ? (
