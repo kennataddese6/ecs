@@ -2,18 +2,19 @@
 
 import * as React from "react";
 import Image from "next/image";
-import { UploadCloud, X, Plus, ImageIcon, Link as LinkIcon, Trash2 } from "lucide-react";
+import { UploadCloud, X, Plus, ImageIcon, Link as LinkIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 export interface ExistingImage {
-  id: string;
-  image_url: string;
+  id?: string;
+  image_url?: string;
+  url?: string;
   alt_text?: string | null;
 }
 
 interface MultiImageUploadInputProps {
-  existingImages?: ExistingImage[];
+  existingImages?: (ExistingImage | string)[];
   label?: string;
 }
 
@@ -24,34 +25,55 @@ interface ImageItem {
   isExisting?: boolean;
 }
 
+function parseExistingImages(rawList?: (ExistingImage | string)[]): ImageItem[] {
+  if (!rawList || !Array.isArray(rawList)) return [];
+  return rawList
+    .map((img, idx) => {
+      if (typeof img === "string" && img.trim()) {
+        return {
+          id: `ext-str-${idx}-${img.substring(0, 10)}`,
+          url: img.trim(),
+          isExisting: true,
+        };
+      }
+      if (img && typeof img === "object") {
+        const url = img.image_url || img.url;
+        if (url && typeof url === "string" && url.trim()) {
+          return {
+            id: img.id || `ext-obj-${idx}`,
+            url: url.trim(),
+            isExisting: true,
+          };
+        }
+      }
+      return null;
+    })
+    .filter(Boolean) as ImageItem[];
+}
+
 export function MultiImageUploadInput({
   existingImages = [],
   label = "Product Gallery Images",
 }: MultiImageUploadInputProps) {
   const [items, setItems] = React.useState<ImageItem[]>(() => {
-    return existingImages.map((img) => ({
-      id: img.id,
-      url: img.image_url,
-      isExisting: true,
-    }));
+    return parseExistingImages(existingImages);
   });
 
   const [urlInput, setUrlInput] = React.useState("");
   const [showUrlInput, setShowUrlInput] = React.useState(false);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
-  // Sync state if existingImages prop updates
+  // Re-sync if existingImages prop updates or populates after fetch
   React.useEffect(() => {
-    if (existingImages && existingImages.length > 0) {
+    const parsed = parseExistingImages(existingImages);
+    if (parsed.length > 0) {
       setItems((prev) => {
-        // Keep any newly added local file items, but update existing URLs
-        const localFileItems = prev.filter((i) => i.file);
-        const existingItems = existingImages.map((img) => ({
-          id: img.id,
-          url: img.image_url,
-          isExisting: true,
-        }));
-        return [...existingItems, ...localFileItems];
+        // Keep any newly added local files
+        const localFiles = prev.filter((i) => i.file);
+        // Avoid duplicate URLs
+        const existingUrls = new Set(parsed.map((p) => p.url));
+        const customUrls = prev.filter((i) => !i.file && !i.isExisting && !existingUrls.has(i.url));
+        return [...parsed, ...customUrls, ...localFiles];
       });
     }
   }, [existingImages]);
@@ -69,7 +91,7 @@ export function MultiImageUploadInput({
         fileInputRef.current.files = dt.files;
       }
     } catch (e) {
-      // Graceful fallback for environments without DataTransfer constructor
+      // Graceful fallback for environments without DataTransfer
     }
   }, [items]);
 
@@ -110,12 +132,12 @@ export function MultiImageUploadInput({
           <ImageIcon className="h-4 w-4 text-primary" />
           <span>{label}</span>
         </label>
-        <span className="text-xs font-semibold text-muted-foreground">
-          {items.length} {items.length === 1 ? "image" : "images"} selected
+        <span className="text-xs font-bold text-amber-500">
+          {items.length} {items.length === 1 ? "image" : "images"} active
         </span>
       </div>
 
-      {/* Hidden input outputs for URL strings */}
+      {/* Hidden inputs for URL strings */}
       {items.map((item) => (
         <React.Fragment key={item.id}>
           {!item.file && <input type="hidden" name="imageUrls" value={item.url} />}
@@ -148,7 +170,7 @@ export function MultiImageUploadInput({
                 className="object-cover"
                 unoptimized={item.url.startsWith("blob:") || item.url.startsWith("data:")}
               />
-              <span className="absolute top-1.5 left-1.5 px-2 py-0.5 rounded-md bg-black/75 backdrop-blur-md text-[10px] font-extrabold text-amber-400 z-10">
+              <span className="absolute top-1.5 left-1.5 px-2 py-0.5 rounded-md bg-black/80 backdrop-blur-md text-[10px] font-extrabold text-amber-400 z-10 shadow">
                 #{idx + 1} {idx === 0 ? "(Primary)" : ""}
               </span>
             </div>

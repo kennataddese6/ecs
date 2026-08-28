@@ -56,7 +56,13 @@ export default async function EditProductPage({
 
         <MultiImageUploadInput
           label="Product Gallery Images"
-          existingImages={product.product_images || []}
+          existingImages={
+            product.product_images && product.product_images.length > 0
+              ? product.product_images
+              : primaryImage
+              ? [primaryImage]
+              : []
+          }
         />
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
