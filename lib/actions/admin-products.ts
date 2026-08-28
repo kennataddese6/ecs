@@ -18,6 +18,49 @@ function revalidateProductPaths(slug?: string) {
   }
 }
 
+async function handleProductImagesSave(supabase: any, productId: string, formData: FormData) {
+  const imageFiles = formData.getAll("imageFiles") as File[];
+  const singleImageFile = formData.get("imageFile") as File | null;
+  const imageUrls = formData.getAll("imageUrls") as string[];
+  const singleImageUrl = (formData.get("imageUrl") as string) || "";
+
+  const finalImageUrls: string[] = [];
+
+  // Add existing or manually entered URLs
+  for (const url of imageUrls) {
+    if (url && typeof url === "string" && url.trim().length > 0) {
+      finalImageUrls.push(url.trim());
+    }
+  }
+  if (singleImageUrl && !finalImageUrls.includes(singleImageUrl)) {
+    finalImageUrls.push(singleImageUrl);
+  }
+
+  // Collect files to upload to Supabase Storage
+  const filesToUpload = imageFiles.filter((f) => f && typeof f === "object" && f.size > 0);
+  if (singleImageFile && singleImageFile.size > 0) {
+    filesToUpload.push(singleImageFile);
+  }
+
+  for (const file of filesToUpload) {
+    const uploadedUrl = await uploadImageToStorage(file, "product-images");
+    if (uploadedUrl) {
+      finalImageUrls.push(uploadedUrl);
+    }
+  }
+
+  if (finalImageUrls.length > 0) {
+    // Refresh product images record list
+    await supabase.from("product_images").delete().eq("product_id", productId);
+    const records = finalImageUrls.map((url, index) => ({
+      product_id: productId,
+      image_url: url,
+      sort_order: index,
+    }));
+    await supabase.from("product_images").insert(records);
+  }
+}
+
 export async function createProductAction(formData: FormData): Promise<void> {
   await requireAdmin();
   const supabase = await createClient();
@@ -37,16 +80,6 @@ export async function createProductAction(formData: FormData): Promise<void> {
   const active = formData.get("active") === "true";
   const isDeliverable = formData.get("isDeliverable") === "true";
   const deliveryFeePerUnit = parseFloat((formData.get("deliveryFeePerUnit") as string) || "0");
-
-  const imageFile = formData.get("imageFile") as File | null;
-  let imageUrl = (formData.get("imageUrl") as string) || "";
-
-  if (imageFile && imageFile.size > 0) {
-    const uploadedUrl = await uploadImageToStorage(imageFile, "product-images");
-    if (uploadedUrl) {
-      imageUrl = uploadedUrl;
-    }
-  }
 
   if (!name || !slug || isNaN(price)) {
     redirect(`/admin/products/new?error=${encodeURIComponent("Name, slug, and valid price are required.")}`);
@@ -80,13 +113,7 @@ export async function createProductAction(formData: FormData): Promise<void> {
     redirect(`/admin/products/new?error=${encodeURIComponent(msg)}`);
   }
 
-  if (imageUrl) {
-    await supabase.from("product_images").insert({
-      product_id: newProd.id,
-      image_url: imageUrl,
-      sort_order: 0,
-    });
-  }
+  await handleProductImagesSave(supabase, newProd.id, formData);
 
   revalidateProductPaths(slug);
   redirect("/admin/products");
@@ -111,16 +138,6 @@ export async function updateProductAction(productId: string, formData: FormData)
   const active = formData.get("active") === "true";
   const isDeliverable = formData.get("isDeliverable") === "true";
   const deliveryFeePerUnit = parseFloat((formData.get("deliveryFeePerUnit") as string) || "0");
-
-  const imageFile = formData.get("imageFile") as File | null;
-  let imageUrl = (formData.get("imageUrl") as string) || "";
-
-  if (imageFile && imageFile.size > 0) {
-    const uploadedUrl = await uploadImageToStorage(imageFile, "product-images");
-    if (uploadedUrl) {
-      imageUrl = uploadedUrl;
-    }
-  }
 
   const { error } = await supabase
     .from("products")
@@ -148,14 +165,7 @@ export async function updateProductAction(productId: string, formData: FormData)
     redirect(`/admin/products/${productId}/edit?error=${encodeURIComponent(error.message)}`);
   }
 
-  if (imageUrl) {
-    await supabase.from("product_images").delete().eq("product_id", productId);
-    await supabase.from("product_images").insert({
-      product_id: productId,
-      image_url: imageUrl,
-      sort_order: 0,
-    });
-  }
+  await handleProductImagesSave(supabase, productId, formData);
 
   revalidateProductPaths(slug);
   redirect("/admin/products");

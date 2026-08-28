@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { getProductById } from "@/lib/services/products";
 import { getAllAdminCategories } from "@/lib/services/admin";
 import { updateProductAction } from "@/lib/actions/admin-products";
-import { ImageUploadInput } from "@/components/admin/image-upload-input";
+import { MultiImageUploadInput } from "@/components/admin/multi-image-upload-input";
 import { SubmitButton } from "@/components/common/submit-button";
 import { FormError } from "@/components/ui/form-message";
 import { Button } from "@/components/ui/button";
@@ -54,11 +54,9 @@ export default async function EditProductPage({
           <Input name="slug" defaultValue={product.slug} required />
         </div>
 
-        <ImageUploadInput
-          label="Product Image"
-          name="imageUrl"
-          fileInputName="imageFile"
-          defaultValue={primaryImage}
+        <MultiImageUploadInput
+          label="Product Gallery Images"
+          existingImages={product.product_images || []}
         />
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

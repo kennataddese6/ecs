@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { getAllAdminCategories } from "@/lib/services/admin";
 import { createProductAction } from "@/lib/actions/admin-products";
-import { ImageUploadInput } from "@/components/admin/image-upload-input";
+import { MultiImageUploadInput } from "@/components/admin/multi-image-upload-input";
 import { SubmitButton } from "@/components/common/submit-button";
 import { FormError } from "@/components/ui/form-message";
 import { Button } from "@/components/ui/button";
@@ -42,7 +42,7 @@ export default async function NewProductPage({
           <Input name="slug" placeholder="yirgacheffe-specialty-coffee" required />
         </div>
 
-        <ImageUploadInput label="Product Image" name="imageUrl" fileInputName="imageFile" />
+        <MultiImageUploadInput label="Product Gallery Images" />
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="space-y-2">
