@@ -13,6 +13,7 @@ export type OrderStatus =
   | "processing"
   | "shipped"
   | "delivered"
+  | "completed"
   | "cancelled"
   | "refunded";
 
