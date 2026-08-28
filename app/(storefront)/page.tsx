@@ -294,7 +294,7 @@ export default async function HomePage() {
               <Headphones className="h-5.5 w-5.5" />
             </div>
             <h4 className="font-bold text-base">Dedicated Customer Care</h4>
-            <p className="text-xs text-muted-foreground leading-relaxed">Reach our friendly UK team via email shop@enatmarket.co.uk or 07830 682710.</p>
+            <p className="text-xs text-muted-foreground leading-relaxed">Reach our friendly UK team via email shop@enatmarket.co.uk or +44 7356 226884.</p>
           </div>
 
           <div className="bg-card border border-border/80 p-6 rounded-2xl space-y-3 shadow-xs hover:border-primary/50 hover:shadow-md transition-all duration-300">

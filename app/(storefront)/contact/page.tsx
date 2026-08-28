@@ -39,8 +39,7 @@ export default function ContactPage() {
             </div>
             <p className="text-xs text-muted-foreground">Direct client support line.</p>
             <div className="font-semibold text-sm space-y-1">
-              <a href="tel:07830682710" className="hover:text-primary transition-colors block">07830 682710</a>
-              <a href="tel:02035760507" className="hover:text-primary transition-colors block">0203 576 0507</a>
+              <a href="tel:+447356226884" className="hover:text-primary transition-colors block">+44 7356 226884</a>
             </div>
           </div>
 

@@ -86,7 +86,7 @@ export default async function CheckoutSuccessPage({
             <span>Bank Transfer Reference & Verification Status</span>
           </div>
           <p className="text-xs text-muted-foreground leading-relaxed">
-            Your transfer receipt was attached to your order. If you need to re-upload or contact customer support regarding your payment, reach us at <strong>shop@enatmarket.co.uk</strong> or call <strong>07830 682710</strong>.
+            Your transfer receipt was attached to your order. If you need to re-upload or contact customer support regarding your payment, reach us at <strong>shop@enatmarket.co.uk</strong> or call <strong>+44 7356 226884</strong>.
           </p>
           {order.payment_proof_url && (
             <div className="pt-1">

@@ -79,7 +79,7 @@ export default async function AccountPage({
 
               <div className="space-y-2">
                 <label className="text-xs font-semibold uppercase tracking-wider">Phone Number</label>
-                <Input name="phone" placeholder="07830 682710" defaultValue={user.user_metadata?.phone || ""} />
+                <Input name="phone" placeholder="+44 7356 226884" defaultValue={user.user_metadata?.phone || ""} />
               </div>
 
               <SubmitButton size="sm" loadingText="Saving Profile...">
