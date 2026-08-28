@@ -19,10 +19,8 @@ import {
   ChevronRight,
   Compass,
   Star,
-  Coffee,
   ShoppingBag,
   Award,
-  Flame,
 } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -43,16 +41,16 @@ export default async function HomePage() {
 
   return (
     <div className="space-y-20 pb-16">
-      {/* 1. LUXURY HERO SECTION */}
-      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-card via-card/95 to-amber-950/10 border border-amber-500/20 p-6 sm:p-12 lg:p-16 shadow-2xl backdrop-blur-md">
+      {/* 1. LUXURY HABESHA HERO SECTION */}
+      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-card via-card/95 to-amber-950/10 border border-amber-500/20 p-5 sm:p-10 lg:p-14 shadow-2xl backdrop-blur-md">
         {/* Glow ambient background graphics */}
-        <div className="absolute top-0 right-0 -mt-20 -mr-20 w-[500px] h-[500px] bg-gradient-to-bl from-amber-500/20 via-primary/10 to-transparent rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-0 -mb-20 -ml-20 w-[450px] h-[450px] bg-gradient-to-tr from-emerald-600/15 via-amber-600/10 to-transparent rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-0 right-0 -mt-20 -mr-20 w-[550px] h-[550px] bg-gradient-to-bl from-amber-500/20 via-primary/10 to-transparent rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 -mb-20 -ml-20 w-[500px] h-[500px] bg-gradient-to-tr from-emerald-600/15 via-amber-600/10 to-transparent rounded-full blur-3xl pointer-events-none" />
         <div className="absolute inset-0 bg-[radial-gradient(#b56d29_1px,transparent_1px)] [background-size:24px_24px] opacity-[0.04] pointer-events-none" />
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center relative z-10">
           {/* Hero Left Content Column */}
-          <div className="lg:col-span-7 space-y-6">
+          <div className="lg:col-span-6 space-y-6">
             <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-gradient-to-r from-amber-500/15 via-primary/10 to-amber-500/15 border border-amber-500/30 text-amber-700 dark:text-amber-300 text-xs font-extrabold tracking-widest uppercase shadow-xs">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
@@ -62,7 +60,7 @@ export default async function HomePage() {
               <span>Authentic Ethiopian Direct Imports</span>
             </div>
 
-            <h1 className="text-4xl sm:text-6xl font-black tracking-tight leading-[1.1] text-foreground">
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.1] text-foreground">
               Ethiopian Heritage. <br />
               <span className="gradient-text font-black">Delivered To Your Door.</span>
             </h1>
@@ -134,48 +132,110 @@ export default async function HomePage() {
             </div>
           </div>
 
-          {/* Hero Right Visual Showcase Card */}
-          <div className="lg:col-span-5 relative">
-            <div className="relative aspect-[4/4] rounded-3xl overflow-hidden shadow-2xl border border-amber-500/30 bg-card group">
-              <Image
-                src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=1200&auto=format&fit=crop"
-                alt="Ethiopian Yirgacheffe Coffee Beans & Buna Ceremony"
-                fill
-                className="object-cover group-hover:scale-105 transition-transform duration-700"
-                priority
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-7 text-white">
-                <div className="flex items-center space-x-2 mb-2">
-                  <Badge className="bg-amber-500 text-black font-extrabold text-[11px] uppercase tracking-wider">
-                    <Flame className="h-3 w-3 mr-1 fill-current" /> Spotlight Product
-                  </Badge>
-                  <Badge variant="outline" className="bg-black/50 backdrop-blur-md text-white border-white/20 text-[11px]">
-                    Single Origin Grade-1
-                  </Badge>
-                </div>
-                <h3 className="text-2xl font-black text-white tracking-tight">Yirgacheffe Coffee Beans</h3>
-                <p className="text-xs text-white/80 mt-1 line-clamp-2">Directly imported from Sidama highlands with notes of jasmine, bergamot & dark chocolate.</p>
+          {/* Hero Right Visual Showcase Composition (Multi-Card Dress, Spices & Coffee Showcase) */}
+          <div className="lg:col-span-6 relative pt-2 lg:pt-0">
+            {/* Ambient Background Radial Glow behind Hero Cards */}
+            <div className="absolute inset-0 bg-gradient-to-tr from-amber-500/20 via-primary/15 to-emerald-500/10 rounded-3xl blur-2xl opacity-80 pointer-events-none" />
 
-                <div className="mt-4 flex items-center justify-between pt-3 border-t border-white/20">
-                  <span className="text-lg font-black text-amber-400">£14.99 / 500g</span>
-                  <Button size="sm" className="bg-white text-black hover:bg-amber-400 font-bold rounded-xl text-xs" asChild>
-                    <Link href="/shop/coffee">View Product &rarr;</Link>
-                  </Button>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 relative z-10">
+              {/* 1. Habesha Kemis Dress Showcase Card */}
+              <div className="group relative aspect-[4/5] sm:aspect-square rounded-2xl overflow-hidden shadow-xl border border-amber-500/30 bg-card hover:border-primary/60 hover:shadow-2xl transition-all duration-500">
+                <Image
+                  src="/habesha-cloth.png"
+                  alt="Handwoven Traditional Habesha Kemis Dress"
+                  fill
+                  className="object-cover group-hover:scale-108 transition-transform duration-700"
+                  priority
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-4 text-white">
+                  <div className="flex items-center space-x-1.5 mb-1">
+                    <Badge className="bg-amber-500 text-black font-extrabold text-[10px] uppercase tracking-wider px-2 py-0.5">
+                      👗 Traditional Dress
+                    </Badge>
+                  </div>
+                  <h4 className="text-base font-black text-white tracking-tight line-clamp-1">Habesha Kemis</h4>
+                  <p className="text-[11px] text-white/80 line-clamp-1 font-medium">Hand-spun organic Shemma cotton</p>
+                  <div className="mt-2 flex items-center justify-between pt-2 border-t border-white/20">
+                    <span className="text-xs font-black text-amber-400">From £89.00</span>
+                    <Link href="/shop/apparel" className="text-[10px] font-bold text-white hover:text-amber-400 flex items-center transition-colors">
+                      Shop Kemis &rarr;
+                    </Link>
+                  </div>
+                </div>
+              </div>
+
+              {/* 2. Berbere Spices & Niter Kibe Showcase Card */}
+              <div className="group relative aspect-[4/5] sm:aspect-square rounded-2xl overflow-hidden shadow-xl border border-amber-500/30 bg-card hover:border-primary/60 hover:shadow-2xl transition-all duration-500">
+                <Image
+                  src="https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?q=80&w=800&auto=format&fit=crop"
+                  alt="Authentic Ethiopian Berbere Spices & Niter Kibe Butter"
+                  fill
+                  className="object-cover group-hover:scale-108 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-4 text-white">
+                  <div className="flex items-center space-x-1.5 mb-1">
+                    <Badge className="bg-emerald-500 text-white font-extrabold text-[10px] uppercase tracking-wider px-2 py-0.5">
+                      🌶️ Spices & Kibe
+                    </Badge>
+                  </div>
+                  <h4 className="text-base font-black text-white tracking-tight line-clamp-1">Berbere & Niter Kibe</h4>
+                  <p className="text-[11px] text-white/80 line-clamp-1 font-medium">Sun-dried peppers & spiced clarified butter</p>
+                  <div className="mt-2 flex items-center justify-between pt-2 border-t border-white/20">
+                    <span className="text-xs font-black text-amber-400">From £7.99</span>
+                    <Link href="/shop/spices" className="text-[10px] font-bold text-white hover:text-amber-400 flex items-center transition-colors">
+                      Shop Spices &rarr;
+                    </Link>
+                  </div>
+                </div>
+              </div>
+
+              {/* 3. Central Banner Product: Yirgacheffe Coffee Beans */}
+              <div className="sm:col-span-2 group relative aspect-[16/9] sm:aspect-[21/9] rounded-2xl overflow-hidden shadow-xl border border-amber-500/40 bg-card hover:border-primary/60 transition-all duration-500">
+                <Image
+                  src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=1200&auto=format&fit=crop"
+                  alt="Ethiopian Yirgacheffe Coffee Beans & Buna Ceremony"
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-black/30 flex flex-col justify-center p-5 text-white">
+                  <div className="flex items-center space-x-2 mb-1">
+                    <Badge className="bg-amber-500 text-black font-extrabold text-[10px] uppercase tracking-wider px-2 py-0.5">
+                      ☕ Premium Yirgacheffe
+                    </Badge>
+                    <Badge variant="outline" className="bg-black/40 backdrop-blur-md text-white border-white/20 text-[10px]">
+                      Single Origin Grade-1
+                    </Badge>
+                  </div>
+                  <h3 className="text-xl font-black text-white tracking-tight">Yirgacheffe Coffee Beans</h3>
+                  <p className="text-xs text-white/80 max-w-sm line-clamp-1 font-medium mt-0.5">Floral jasmine, bergamot citrus & dark chocolate notes.</p>
+                  <div className="mt-3 flex items-center space-x-4">
+                    <span className="text-sm font-black text-amber-400">£14.99 / 500g</span>
+                    <Button size="sm" className="bg-white text-black hover:bg-amber-400 font-extrabold rounded-xl text-xs h-8 px-3 cursor-pointer" asChild>
+                      <Link href="/shop/coffee">View Product &rarr;</Link>
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Floating Glass Ratings Badge */}
-            <div className="absolute -bottom-4 -left-4 hidden sm:flex items-center space-x-3 rounded-2xl bg-card/90 backdrop-blur-md border border-border/80 p-3.5 shadow-xl">
-              <div className="h-9 w-9 rounded-xl bg-amber-500/15 text-amber-600 flex items-center justify-center font-bold">
-                <Star className="h-5 w-5 fill-amber-400 text-amber-400" />
-              </div>
-              <div>
-                <div className="flex items-center space-x-1">
-                  <span className="font-extrabold text-sm text-foreground">4.9 / 5.0</span>
-                  <span className="text-[10px] text-muted-foreground">(850+ reviews)</span>
+            {/* Floating Glass Ratings & Cart Express Shipping Badge */}
+            <div className="mt-4 flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-2xl bg-card/85 backdrop-blur-md border border-border/80 shadow-lg">
+              <div className="flex items-center space-x-3">
+                <div className="h-9 w-9 rounded-xl bg-amber-500/15 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold">
+                  <Star className="h-4.5 w-4.5 fill-amber-400 text-amber-400" />
                 </div>
-                <p className="text-[11px] font-semibold text-muted-foreground">Authentic Ethiopian Quality</p>
+                <div>
+                  <div className="flex items-center space-x-1">
+                    <span className="font-extrabold text-xs text-foreground">4.9 / 5.0 Rating</span>
+                    <span className="text-[10px] text-muted-foreground">(850+ Habesha Families)</span>
+                  </div>
+                  <p className="text-[10px] font-semibold text-muted-foreground">Authentic Goods Delivered UK-Wide</p>
+                </div>
+              </div>
+
+              <div className="flex items-center space-x-2 text-xs font-bold text-primary">
+                <ShoppingBag className="h-4 w-4" />
+                <span>Fast UK Tracked Shipping</span>
               </div>
             </div>
           </div>
