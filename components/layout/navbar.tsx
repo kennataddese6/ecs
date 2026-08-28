@@ -1,14 +1,14 @@
-import Link from "next/link";
-import Image from "next/image";
-import { getCurrentUser } from "@/lib/auth";
-import { getCart } from "@/lib/services/cart";
-import { ThemeToggle } from "@/components/theme/theme-toggle";
-import { CartDrawer } from "@/components/shop/cart-drawer";
 import { SearchBar } from "@/components/common/search-bar";
 import { MobileNav } from "@/components/layout/mobile-nav";
-import { LayoutDashboard, LogOut } from "lucide-react";
+import { CartDrawer } from "@/components/shop/cart-drawer";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { logoutAction } from "@/lib/actions/auth";
+import { getCurrentUser } from "@/lib/auth";
+import { getCart } from "@/lib/services/cart";
+import { LayoutDashboard, LogOut } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
 export async function Navbar() {
   const user = await getCurrentUser();

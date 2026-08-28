@@ -1,25 +1,25 @@
-import Link from "next/link";
-import Image from "next/image";
-import { getProducts } from "@/lib/services/products";
-import { getCategories } from "@/lib/services/categories";
-import { getPublishedNews } from "@/lib/services/news";
-import { ProductGrid } from "@/components/shop/product-grid";
+import { NewsletterForm } from "@/components/common/newsletter-form";
 import { NewsCard } from "@/components/news/news-card";
 import { CategoryNav } from "@/components/shop/category-nav";
-import { NewsletterForm } from "@/components/common/newsletter-form";
-import { Button } from "@/components/ui/button";
+import { ProductGrid } from "@/components/shop/product-grid";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { getCategories } from "@/lib/services/categories";
+import { getPublishedNews } from "@/lib/services/news";
+import { getProducts } from "@/lib/services/products";
 import {
   ArrowRight,
-  Truck,
-  ShieldCheck,
-  Headphones,
-  RotateCcw,
-  Sparkles,
+  Award,
   ChevronRight,
   Compass,
-  Award,
+  Headphones,
+  RotateCcw,
+  ShieldCheck,
+  Sparkles,
+  Truck,
 } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -39,24 +39,27 @@ export default async function HomePage() {
 
   return (
     <div className="w-full pb-16">
-      {/* 1. TRUE 100% FULL-WIDTH CENTERED HERO SECTION (WALL-TO-WALL COVERAGE, NO BOX WRAPPERS) */}
+      {/* 1. TRUE 100% FULL-WIDTH HERO BANNER WITH ROTATED /hero.jpg BACKGROUND */}
       <section className="relative w-full overflow-hidden bg-black text-white py-20 sm:py-32 lg:py-40">
         {/* Full-bleed background image across 100% of screen width */}
-        <div className="absolute inset-0 z-0 overflow-hidden flex items-center justify-center">
+        <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
           <Image
-            src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=2400&auto=format&fit=crop"
-            alt="Ethiopian Yirgacheffe Heart Latte Coffee & Roasted Beans"
+            src="/newhero.jpg"
+            alt="Ethiopian Yirgacheffe Coffee Art & Roasted Beans"
             fill
-            className="object-cover object-center opacity-45 rotate-90 scale-[1.7] sm:scale-[1.45] transition-transform duration-700"
+            className="w-full h-full object-cover object-center opacity-100"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-black/75 to-black/85" />
+          {/* Enhanced dark overlay for text readability */}
+          <div className="absolute inset-0 bg-black/50 backdrop-brightness-[0.8]" />
+          {/* Subtle bottom transition fade coming from bottom */}
+          <div className="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t from-background via-background/30 to-transparent" />
         </div>
 
         {/* Centered Hero Content Container */}
-        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center text-center space-y-6">
+        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center text-center space-y-6 drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)]">
           {/* Top Pill Badge */}
-          <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-extrabold tracking-widest uppercase shadow-sm backdrop-blur-md">
+          <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-black/65 border border-amber-500/50 text-amber-300 text-xs font-extrabold tracking-widest uppercase shadow-lg backdrop-blur-md">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
               <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500" />
@@ -66,7 +69,7 @@ export default async function HomePage() {
           </div>
 
           {/* Main Centered Headline */}
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.08] text-white">
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.08] text-white drop-shadow-md">
             Ethiopian Heritage. <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 font-black">
               Delivered To Your Door.
@@ -74,36 +77,36 @@ export default async function HomePage() {
           </h1>
 
           {/* Subtitle */}
-          <p className="text-zinc-300 text-base sm:text-xl font-medium leading-relaxed max-w-2xl">
+          <p className="text-zinc-200 text-base sm:text-xl font-medium leading-relaxed max-w-2xl drop-shadow-md">
             Discover hand-roasted Yirgacheffe coffee beans, hand-spun Habesha Kemis dresses, traditional Niter Kibe spiced butter, and artisan Mesob crafts.
           </p>
 
-          {/* Centered Category Filter Chips */}
+          {/* Centered Quick Category Filter Chips */}
           <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
             <Link
               href="/shop/coffee"
-              className="inline-flex items-center space-x-1.5 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-extrabold text-white transition-all backdrop-blur-md"
+              className="inline-flex items-center space-x-1.5 px-4 py-2.5 rounded-xl bg-black/50 hover:bg-black/70 border border-white/30 text-xs font-extrabold text-white transition-all backdrop-blur-md shadow-md"
             >
               <span>☕</span>
               <span>Yirgacheffe Coffee</span>
             </Link>
             <Link
               href="/shop/apparel"
-              className="inline-flex items-center space-x-1.5 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-extrabold text-white transition-all backdrop-blur-md"
+              className="inline-flex items-center space-x-1.5 px-4 py-2.5 rounded-xl bg-black/50 hover:bg-black/70 border border-white/30 text-xs font-extrabold text-white transition-all backdrop-blur-md shadow-md"
             >
               <span>👗</span>
               <span>Habesha Kemis</span>
             </Link>
             <Link
               href="/shop/spices"
-              className="inline-flex items-center space-x-1.5 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-extrabold text-white transition-all backdrop-blur-md"
+              className="inline-flex items-center space-x-1.5 px-4 py-2.5 rounded-xl bg-black/50 hover:bg-black/70 border border-white/30 text-xs font-extrabold text-white transition-all backdrop-blur-md shadow-md"
             >
               <span>🌶️</span>
               <span>Berbere & Spices</span>
             </Link>
             <Link
               href="/shop/crafts"
-              className="inline-flex items-center space-x-1.5 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-extrabold text-white transition-all backdrop-blur-md"
+              className="inline-flex items-center space-x-1.5 px-4 py-2.5 rounded-xl bg-black/50 hover:bg-black/70 border border-white/30 text-xs font-extrabold text-white transition-all backdrop-blur-md shadow-md"
             >
               <span>🧺</span>
               <span>Mesob Crafts</span>
@@ -117,7 +120,7 @@ export default async function HomePage() {
                 Discover Storefront <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
-            <Button size="lg" variant="outline" className="h-13 px-8 text-base font-bold rounded-2xl border-white/30 text-white hover:bg-white/10 bg-black/40 backdrop-blur-md cursor-pointer" asChild>
+            <Button size="lg" variant="outline" className="h-13 px-8 text-base font-bold rounded-2xl border-white/40 text-white hover:bg-white/10 bg-black/50 backdrop-blur-md cursor-pointer" asChild>
               <Link href="/news">
                 Cultural Journal <Compass className="ml-2 h-5 w-5" />
               </Link>
@@ -125,18 +128,18 @@ export default async function HomePage() {
           </div>
 
           {/* Centered Key Guarantee Stats */}
-          <div className="pt-10 border-t border-white/15 grid grid-cols-3 gap-6 text-xs font-medium text-zinc-400 w-full max-w-xl">
+          <div className="pt-10 border-t border-white/20 grid grid-cols-3 gap-6 text-xs font-medium text-zinc-300 w-full max-w-xl">
             <div className="space-y-0.5 text-center">
               <span className="block text-xl font-black text-amber-400">100%</span>
-              <span className="font-semibold text-zinc-300">Direct Import</span>
+              <span className="font-semibold text-white">Direct Import</span>
             </div>
             <div className="space-y-0.5 text-center">
               <span className="block text-xl font-black text-amber-400">24-48 HR</span>
-              <span className="font-semibold text-zinc-300">UK Express</span>
+              <span className="font-semibold text-white">UK Express</span>
             </div>
             <div className="space-y-0.5 text-center">
               <span className="block text-xl font-black text-amber-400">850+</span>
-              <span className="font-semibold text-zinc-300">UK Families</span>
+              <span className="font-semibold text-white">UK Families</span>
             </div>
           </div>
         </div>
