@@ -6,6 +6,17 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { uploadImageToStorage } from "@/lib/supabase/storage";
 
+function revalidateNewsPaths(slug?: string) {
+  revalidatePath("/", "layout");
+  revalidatePath("/");
+  revalidatePath("/news");
+  revalidatePath("/admin/news");
+  revalidatePath("/news/[slug]", "page");
+  if (slug) {
+    revalidatePath(`/news/${slug}`);
+  }
+}
+
 export async function createNewsAction(formData: FormData): Promise<void> {
   await requireAdmin();
   const supabase = await createClient();
@@ -47,8 +58,7 @@ export async function createNewsAction(formData: FormData): Promise<void> {
     redirect(`/admin/news/new?error=${encodeURIComponent(error.message)}`);
   }
 
-  revalidatePath("/admin/news");
-  revalidatePath("/news");
+  revalidateNewsPaths(slug);
   redirect("/admin/news");
 }
 
@@ -92,8 +102,7 @@ export async function updateNewsAction(articleId: string, formData: FormData): P
     redirect(`/admin/news/${articleId}/edit?error=${encodeURIComponent(error.message)}`);
   }
 
-  revalidatePath("/admin/news");
-  revalidatePath("/news");
+  revalidateNewsPaths(slug);
   redirect("/admin/news");
 }
 
@@ -101,9 +110,12 @@ export async function deleteNewsAction(articleId: string): Promise<void> {
   await requireAdmin();
   const supabase = await createClient();
 
-  await supabase.from("news").delete().eq("id", articleId);
+  const { error } = await supabase.from("news").delete().eq("id", articleId);
 
-  revalidatePath("/admin/news");
-  revalidatePath("/news");
+  if (error) {
+    redirect(`/admin/news?error=${encodeURIComponent(error.message)}`);
+  }
+
+  revalidateNewsPaths();
   redirect("/admin/news");
 }

@@ -6,6 +6,18 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { uploadImageToStorage } from "@/lib/supabase/storage";
 
+function revalidateProductPaths(slug?: string) {
+  revalidatePath("/", "layout");
+  revalidatePath("/");
+  revalidatePath("/shop");
+  revalidatePath("/admin/products");
+  revalidatePath("/shop/[category]", "page");
+  revalidatePath("/products/[slug]", "page");
+  if (slug) {
+    revalidatePath(`/products/${slug}`);
+  }
+}
+
 export async function createProductAction(formData: FormData): Promise<void> {
   await requireAdmin();
   const supabase = await createClient();
@@ -74,8 +86,7 @@ export async function createProductAction(formData: FormData): Promise<void> {
     });
   }
 
-  revalidatePath("/admin/products");
-  revalidatePath("/shop");
+  revalidateProductPaths(slug);
   redirect("/admin/products");
 }
 
@@ -142,8 +153,7 @@ export async function updateProductAction(productId: string, formData: FormData)
     });
   }
 
-  revalidatePath("/admin/products");
-  revalidatePath("/shop");
+  revalidateProductPaths(slug);
   redirect("/admin/products");
 }
 
@@ -151,9 +161,12 @@ export async function deleteProductAction(productId: string): Promise<void> {
   await requireAdmin();
   const supabase = await createClient();
 
-  await supabase.from("products").delete().eq("id", productId);
+  const { error } = await supabase.from("products").delete().eq("id", productId);
 
-  revalidatePath("/admin/products");
-  revalidatePath("/shop");
+  if (error) {
+    redirect(`/admin/products?error=${encodeURIComponent(error.message)}`);
+  }
+
+  revalidateProductPaths();
   redirect("/admin/products");
 }
