@@ -44,7 +44,7 @@ export default async function HomePage() {
         {/* Full-bleed background image across 100% of screen width */}
         <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
           <Image
-            src="/newhero.jpg"
+            src="/heroai.png"
             alt="Ethiopian Yirgacheffe Coffee Art & Roasted Beans"
             fill
             className="w-full h-full object-cover object-center opacity-100"
