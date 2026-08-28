@@ -1,23 +1,25 @@
-import { NewsletterForm } from "@/components/common/newsletter-form";
-import { NewsCard } from "@/components/news/news-card";
-import { CategoryNav } from "@/components/shop/category-nav";
-import { ProductGrid } from "@/components/shop/product-grid";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import Image from "next/image";
+import { getProducts } from "@/lib/services/products";
 import { getCategories } from "@/lib/services/categories";
 import { getPublishedNews } from "@/lib/services/news";
-import { getProducts } from "@/lib/services/products";
+import { ProductGrid } from "@/components/shop/product-grid";
+import { NewsCard } from "@/components/news/news-card";
+import { CategoryNav } from "@/components/shop/category-nav";
+import { NewsletterForm } from "@/components/common/newsletter-form";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   ArrowRight,
-  Award,
-  ChevronRight,
+  Truck,
+  ShieldCheck,
   Headphones,
   RotateCcw,
-  ShieldCheck,
-  Truck,
+  Sparkles,
+  ChevronRight,
+  Compass,
+  Award,
 } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -37,7 +39,110 @@ export default async function HomePage() {
 
   return (
     <div className="space-y-16 pb-16">
-      {/* 1. PRIMARY CTA DISCOVERY BANNER */}
+      {/* 1. FULL WIDTH CENTERED HERO SECTION (EDGE-TO-EDGE, NO CARDS/SHADOWS) */}
+      <section className="relative w-full -mx-4 sm:-mx-6 lg:-mx-8 -mt-8 mb-12 overflow-hidden bg-black text-white">
+        {/* Full-bleed coffee background image with dark vignette overlay */}
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=2000&auto=format&fit=crop"
+            alt="Ethiopian Yirgacheffe Coffee Beans & Buna Ritual"
+            fill
+            className="object-cover object-center opacity-45 scale-105"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-black/70 to-black/80" />
+        </div>
+
+        {/* Centered Hero Content */}
+        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28 lg:py-36 flex flex-col items-center justify-center text-center space-y-6">
+          {/* Top Pill Badge */}
+          <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-extrabold tracking-widest uppercase shadow-sm backdrop-blur-md">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500" />
+            </span>
+            <Sparkles className="h-3.5 w-3.5 text-amber-400" />
+            <span>100% Authentic Ethiopian Direct Imports</span>
+          </div>
+
+          {/* Main Centered Headline */}
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.08] text-white">
+            Ethiopian Heritage. <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 font-black">
+              Delivered To Your Door.
+            </span>
+          </h1>
+
+          {/* Subtitle */}
+          <p className="text-zinc-300 text-base sm:text-xl font-medium leading-relaxed max-w-2xl">
+            Discover hand-roasted Yirgacheffe coffee beans, hand-spun Habesha Kemis dresses, traditional Niter Kibe spiced butter, and artisan Mesob crafts.
+          </p>
+
+          {/* Centered Category Pills */}
+          <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
+            <Link
+              href="/shop/coffee"
+              className="inline-flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-extrabold text-white transition-all backdrop-blur-md"
+            >
+              <span>☕</span>
+              <span>Yirgacheffe Coffee</span>
+            </Link>
+            <Link
+              href="/shop/apparel"
+              className="inline-flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-extrabold text-white transition-all backdrop-blur-md"
+            >
+              <span>👗</span>
+              <span>Habesha Kemis</span>
+            </Link>
+            <Link
+              href="/shop/spices"
+              className="inline-flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-extrabold text-white transition-all backdrop-blur-md"
+            >
+              <span>🌶️</span>
+              <span>Berbere & Spices</span>
+            </Link>
+            <Link
+              href="/shop/crafts"
+              className="inline-flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-extrabold text-white transition-all backdrop-blur-md"
+            >
+              <span>🧺</span>
+              <span>Mesob Crafts</span>
+            </Link>
+          </div>
+
+          {/* Centered Hero CTAs */}
+          <div className="pt-4 flex flex-wrap items-center justify-center gap-4">
+            <Button size="lg" className="h-13 px-9 text-base font-extrabold bg-amber-500 hover:bg-amber-600 text-black shadow-xl rounded-2xl cursor-pointer" asChild>
+              <Link href="/shop">
+                Discover Storefront <ArrowRight className="ml-2 h-5 w-5" />
+              </Link>
+            </Button>
+            <Button size="lg" variant="outline" className="h-13 px-8 text-base font-bold rounded-2xl border-white/30 text-white hover:bg-white/10 bg-black/40 backdrop-blur-md cursor-pointer" asChild>
+              <Link href="/news">
+                Cultural Journal <Compass className="ml-2 h-5 w-5" />
+              </Link>
+            </Button>
+          </div>
+
+          {/* Centered Key Guarantee Stats */}
+          <div className="pt-10 border-t border-white/15 grid grid-cols-3 gap-6 text-xs font-medium text-zinc-400 w-full max-w-xl">
+            <div className="space-y-0.5 text-center">
+              <span className="block text-xl font-black text-amber-400">100%</span>
+              <span className="font-semibold text-zinc-300">Direct Import</span>
+            </div>
+            <div className="space-y-0.5 text-center">
+              <span className="block text-xl font-black text-amber-400">24-48 HR</span>
+              <span className="font-semibold text-zinc-300">UK Express</span>
+            </div>
+            <div className="space-y-0.5 text-center">
+              <span className="block text-xl font-black text-amber-400">850+</span>
+              <span className="font-semibold text-zinc-300">UK Families</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 2. PRIMARY CTA DISCOVERY BANNER */}
       <section className="bg-gradient-to-r from-card via-card to-amber-500/10 border border-border/80 rounded-3xl p-6 sm:p-10 flex flex-col md:flex-row items-center justify-between gap-6 shadow-md backdrop-blur-sm">
         <div className="space-y-1.5 text-center md:text-left">
           <div className="flex items-center justify-center md:justify-start space-x-2 text-xs font-bold text-primary uppercase tracking-wider mb-1">
@@ -54,7 +159,7 @@ export default async function HomePage() {
         </Button>
       </section>
 
-      {/* 2. FEATURED PRODUCTS SHOWCASE */}
+      {/* 3. FEATURED PRODUCTS SHOWCASE */}
       <section className="space-y-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-border/80 pb-4">
           <div>
@@ -70,7 +175,7 @@ export default async function HomePage() {
         <ProductGrid products={featuredProducts} />
       </section>
 
-      {/* 3. SHOP BY CATEGORY SHOWCASE */}
+      {/* 4. SHOP BY CATEGORY SHOWCASE */}
       <section className="space-y-8">
         <div className="border-b border-border/80 pb-4">
           <Badge variant="secondary" className="mb-2 font-bold uppercase tracking-widest text-[10px] bg-primary/10 text-primary">
@@ -114,7 +219,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* 4. CULTURAL HERITAGE EDITORIAL BANNER */}
+      {/* 5. CULTURAL HERITAGE EDITORIAL BANNER */}
       <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-card via-card to-amber-950/20 border border-border/80 p-8 sm:p-14 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center shadow-xl">
         <div className="relative aspect-square sm:aspect-video lg:aspect-square rounded-2xl overflow-hidden border border-border bg-muted shadow-md group">
           <Image
@@ -145,7 +250,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* 5. NEW ARRIVALS CATALOG */}
+      {/* 6. NEW ARRIVALS CATALOG */}
       <section className="space-y-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-border/80 pb-4">
           <div>
@@ -161,7 +266,7 @@ export default async function HomePage() {
         <ProductGrid products={newArrivals} />
       </section>
 
-      {/* 6. VALUE PROPOSITIONS GRID */}
+      {/* 7. VALUE PROPOSITIONS GRID */}
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="bg-card border border-border/80 p-6 rounded-2xl space-y-3 shadow-xs hover:border-primary/50 hover:shadow-md transition-all duration-300">
           <div className="h-11 w-11 rounded-xl bg-primary/15 text-primary flex items-center justify-center font-bold">
@@ -196,7 +301,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* 7. CULTURAL JOURNAL PREVIEW */}
+      {/* 8. CULTURAL JOURNAL PREVIEW */}
       {latestNews.length > 0 && (
         <section className="space-y-8">
           <div className="flex items-center justify-between border-b border-border/80 pb-4">
@@ -218,7 +323,7 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* 8. VIP NEWSLETTER JOIN */}
+      {/* 9. VIP NEWSLETTER JOIN */}
       <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary/15 via-card to-amber-950/20 border border-primary/30 p-8 sm:p-14 text-center space-y-6 shadow-xl">
         <div className="max-w-2xl mx-auto space-y-3">
           <Badge className="bg-primary text-primary-foreground font-bold">Join Our Family</Badge>
