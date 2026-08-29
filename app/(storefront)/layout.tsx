@@ -1,5 +1,6 @@
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
+import { FloatingContactWidget } from "@/components/common/floating-contact-widget";
 
 export default function StorefrontLayout({
   children,
@@ -21,6 +22,7 @@ export default function StorefrontLayout({
         {children}
       </main>
       <Footer />
+      <FloatingContactWidget />
     </div>
   );
 }
