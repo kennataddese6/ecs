@@ -1,19 +1,59 @@
+import Link from "next/link";
+import Image from "next/image";
 import { getAllAdminCategories } from "@/lib/services/admin";
 import { createCategoryAction, deleteCategoryAction } from "@/lib/actions/admin-categories";
+import { ImageUploadInput } from "@/components/admin/image-upload-input";
 import { DataTable, Column } from "@/components/admin/data-table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Trash2 } from "lucide-react";
+import { Edit2, Trash2, ImageIcon } from "lucide-react";
+import { FormError } from "@/components/ui/form-message";
 
 type CategoryRow = Awaited<ReturnType<typeof getAllAdminCategories>>[number];
 
-export default async function AdminCategoriesPage() {
+export default async function AdminCategoriesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string }>;
+}) {
   const categories = await getAllAdminCategories();
+  const sParams = await searchParams;
 
   const columns: Column<CategoryRow>[] = [
-    { header: "Name", accessorKey: "name" },
-    { header: "Slug", accessorKey: "slug" },
+    {
+      header: "Category",
+      cell: (row) => (
+        <div className="flex items-center space-x-3">
+          <div className="relative h-11 w-11 rounded-xl overflow-hidden bg-muted border border-border shrink-0">
+            {row.image_url ? (
+              <Image
+                src={row.image_url}
+                alt={row.name}
+                fill
+                className="object-cover"
+              />
+            ) : (
+              <div className="h-full w-full flex items-center justify-center text-muted-foreground">
+                <ImageIcon className="h-5 w-5" />
+              </div>
+            )}
+          </div>
+          <div>
+            <span className="font-bold block text-sm">{row.name}</span>
+            <span className="text-xs text-muted-foreground block">/{row.slug}</span>
+          </div>
+        </div>
+      ),
+    },
+    {
+      header: "Description",
+      cell: (row) => (
+        <p className="text-xs text-muted-foreground max-w-xs truncate">
+          {row.description || "No description"}
+        </p>
+      ),
+    },
     {
       header: "Status",
       cell: (row) => (
@@ -25,11 +65,19 @@ export default async function AdminCategoriesPage() {
     {
       header: "Actions",
       cell: (row) => (
-        <form action={deleteCategoryAction.bind(null, row.id)}>
-          <Button variant="ghost" size="icon" className="text-destructive">
-            <Trash2 className="h-4 w-4" />
+        <div className="flex items-center space-x-1">
+          <Button variant="ghost" size="icon" asChild>
+            <Link href={`/admin/categories/${row.id}/edit`}>
+              <Edit2 className="h-4 w-4" />
+            </Link>
           </Button>
-        </form>
+
+          <form action={deleteCategoryAction.bind(null, row.id)}>
+            <Button variant="ghost" size="icon" className="text-destructive">
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          </form>
+        </div>
       ),
     },
   ];
@@ -42,6 +90,8 @@ export default async function AdminCategoriesPage() {
           <p className="text-sm text-muted-foreground mt-1">Organize products into store categories.</p>
         </div>
 
+        <FormError message={sParams.error} />
+
         <DataTable columns={columns} data={categories} emptyTitle="No categories created" />
       </div>
 
@@ -51,13 +101,15 @@ export default async function AdminCategoriesPage() {
         <form action={createCategoryAction} className="space-y-4">
           <div className="space-y-2">
             <label className="text-sm font-semibold">Category Name</label>
-            <Input name="name" placeholder="Footwear" required />
+            <Input name="name" placeholder="e.g. Ethiopian Coffee & Buna" required />
           </div>
 
           <div className="space-y-2">
             <label className="text-sm font-semibold">Slug</label>
-            <Input name="slug" placeholder="footwear" required />
+            <Input name="slug" placeholder="e.g. coffee" required />
           </div>
+
+          <ImageUploadInput label="Category Image" />
 
           <div className="space-y-2">
             <label className="text-sm font-semibold">Description</label>
@@ -73,7 +125,7 @@ export default async function AdminCategoriesPage() {
             <span>Active Category</span>
           </label>
 
-          <Button type="submit" className="w-full">
+          <Button type="submit" className="w-full font-bold">
             Save Category
           </Button>
         </form>

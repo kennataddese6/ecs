@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getCategoryBySlug, getCategories } from "@/lib/services/categories";
 import { getProducts, ProductSortOption } from "@/lib/services/products";
@@ -18,7 +19,7 @@ export async function generateMetadata({
 
   return {
     title: `${category.name} Collection`,
-    description: category.description || `Explore ${category.name} products at LUMEN.`,
+    description: category.description || `Explore ${category.name} products at Enat Market.`,
   };
 }
 
@@ -51,10 +52,28 @@ export default async function CategoryShopPage({
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 py-8">
-      <div>
-        <h1 className="text-4xl font-extrabold tracking-tight">{category.name}</h1>
-        {category.description && (
-          <p className="text-muted-foreground text-sm mt-1 max-w-2xl">{category.description}</p>
+      {/* Category Banner with Image */}
+      <div className="relative rounded-3xl overflow-hidden border border-border/80 bg-gradient-to-r from-card via-card to-amber-500/10 p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-md backdrop-blur-sm">
+        <div className="space-y-2 flex-1">
+          <span className="text-[10px] font-extrabold uppercase tracking-widest text-primary bg-primary/10 px-2.5 py-1 rounded-md">
+            Curated Collection
+          </span>
+          <h1 className="text-3xl sm:text-4xl font-black tracking-tight">{category.name}</h1>
+          {category.description && (
+            <p className="text-muted-foreground text-sm max-w-2xl font-medium leading-relaxed">
+              {category.description}
+            </p>
+          )}
+        </div>
+        {category.image_url && (
+          <div className="relative h-28 w-28 sm:h-36 sm:w-36 rounded-2xl overflow-hidden bg-muted border border-border shrink-0 shadow-sm">
+            <Image
+              src={category.image_url}
+              alt={category.name}
+              fill
+              className="object-cover"
+            />
+          </div>
         )}
       </div>
 

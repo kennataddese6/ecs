@@ -3,7 +3,7 @@ import { Database } from "@/lib/types/database";
 
 export type Category = Database["public"]["Tables"]["categories"]["Row"];
 
-const DEMO_CATEGORIES: Category[] = [
+export const DEMO_CATEGORIES: Category[] = [
   {
     id: "cat-1",
     name: "Ethiopian Coffee & Buna",
@@ -62,6 +62,24 @@ export async function getCategories(): Promise<Category[]> {
   } catch (e) {}
 
   return DEMO_CATEGORIES;
+}
+
+export async function getCategoryById(id: string): Promise<Category | null> {
+  try {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+      .from("categories")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (!error && data) {
+      return data;
+    }
+  } catch (e) {}
+
+  return DEMO_CATEGORIES.find((c) => c.id === id || c.slug === id) || DEMO_CATEGORIES[0];
 }
 
 export async function getCategoryBySlug(slug: string): Promise<Category | null> {
