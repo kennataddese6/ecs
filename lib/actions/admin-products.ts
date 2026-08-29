@@ -215,3 +215,20 @@ export async function deleteProductAction(productId: string): Promise<void> {
   revalidateProductPaths();
   redirect("/admin/products");
 }
+
+export async function toggleProductFeaturedAction(productId: string, currentFeatured: boolean): Promise<void> {
+  await requireAdmin();
+  const supabase = await createClient();
+
+  const { error } = await supabase
+    .from("products")
+    .update({ featured: !currentFeatured })
+    .eq("id", productId);
+
+  if (error) {
+    redirect(`/admin/products?error=${encodeURIComponent(error.message)}`);
+  }
+
+  revalidateProductPaths();
+  redirect("/admin/products?success=Featured+status+updated");
+}

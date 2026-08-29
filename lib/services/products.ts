@@ -263,6 +263,25 @@ export async function getProducts(options?: {
     if (!error && data && data.length > 0) {
       return { products: data as ProductWithImages[], total: count ?? data.length };
     }
+
+    // Fallback: If featured products were specifically requested but 0 products in DB have featured = true,
+    // fetch the latest active real products from Supabase DB instead of falling back to static demo data.
+    if (options?.featured) {
+      let fallbackQuery = supabase
+        .from("products")
+        .select("*, product_images(*), categories(*)", { count: "exact" })
+        .eq("active", true)
+        .order("created_at", { ascending: false });
+
+      if (options?.limit) {
+        fallbackQuery = fallbackQuery.range(0, options.limit - 1);
+      }
+
+      const { data: fbData, count: fbCount } = await fallbackQuery;
+      if (fbData && fbData.length > 0) {
+        return { products: fbData as ProductWithImages[], total: fbCount ?? fbData.length };
+      }
+    }
   } catch (e) {}
 
   return getDemoProducts(options);
