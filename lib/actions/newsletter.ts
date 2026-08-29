@@ -1,6 +1,9 @@
 "use server";
 
 import { createAdminClient } from "@/lib/supabase/admin";
+import { requireAdmin } from "@/lib/auth";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { z } from "zod";
 
 const emailSchema = z.string().email("Please enter a valid email address.");
@@ -41,6 +44,7 @@ export async function subscribeNewsletterAction(email: string): Promise<Newslett
       throw new Error(error.message || "Database insert failed.");
     }
 
+    revalidatePath("/admin/subscribers");
     return {
       success: true,
       message: "Thank you! You have successfully subscribed to the Enat Market journal & newsletter.",
@@ -51,4 +55,21 @@ export async function subscribeNewsletterAction(email: string): Promise<Newslett
       message: err?.message || "Failed to subscribe. Please check your email and try again.",
     };
   }
+}
+
+export async function deleteSubscriberAction(subscriberId: string): Promise<void> {
+  await requireAdmin();
+  const adminClient = createAdminClient();
+
+  const { error } = await adminClient
+    .from("newsletter_subscribers")
+    .delete()
+    .eq("id", subscriberId);
+
+  if (error) {
+    redirect(`/admin/subscribers?error=${encodeURIComponent(error.message)}`);
+  }
+
+  revalidatePath("/admin/subscribers");
+  redirect("/admin/subscribers?success=Subscriber+removed+successfully");
 }

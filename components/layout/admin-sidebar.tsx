@@ -10,6 +10,7 @@ import {
   FolderTree,
   ShoppingBag,
   Newspaper,
+  Mail,
   Settings,
   ArrowLeft,
   Menu,
@@ -22,6 +23,7 @@ const navItems = [
   { name: "Products", href: "/admin/products", icon: Package },
   { name: "Categories", href: "/admin/categories", icon: FolderTree },
   { name: "Orders", href: "/admin/orders", icon: ShoppingBag },
+  { name: "Subscribers", href: "/admin/subscribers", icon: Mail },
   { name: "News", href: "/admin/news", icon: Newspaper },
   { name: "Settings", href: "/admin/settings", icon: Settings },
 ];
