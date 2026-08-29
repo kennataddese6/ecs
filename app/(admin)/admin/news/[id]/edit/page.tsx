@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getNewsBySlug } from "@/lib/services/news";
+import { getNewsById } from "@/lib/services/news";
 import { updateNewsAction } from "@/lib/actions/admin-news";
 import { ImageUploadInput } from "@/components/admin/image-upload-input";
 import { SubmitButton } from "@/components/common/submit-button";
@@ -18,7 +18,7 @@ export default async function EditNewsArticlePage({
 }) {
   const { id } = await params;
   const sParams = await searchParams;
-  const article = await getNewsBySlug(id);
+  const article = await getNewsById(id);
 
   if (!article) notFound();
 

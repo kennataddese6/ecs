@@ -21,16 +21,16 @@ export async function createNewsAction(formData: FormData): Promise<void> {
   await requireAdmin();
   const supabase = await createClient();
 
-  const title = formData.get("title") as string;
-  const slug = formData.get("slug") as string;
-  const excerpt = formData.get("excerpt") as string;
-  const content = formData.get("content") as string;
+  const title = (formData.get("title") as string)?.trim();
+  const slug = (formData.get("slug") as string)?.trim();
+  const excerpt = (formData.get("excerpt") as string)?.trim();
+  const content = (formData.get("content") as string)?.trim();
   const published = formData.get("published") === "true";
 
   const imageFile = formData.get("imageFile") as File | null;
-  let featuredImage = (formData.get("featuredImage") as string) || "";
+  let featuredImage = (formData.get("featuredImage") as string) || (formData.get("imageUrl") as string) || "";
 
-  if (imageFile && imageFile.size > 0) {
+  if (imageFile && typeof imageFile === "object" && imageFile.size > 0) {
     const uploadedUrl = await uploadImageToStorage(imageFile, "news-images");
     if (uploadedUrl) {
       featuredImage = uploadedUrl;
@@ -38,7 +38,7 @@ export async function createNewsAction(formData: FormData): Promise<void> {
   }
 
   if (!title || !slug || !content) {
-    redirect(`/admin/news/new?error=${encodeURIComponent("Title, slug, and content are required.")}`);
+    redirect(`/admin/news/new?error=${encodeURIComponent("Title, slug, and article content are required.")}`);
   }
 
   const { error } = await supabase.from("news").insert({
@@ -46,15 +46,12 @@ export async function createNewsAction(formData: FormData): Promise<void> {
     slug,
     excerpt,
     content,
-    featured_image: featuredImage,
+    featured_image: featuredImage || null,
     published,
     published_at: published ? new Date().toISOString() : null,
   });
 
   if (error) {
-    if (error.message.includes("public.news") || error.message.includes("schema cache")) {
-      redirect(`/admin/news/new?error=${encodeURIComponent("The 'public.news' table does not exist in your Supabase project yet. Please run the SQL migration script located in supabase/schema.sql in your Supabase SQL Editor.")}`);
-    }
     redirect(`/admin/news/new?error=${encodeURIComponent(error.message)}`);
   }
 
@@ -66,40 +63,56 @@ export async function updateNewsAction(articleId: string, formData: FormData): P
   await requireAdmin();
   const supabase = await createClient();
 
-  const title = formData.get("title") as string;
-  const slug = formData.get("slug") as string;
-  const excerpt = formData.get("excerpt") as string;
-  const content = formData.get("content") as string;
+  const title = (formData.get("title") as string)?.trim();
+  const slug = (formData.get("slug") as string)?.trim();
+  const excerpt = (formData.get("excerpt") as string)?.trim();
+  const content = (formData.get("content") as string)?.trim();
   const published = formData.get("published") === "true";
 
   const imageFile = formData.get("imageFile") as File | null;
-  let featuredImage = (formData.get("featuredImage") as string) || "";
+  let featuredImage = (formData.get("featuredImage") as string) || (formData.get("imageUrl") as string) || "";
 
-  if (imageFile && imageFile.size > 0) {
+  if (imageFile && typeof imageFile === "object" && imageFile.size > 0) {
     const uploadedUrl = await uploadImageToStorage(imageFile, "news-images");
     if (uploadedUrl) {
       featuredImage = uploadedUrl;
     }
   }
 
-  const { error } = await supabase
+  if (!title || !slug || !content) {
+    redirect(`/admin/news/${articleId}/edit?error=${encodeURIComponent("Title, slug, and article content are required.")}`);
+  }
+
+  // Attempt update on existing Supabase news article row
+  const { data: updatedRows, error } = await supabase
     .from("news")
     .update({
       title,
       slug,
       excerpt,
       content,
-      featured_image: featuredImage,
+      featured_image: featuredImage || null,
       published,
       published_at: published ? new Date().toISOString() : null,
     })
-    .eq("id", articleId);
+    .eq("id", articleId)
+    .select("id");
 
   if (error) {
-    if (error.message.includes("public.news") || error.message.includes("schema cache")) {
-      redirect(`/admin/news/${articleId}/edit?error=${encodeURIComponent("The 'public.news' table does not exist in your Supabase project yet. Please run supabase/schema.sql in your Supabase SQL Editor.")}`);
-    }
     redirect(`/admin/news/${articleId}/edit?error=${encodeURIComponent(error.message)}`);
+  }
+
+  // If 0 rows were updated (e.g. editing a demo news item like 'news-1'), insert real row into Supabase
+  if (!updatedRows || updatedRows.length === 0) {
+    await supabase.from("news").insert({
+      title,
+      slug,
+      excerpt,
+      content,
+      featured_image: featuredImage || null,
+      published,
+      published_at: published ? new Date().toISOString() : null,
+    });
   }
 
   revalidateNewsPaths(slug);

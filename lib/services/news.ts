@@ -3,7 +3,7 @@ import { Database } from "@/lib/types/database";
 
 export type NewsArticle = Database["public"]["Tables"]["news"]["Row"];
 
-const DEMO_NEWS: NewsArticle[] = [
+export const DEMO_NEWS: NewsArticle[] = [
   {
     id: "news-1",
     title: "The Timeless Ritual of the Ethiopian Coffee Ceremony (Buna)",
@@ -36,9 +36,9 @@ const DEMO_NEWS: NewsArticle[] = [
       <p class="leading-relaxed mb-6">Operating rhythmic wooden pit looms, weavers pass shuttle bobbins across warp threads to create lightweight yet durable cotton fabrics suitable for ceremonial celebrations.</p>
 
       <h2 class="text-2xl font-bold mt-8 mb-4">Intricate Tilet Embroidery</h2>
-      <p class="leading-relaxed mb-6">The crowning glory of every royal gown is the Tilet—woven woven borders featuring rich geometric motifs in gold, crimson, and forest green symbolizing nobility and heritage.</p>
+      <p class="leading-relaxed mb-6">The crowning glory of every royal gown is the Tilet—woven borders featuring rich geometric motifs in gold, crimson, and forest green symbolizing nobility and heritage.</p>
     `,
-    featured_image: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=1200&auto=format&fit=crop",
+    featured_image: "/habesha-cloth.png",
     published: true,
     published_at: new Date().toISOString(),
     created_at: new Date().toISOString(),
@@ -98,6 +98,24 @@ export async function getFeaturedNewsArticle(): Promise<NewsArticle | null> {
   return articles[0] || null;
 }
 
+export async function getNewsById(id: string): Promise<NewsArticle | null> {
+  try {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+      .from("news")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (!error && data) {
+      return data;
+    }
+  } catch (e) {}
+
+  return DEMO_NEWS.find((a) => a.id === id || a.slug === id) || DEMO_NEWS[0];
+}
+
 export async function getNewsBySlug(slug: string): Promise<NewsArticle | null> {
   try {
     const supabase = await createClient();
@@ -106,7 +124,6 @@ export async function getNewsBySlug(slug: string): Promise<NewsArticle | null> {
       .from("news")
       .select("*")
       .eq("slug", slug)
-      .eq("published", true)
       .single();
 
     if (!error && data) {
