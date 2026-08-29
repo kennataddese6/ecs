@@ -19,20 +19,20 @@ export async function generateMetadata({
     return { title: "Article Not Found" };
   }
 
-  const imageUrl = article.featured_image || "https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=800&auto=format&fit=crop";
+  const imageUrl = article.featured_image || "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=800&auto=format&fit=crop";
 
   return {
     title: article.title,
-    description: article.excerpt || `Read ${article.title} on LUMEN Journal.`,
+    description: article.excerpt || `Read ${article.title} on Enat Market Journal.`,
     openGraph: {
-      title: `${article.title} | LUMEN Journal`,
-      description: article.excerpt || `Read ${article.title} on LUMEN Journal.`,
+      title: `${article.title} | Enat Market Journal`,
+      description: article.excerpt || `Read ${article.title} on Enat Market Journal.`,
       images: [{ url: imageUrl, alt: article.title }],
     },
     twitter: {
       card: "summary_large_image",
-      title: `${article.title} | LUMEN Journal`,
-      description: article.excerpt || `Read ${article.title} on LUMEN Journal.`,
+      title: `${article.title} | Enat Market Journal`,
+      description: article.excerpt || `Read ${article.title} on Enat Market Journal.`,
       images: [imageUrl],
     },
   };
@@ -51,14 +51,14 @@ export default async function NewsArticlePage({
   }
 
   const formattedDate = article.published_at
-    ? new Date(article.published_at).toLocaleDateString("en-US", {
+    ? new Date(article.published_at).toLocaleDateString("en-GB", {
         month: "long",
         day: "numeric",
         year: "numeric",
       })
     : "";
 
-  const mainImageUrl = article.featured_image || "https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=800&auto=format&fit=crop";
+  const mainImageUrl = article.featured_image || "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=800&auto=format&fit=crop";
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -70,7 +70,7 @@ export default async function NewsArticlePage({
     description: article.excerpt,
     author: {
       "@type": "Organization",
-      name: "LUMEN Editorial Team",
+      name: "Enat Market Editorial Team",
     },
   };
 
@@ -89,7 +89,7 @@ export default async function NewsArticlePage({
 
       <header className="space-y-4">
         <div className="flex items-center space-x-3 text-sm text-muted-foreground font-semibold">
-          <Badge variant="secondary">LUMEN Editorial</Badge>
+          <Badge variant="secondary" className="bg-primary/10 text-primary border border-primary/20">Enat Market Editorial</Badge>
           {formattedDate && (
             <div className="flex items-center">
               <Calendar className="h-4 w-4 mr-1.5" />

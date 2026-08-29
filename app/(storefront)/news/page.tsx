@@ -11,8 +11,8 @@ import { Calendar, ArrowRight } from "lucide-react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "LUMEN Journal | Stories & Announcements",
-  description: "Explore the latest design stories, product releases, and editorial essays from LUMEN.",
+  title: "Enat Market Journal | Stories & Cultural Heritage",
+  description: "Discover Ethiopian cultural stories, coffee roasting traditions, apparel craft, and store announcements from Enat Market.",
 };
 
 export default async function NewsListingPage({
@@ -37,10 +37,10 @@ export default async function NewsListingPage({
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 py-8">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-border pb-6">
         <div>
-          <Badge variant="secondary" className="mb-2">Enat Market Journal</Badge>
-          <h1 className="text-4xl font-extrabold tracking-tight">Editorial & Stories</h1>
-          <p className="text-muted-foreground text-sm mt-1">
-            Perspectives on industrial design, acoustic engineering, and modern craft.
+          <Badge variant="secondary" className="mb-2 font-bold uppercase tracking-wider text-[10px] bg-primary/10 text-primary">Enat Market Journal</Badge>
+          <h1 className="text-4xl font-black tracking-tight">Cultural Stories & News</h1>
+          <p className="text-muted-foreground text-sm mt-1 font-medium">
+            Discover Ethiopian Buna traditions, handwoven Habesha Kemis heritage, and store updates.
           </p>
         </div>
         <div className="w-full md:w-80">

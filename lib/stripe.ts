@@ -5,7 +5,7 @@ export const stripe = new Stripe(
   {
     apiVersion: "2026-08-25" as unknown as Stripe.LatestApiVersion,
     appInfo: {
-      name: "LUMEN E-Commerce Platform",
+      name: "Enat Market UK Platform",
       version: "1.0.0",
     },
   }

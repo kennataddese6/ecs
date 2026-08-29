@@ -11,6 +11,7 @@ import {
   ShoppingBag,
   Newspaper,
   Mail,
+  MessageSquare,
   Settings,
   ArrowLeft,
   Menu,
@@ -24,6 +25,7 @@ const navItems = [
   { name: "Categories", href: "/admin/categories", icon: FolderTree },
   { name: "Orders", href: "/admin/orders", icon: ShoppingBag },
   { name: "Subscribers", href: "/admin/subscribers", icon: Mail },
+  { name: "Messages", href: "/admin/messages", icon: MessageSquare },
   { name: "News", href: "/admin/news", icon: Newspaper },
   { name: "Settings", href: "/admin/settings", icon: Settings },
 ];
