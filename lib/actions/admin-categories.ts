@@ -21,15 +21,15 @@ export async function createCategoryAction(formData: FormData): Promise<void> {
   await requireAdmin();
   const supabase = await createClient();
 
-  const name = formData.get("name") as string;
-  const slug = formData.get("slug") as string;
-  const description = formData.get("description") as string;
+  const name = (formData.get("name") as string)?.trim();
+  const slug = (formData.get("slug") as string)?.trim();
+  const description = (formData.get("description") as string)?.trim();
   let imageUrl = (formData.get("imageUrl") as string) || "";
   const imageFile = formData.get("imageFile") as File | null;
   const active = formData.get("active") === "true";
 
   if (!name || !slug) {
-    redirect(`/admin/categories?error=${encodeURIComponent("Name and slug are required.")}`);
+    redirect(`/admin/categories?error=${encodeURIComponent("Category Name and Slug are required.")}`);
   }
 
   // Handle uploaded category image file
@@ -60,17 +60,18 @@ export async function updateCategoryAction(categoryId: string, formData: FormDat
   await requireAdmin();
   const supabase = await createClient();
 
-  const name = formData.get("name") as string;
-  const slug = formData.get("slug") as string;
-  const description = formData.get("description") as string;
+  const name = (formData.get("name") as string)?.trim();
+  const slug = (formData.get("slug") as string)?.trim();
+  const description = (formData.get("description") as string)?.trim();
   let imageUrl = (formData.get("imageUrl") as string) || "";
   const imageFile = formData.get("imageFile") as File | null;
   const active = formData.get("active") === "true";
 
   if (!name || !slug) {
-    redirect(`/admin/categories/${categoryId}/edit?error=${encodeURIComponent("Name and slug are required.")}`);
+    redirect(`/admin/categories/${categoryId}/edit?error=${encodeURIComponent("Category Name and Slug are required.")}`);
   }
 
+  // Upload file if new file was selected
   if (imageFile && typeof imageFile === "object" && imageFile.size > 0) {
     const uploadedUrl = await uploadImageToStorage(imageFile, "category-images");
     if (uploadedUrl) {
@@ -78,32 +79,63 @@ export async function updateCategoryAction(categoryId: string, formData: FormDat
     }
   }
 
-  // Try updating existing database record first
-  const { data: updatedRows, error } = await supabase
-    .from("categories")
-    .update({
-      name,
-      slug,
-      description,
-      image_url: imageUrl || null,
-      active,
-    })
-    .eq("id", categoryId)
-    .select("id");
+  // Check if categoryId is a valid UUID
+  const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(categoryId);
 
-  if (error) {
-    redirect(`/admin/categories/${categoryId}/edit?error=${encodeURIComponent(error.message)}`);
+  let updatedRowsCount = 0;
+
+  if (isUuid) {
+    const { data: updatedRows, error } = await supabase
+      .from("categories")
+      .update({
+        name,
+        slug,
+        description,
+        image_url: imageUrl || null,
+        active,
+      })
+      .eq("id", categoryId)
+      .select("id");
+
+    if (error) {
+      console.error("Supabase Category Update Error:", error);
+    } else if (updatedRows && updatedRows.length > 0) {
+      updatedRowsCount = updatedRows.length;
+    }
   }
 
-  // If 0 rows were updated (e.g., editing a demo mock category like 'cat-1'), insert a real record into Supabase!
-  if (!updatedRows || updatedRows.length === 0) {
-    await supabase.from("categories").insert({
+  // If 0 rows updated by UUID, attempt updating by slug
+  if (updatedRowsCount === 0) {
+    const { data: updatedBySlug } = await supabase
+      .from("categories")
+      .update({
+        name,
+        slug,
+        description,
+        image_url: imageUrl || null,
+        active,
+      })
+      .eq("slug", slug)
+      .select("id");
+
+    if (updatedBySlug && updatedBySlug.length > 0) {
+      updatedRowsCount = updatedBySlug.length;
+    }
+  }
+
+  // If still 0 rows updated, insert new category into Supabase DB
+  if (updatedRowsCount === 0) {
+    const { error: insertError } = await supabase.from("categories").insert({
       name,
       slug,
       description,
       image_url: imageUrl || null,
       active,
     });
+
+    if (insertError) {
+      redirect(`/admin/categories/${categoryId}/edit?error=${encodeURIComponent(insertError.message)}`);
+    }
   }
 
   revalidateCategoryPaths(slug);
@@ -114,10 +146,13 @@ export async function deleteCategoryAction(categoryId: string): Promise<void> {
   await requireAdmin();
   const supabase = await createClient();
 
-  const { error } = await supabase.from("categories").delete().eq("id", categoryId);
+  const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(categoryId);
 
-  if (error) {
-    redirect(`/admin/categories?error=${encodeURIComponent(error.message)}`);
+  if (isUuid) {
+    await supabase.from("categories").delete().eq("id", categoryId);
+  } else {
+    // Delete by ID or slug for demo records
+    await supabase.from("categories").delete().or(`id.eq.${categoryId},slug.eq.${categoryId}`);
   }
 
   revalidateCategoryPaths();

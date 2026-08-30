@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Image from "next/image";
-import { UploadCloud, X, Link as LinkIcon, Image as ImageIcon, AlertCircle } from "lucide-react";
+import { UploadCloud, X, Link as LinkIcon, Image as ImageIcon, AlertCircle, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -26,13 +26,20 @@ export function ImageUploadInput({
   name = "imageUrl",
   fileInputName = "imageFile",
   defaultValue = "",
-  label = "Product Image",
+  label = "Image Upload",
 }: ImageUploadInputProps) {
   const [previewUrl, setPreviewUrl] = React.useState<string>(defaultValue);
   const [mode, setMode] = React.useState<"file" | "url">("file");
   const [urlInput, setUrlInput] = React.useState<string>(defaultValue);
   const [errorMsg, setErrorMsg] = React.useState<string | null>(null);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
+
+  React.useEffect(() => {
+    if (defaultValue) {
+      setPreviewUrl(defaultValue);
+      setUrlInput(defaultValue);
+    }
+  }, [defaultValue]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setErrorMsg(null);
@@ -105,11 +112,19 @@ export function ImageUploadInput({
         </div>
       )}
 
-      {/* Hidden value field for form submission */}
-      <input type="hidden" name={name} value={urlInput || (previewUrl.startsWith("http") ? previewUrl : "")} />
+      {/* HIDDEN INPUTS FOR FORM SUBMISSION - ALWAYS IN DOM */}
+      <input type="hidden" name={name} value={urlInput || (previewUrl.startsWith("http") || previewUrl.startsWith("/") ? previewUrl : "")} />
+      <input
+        ref={fileInputRef}
+        type="file"
+        name={fileInputName}
+        accept="image/jpeg,image/jpg,image/png,image/webp,image/avif,image/gif,image/svg+xml"
+        className="hidden"
+        onChange={handleFileChange}
+      />
 
       {previewUrl ? (
-        <div className="relative rounded-2xl overflow-hidden border border-border bg-card p-2 group shadow-sm flex items-center space-x-4">
+        <div className="relative rounded-2xl overflow-hidden border border-border bg-card p-3 group shadow-sm flex items-center space-x-4">
           <div className="relative h-24 w-24 rounded-xl overflow-hidden bg-muted border border-border flex-shrink-0">
             <Image
               src={previewUrl}
@@ -119,24 +134,34 @@ export function ImageUploadInput({
               unoptimized={previewUrl.startsWith("blob:") || previewUrl.startsWith("data:")}
             />
           </div>
-          <div className="flex-1 space-y-1 overflow-hidden pr-8">
+          <div className="flex-1 space-y-1.5 overflow-hidden pr-2">
             <p className="text-xs font-semibold text-foreground truncate">
-              {previewUrl.startsWith("blob:") ? "Local File Selected" : previewUrl}
+              {previewUrl.startsWith("blob:") ? "New File Selected" : previewUrl}
             </p>
             <p className="text-[10px] text-muted-foreground">
-              {previewUrl.startsWith("blob:") ? "Ready to upload to Supabase Storage on submit" : "Image URL active"}
+              {previewUrl.startsWith("blob:") ? "Ready to upload to Supabase Storage on submit" : "Active Image URL"}
             </p>
+            <div className="flex items-center space-x-2 pt-1">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="h-7 text-xs font-bold px-2.5"
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <RefreshCw className="h-3 w-3 mr-1" /> Change Picture
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="h-7 text-xs text-destructive hover:bg-destructive/10 px-2"
+                onClick={clearImage}
+              >
+                <X className="h-3.5 w-3.5 mr-1" /> Remove
+              </Button>
+            </div>
           </div>
-          <Button
-            type="button"
-            variant="destructive"
-            size="icon"
-            className="absolute top-3 right-3 h-7 w-7 rounded-full shadow"
-            onClick={clearImage}
-            title="Remove Image"
-          >
-            <X className="h-4 w-4" />
-          </Button>
         </div>
       ) : (
         <div>
@@ -156,14 +181,6 @@ export function ImageUploadInput({
                   JPG, JPEG, PNG, WEBP, AVIF up to 20MB
                 </p>
               </div>
-              <input
-                ref={fileInputRef}
-                type="file"
-                name={fileInputName}
-                accept="image/jpeg,image/jpg,image/png,image/webp,image/avif,image/gif,image/svg+xml"
-                className="hidden"
-                onChange={handleFileChange}
-              />
             </div>
           ) : (
             <div className="space-y-2">

@@ -200,9 +200,9 @@ export async function getAllAdminCategories() {
   } catch (e) {}
 
   return [
-    { id: "cat-1", name: "Ethiopian Coffee & Buna", slug: "coffee", description: "Coffee & Buna accessories", active: true },
-    { id: "cat-2", name: "Traditional Habesha Apparel", slug: "apparel", description: "Habesha Kemis", active: true },
-    { id: "cat-3", name: "Spices & Niter Kibe", slug: "spices", description: "Berbere & Niter Kibe", active: true },
-    { id: "cat-4", name: "Artisan Mesob & Crafts", slug: "crafts", description: "Mesob baskets", active: true },
+    { id: "c1000000-0000-0000-0000-000000000001", name: "Ethiopian Coffee & Buna", slug: "coffee", description: "Coffee & Buna accessories", image_url: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=800&auto=format&fit=crop", active: true },
+    { id: "c2000000-0000-0000-0000-000000000002", name: "Traditional Habesha Apparel", slug: "apparel", description: "Habesha Kemis", image_url: "/habesha-cloth.png", active: true },
+    { id: "c3000000-0000-0000-0000-000000000003", name: "Spices & Niter Kibe", slug: "spices", description: "Berbere & Niter Kibe", image_url: "https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?q=80&w=800&auto=format&fit=crop", active: true },
+    { id: "c4000000-0000-0000-0000-000000000004", name: "Artisan Mesob & Crafts", slug: "crafts", description: "Mesob baskets", image_url: "https://images.unsplash.com/photo-1606744824163-985d376605aa?q=80&w=800&auto=format&fit=crop", active: true },
   ];
 }
