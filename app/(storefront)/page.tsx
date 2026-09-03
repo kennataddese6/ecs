@@ -82,7 +82,7 @@ export default async function HomePage() {
           </p>
 
           {/* Centered Quick Category Filter Chips */}
-          <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
+     {/*      <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
             <Link
               href="/shop/coffee"
               className="inline-flex items-center space-x-1.5 px-4 py-2.5 rounded-xl bg-black/50 hover:bg-black/70 border border-white/30 text-xs font-extrabold text-white transition-all backdrop-blur-md shadow-md"
@@ -112,7 +112,7 @@ export default async function HomePage() {
               <span>Mesob Crafts</span>
             </Link>
           </div>
-
+ */}
           {/* Centered Hero Action Buttons */}
           <div className="pt-4 flex flex-wrap items-center justify-center gap-4">
             <Button size="lg" className="h-13 px-9 text-base font-extrabold bg-amber-500 hover:bg-amber-600 text-black shadow-xl rounded-2xl cursor-pointer" asChild>
