@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowLeft, Truck } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 export default async function NewProductPage({
   searchParams,
 }: {

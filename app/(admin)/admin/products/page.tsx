@@ -8,6 +8,8 @@ import { Plus, Edit, Trash2, Star } from "lucide-react";
 import { deleteProductAction, toggleProductFeaturedAction } from "@/lib/actions/admin-products";
 import { FormError, FormSuccess } from "@/components/ui/form-message";
 
+export const dynamic = "force-dynamic";
+
 type ProductRow = Awaited<ReturnType<typeof getAllAdminProducts>>[number];
 
 export default async function AdminProductsPage({

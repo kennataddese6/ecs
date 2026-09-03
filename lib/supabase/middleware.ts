@@ -35,7 +35,7 @@ export async function updateSession(request: NextRequest): Promise<NextResponse>
     user = data?.user;
   } catch (e) {}
 
-  const demoRole = request.cookies.get("lumen_demo_role")?.value;
+  const demoRole = request.cookies.get("enat_demo_role")?.value;
   const isDemoAdmin = demoRole === "admin";
 
   const path = request.nextUrl.pathname;

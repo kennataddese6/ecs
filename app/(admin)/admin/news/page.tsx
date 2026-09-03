@@ -6,6 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { Plus, Edit, Trash2 } from "lucide-react";
 import { deleteNewsAction } from "@/lib/actions/admin-news";
 
+export const dynamic = "force-dynamic";
+
 type NewsRow = Awaited<ReturnType<typeof getAllAdminNews>>[number];
 
 export default async function AdminNewsPage() {

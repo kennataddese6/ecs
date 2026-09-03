@@ -10,6 +10,8 @@ import { Badge } from "@/components/ui/badge";
 import { Edit2, Trash2, ImageIcon } from "lucide-react";
 import { FormError } from "@/components/ui/form-message";
 
+export const dynamic = "force-dynamic";
+
 type CategoryRow = Awaited<ReturnType<typeof getAllAdminCategories>>[number];
 
 export default async function AdminCategoriesPage({
