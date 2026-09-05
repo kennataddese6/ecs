@@ -563,17 +563,25 @@ export function UKCheckoutForm({ user, items, bankAccounts = [], error }: UKChec
           type="submit"
           size="lg"
           disabled={hasNonDeliverable || !isPostcodeValid || !isPhoneValid || isSubmitting}
-          className="w-full font-bold shadow-lg shadow-primary/25 h-12 text-base"
+          className="w-full font-bold shadow-lg shadow-primary/25 min-h-[3rem] h-auto py-3 px-4 text-sm sm:text-base rounded-2xl flex items-center justify-center gap-2 whitespace-normal text-center transition-all"
         >
           {isSubmitting ? (
-            <>
-              <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+            <span className="flex items-center justify-center gap-2">
+              <Loader2 className="h-5 w-5 animate-spin shrink-0" />
               <span>{paymentMethod === "stripe" ? "Redirecting to Stripe..." : "Processing Order..."}</span>
-            </>
+            </span>
           ) : paymentMethod === "stripe" ? (
-            `Pay £${total.toFixed(2)} with Card (Stripe) \u2192`
+            <span className="flex items-center justify-center gap-2">
+              <CreditCard className="h-4 w-4 shrink-0" />
+              <span>Pay £{total.toFixed(2)} with Card</span>
+              <span aria-hidden="true">→</span>
+            </span>
           ) : (
-            `Submit Bank Transfer Order (£${total.toFixed(2)}) \u2192`
+            <span className="flex items-center justify-center gap-2">
+              <Building2 className="h-4 w-4 shrink-0" />
+              <span>Submit Bank Transfer · £{total.toFixed(2)}</span>
+              <span aria-hidden="true">→</span>
+            </span>
           )}
         </Button>
       </div>
