@@ -9,6 +9,14 @@ interface FormMessageProps {
 
 export function FormError({ message, className }: FormMessageProps) {
   if (!message) return null;
+
+  let displayMessage = message;
+  try {
+    displayMessage = decodeURIComponent(message);
+  } catch (e) {
+    displayMessage = message;
+  }
+
   return (
     <div
       className={cn(
@@ -17,7 +25,7 @@ export function FormError({ message, className }: FormMessageProps) {
       )}
     >
       <AlertCircle className="h-5 w-5 flex-shrink-0 mt-0.5" />
-      <span className="flex-1 leading-normal">{decodeURIComponent(message)}</span>
+      <span className="flex-1 leading-normal">{displayMessage}</span>
     </div>
   );
 }

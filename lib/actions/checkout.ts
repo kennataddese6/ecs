@@ -224,11 +224,13 @@ export async function createCheckoutSessionAction(formData: FormData): Promise<v
     redirect(`/checkout?error=${encodeURIComponent("Unable to record items in order. Please try again.")}`);
   }
 
-  // Compute host origin for redirection
+  // Compute host origin for redirection dynamically from request headers
   const headersList = await headers();
-  const host = headersList.get("host") || "localhost:3000";
-  const protocol = headersList.get("x-forwarded-proto") || (host.includes("localhost") ? "http" : "https");
-  const origin = process.env.NEXT_PUBLIC_APP_URL || `${protocol}://${host}`;
+  const rawHost = headersList.get("x-forwarded-host") || headersList.get("host");
+  const host = rawHost?.split(",")[0]?.trim() || "enatmarket.co.uk";
+  const rawProto = headersList.get("x-forwarded-proto");
+  const protocol = rawProto?.split(",")[0]?.trim() || (host.includes("localhost") ? "http" : "https");
+  const origin = `${protocol}://${host}`;
 
   // If Bank Transfer: clear cart now and redirect to success page
   if (isBankTransfer) {
