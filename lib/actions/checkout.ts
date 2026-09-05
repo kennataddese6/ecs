@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { getCart, clearCart } from "@/lib/services/cart";
 import { createStripeCheckoutSession } from "@/lib/services/stripe";
 import { redirect } from "next/navigation";
@@ -170,8 +171,10 @@ export async function createCheckoutSessionAction(formData: FormData): Promise<v
   const orderNumber = `ORD-UK-${Date.now()}-${Math.floor(1000 + Math.random() * 9000)}`;
   const initialPaymentStatus = isBankTransfer ? "pending_verification" : "unpaid";
 
-  // Create pending order record in Supabase
-  const { data: order, error: orderError } = await supabase
+  // Create pending order record in Supabase using admin client to guarantee reliable server-side execution
+  const supabaseAdmin = createAdminClient();
+
+  const { data: order, error: orderError } = await supabaseAdmin
     .from("orders")
     .insert({
       order_number: orderNumber,
@@ -214,7 +217,7 @@ export async function createCheckoutSessionAction(formData: FormData): Promise<v
     ...item,
     order_id: order.id,
   }));
-  const { error: itemsError } = await supabase.from("order_items").insert(orderItemsWithId);
+  const { error: itemsError } = await supabaseAdmin.from("order_items").insert(orderItemsWithId);
 
   if (itemsError) {
     console.error("Order items database error:", itemsError);
@@ -253,7 +256,7 @@ export async function createCheckoutSessionAction(formData: FormData): Promise<v
     });
 
     // Store Stripe Checkout Session ID on the order in Supabase
-    await supabase
+    await supabaseAdmin
       .from("orders")
       .update({
         stripe_session_id: session.id,
@@ -266,7 +269,7 @@ export async function createCheckoutSessionAction(formData: FormData): Promise<v
     console.error("Stripe Checkout Session Creation Error:", message);
 
     // Cancel order since payment session could not be established
-    await supabase
+    await supabaseAdmin
       .from("orders")
       .update({
         status: "cancelled",
