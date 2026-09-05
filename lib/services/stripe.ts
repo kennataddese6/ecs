@@ -237,33 +237,69 @@ export async function processStripeWebhookEvent(event: Stripe.Event): Promise<{
 
       const { data: existingOrders } = await supabaseAdmin
         .from("orders")
-        .select("id, payment_status")
+        .select("id, status, payment_status, notes")
         .eq("stripe_payment_intent_id", paymentIntentId)
         .limit(1);
 
       const existingOrder = existingOrders?.[0];
-      if (existingOrder && existingOrder.payment_status !== "refunded") {
+      if (!existingOrder) {
+        return { received: true, status: "order_not_found" };
+      }
+
+      const isFullRefund = charge.refunded === true || charge.amount_refunded >= charge.amount;
+      const refundedAmountFormatted = (charge.amount_refunded / 100).toFixed(2);
+
+      if (isFullRefund) {
+        // Full refund: update payment_status to 'refunded'
+        // If order has not yet been dispatched (pending or processing), also update status to 'refunded'
+        const shouldUpdateFulfillmentStatus =
+          existingOrder.status === "pending" || existingOrder.status === "processing";
+
+        const updatePayload: Record<string, string> = {
+          payment_status: "refunded",
+          notes: existingOrder.notes
+            ? `${existingOrder.notes} | Full refund of £${refundedAmountFormatted} processed via Stripe.`
+            : `Full refund of £${refundedAmountFormatted} processed via Stripe.`,
+        };
+
+        if (shouldUpdateFulfillmentStatus) {
+          updatePayload.status = "refunded";
+        }
+
         await supabaseAdmin
           .from("orders")
-          .update({
-            status: "refunded",
-            payment_status: "refunded",
-          })
+          .update(updatePayload)
           .eq("id", existingOrder.id);
 
-        // Restore inventory stock using database function
-        await supabaseAdmin.rpc("restore_order_stock", {
-          p_order_id: existingOrder.id,
-        });
+        // Note: We intentionally do NOT automatically call restore_order_stock here.
+        // Physical stock returns must be verified by store admins in /admin/products
+        // to prevent inflating inventory for discarded/damaged goods or unreturned items.
 
         return {
           received: true,
-          status: "order_marked_refunded",
+          status: "order_full_refund_recorded",
+          orderId: existingOrder.id,
+        };
+      } else {
+        // Partial refund: record refund amount in notes without cancelling order or inflating stock
+        const refundNote = `Partial refund of £${refundedAmountFormatted} processed via Stripe.`;
+        const updatedNotes = existingOrder.notes
+          ? `${existingOrder.notes} | ${refundNote}`
+          : refundNote;
+
+        await supabaseAdmin
+          .from("orders")
+          .update({
+            notes: updatedNotes,
+          })
+          .eq("id", existingOrder.id);
+
+        return {
+          received: true,
+          status: "order_partial_refund_recorded",
           orderId: existingOrder.id,
         };
       }
-
-      return { received: true, status: "already_refunded_or_not_found" };
     }
 
     default:
