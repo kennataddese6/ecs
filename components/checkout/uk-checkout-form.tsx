@@ -42,7 +42,7 @@ interface UKCheckoutFormProps {
 
 export function UKCheckoutForm({ user, items, bankAccounts = [], error }: UKCheckoutFormProps) {
   const [fulfillmentMethod, setFulfillmentMethod] = React.useState<"delivery" | "collection">("delivery");
-  const [paymentMethod, setPaymentMethod] = React.useState<"bank_transfer" | "stripe">("bank_transfer");
+  const [paymentMethod, setPaymentMethod] = React.useState<"bank_transfer" | "stripe">("stripe");
   const [postcode, setPostcode] = React.useState<string>("");
   const [phone, setPhone] = React.useState<string>(user?.user_metadata?.phone || "");
   const [proofPreview, setProofPreview] = React.useState<string>("");
@@ -77,8 +77,8 @@ export function UKCheckoutForm({ user, items, bankAccounts = [], error }: UKChec
   const nonDeliverableItems = shippingBreakdown.filter((item) => !item.isDeliverable);
   const hasNonDeliverable = isDelivery && nonDeliverableItems.length > 0;
 
-  const tax = subtotal * 0.05; // 5% UK VAT rate on eligible items
-  const total = subtotal + effectiveShippingCost + tax;
+  const tax = 0; // VAT is inclusive in all product prices; no additional VAT is added
+  const total = subtotal + effectiveShippingCost;
 
   const handlePostcodeBlur = () => {
     if (postcode && isValidUKPostcode(postcode)) {
@@ -318,26 +318,6 @@ export function UKCheckoutForm({ user, items, bankAccounts = [], error }: UKChec
           <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Select Payment Method</label>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div
-              onClick={() => setPaymentMethod("bank_transfer")}
-              className={`p-4 rounded-2xl border-2 cursor-pointer transition-all flex items-center space-x-3 ${
-                paymentMethod === "bank_transfer"
-                  ? "border-primary bg-primary/10 shadow-sm"
-                  : "border-border bg-card hover:border-primary/50"
-              }`}
-            >
-              <div className={`h-10 w-10 rounded-xl flex items-center justify-center font-bold ${
-                paymentMethod === "bank_transfer" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
-              }`}>
-                <Building2 className="h-5 w-5" />
-              </div>
-              <div className="flex-1">
-                <h4 className="font-bold text-sm text-foreground">Direct Bank Transfer</h4>
-                <p className="text-xs text-primary font-medium">UK BACS + Proof Upload</p>
-              </div>
-              {paymentMethod === "bank_transfer" && <CheckCircle2 className="h-5 w-5 text-primary" />}
-            </div>
-
-            <div
               onClick={() => setPaymentMethod("stripe")}
               className={`p-4 rounded-2xl border-2 cursor-pointer transition-all flex items-center space-x-3 ${
                 paymentMethod === "stripe"
@@ -352,9 +332,29 @@ export function UKCheckoutForm({ user, items, bankAccounts = [], error }: UKChec
               </div>
               <div className="flex-1">
                 <h4 className="font-bold text-sm text-foreground">Credit / Debit Card</h4>
-                <p className="text-xs text-muted-foreground">Stripe Checkout</p>
+                <p className="text-xs text-primary font-semibold">Stripe Hosted Checkout</p>
               </div>
               {paymentMethod === "stripe" && <CheckCircle2 className="h-5 w-5 text-primary" />}
+            </div>
+
+            <div
+              onClick={() => setPaymentMethod("bank_transfer")}
+              className={`p-4 rounded-2xl border-2 cursor-pointer transition-all flex items-center space-x-3 ${
+                paymentMethod === "bank_transfer"
+                  ? "border-primary bg-primary/10 shadow-sm"
+                  : "border-border bg-card hover:border-primary/50"
+              }`}
+            >
+              <div className={`h-10 w-10 rounded-xl flex items-center justify-center font-bold ${
+                paymentMethod === "bank_transfer" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
+              }`}>
+                <Building2 className="h-5 w-5" />
+              </div>
+              <div className="flex-1">
+                <h4 className="font-bold text-sm text-foreground">Direct Bank Transfer</h4>
+                <p className="text-xs text-muted-foreground">UK BACS + Proof Upload</p>
+              </div>
+              {paymentMethod === "bank_transfer" && <CheckCircle2 className="h-5 w-5 text-primary" />}
             </div>
           </div>
 
@@ -535,7 +535,7 @@ export function UKCheckoutForm({ user, items, bankAccounts = [], error }: UKChec
             </span>
           </div>
           <div className="flex justify-between">
-            <span className="text-muted-foreground">Estimated Tax (VAT 5%)</span>
+            <span className="text-muted-foreground">VAT (Included in price)</span>
             <PriceDisplay price={tax} />
           </div>
           <div className="border-t border-border pt-3 flex justify-between font-extrabold text-base">
@@ -568,12 +568,12 @@ export function UKCheckoutForm({ user, items, bankAccounts = [], error }: UKChec
           {isSubmitting ? (
             <>
               <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-              <span>Processing Order...</span>
+              <span>{paymentMethod === "stripe" ? "Redirecting to Stripe..." : "Processing Order..."}</span>
             </>
-          ) : paymentMethod === "bank_transfer" ? (
-            `Submit Bank Transfer Order (£${total.toFixed(2)}) \u2192`
+          ) : paymentMethod === "stripe" ? (
+            `Pay £${total.toFixed(2)} with Card (Stripe) \u2192`
           ) : (
-            `Pay £${total.toFixed(2)} via Card \u2192`
+            `Submit Bank Transfer Order (£${total.toFixed(2)}) \u2192`
           )}
         </Button>
       </div>

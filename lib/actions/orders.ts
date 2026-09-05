@@ -59,8 +59,8 @@ export async function createOrderAction(formData: FormData): Promise<void> {
   });
 
   const shippingCost = subtotal > 100 ? 0 : 15;
-  const tax = subtotal * 0.08;
-  const total = subtotal + shippingCost + tax;
+  const tax = 0; // VAT is inclusive
+  const total = subtotal + shippingCost;
   const orderNumber = `ORD-${Date.now()}-${Math.floor(1000 + Math.random() * 9000)}`;
 
   const { data: order, error: orderError } = await supabase

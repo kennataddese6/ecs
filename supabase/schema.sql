@@ -166,6 +166,7 @@ CREATE TABLE IF NOT EXISTS public.orders (
   status text NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'processing', 'shipped', 'delivered', 'completed', 'cancelled', 'refunded')),
   payment_status text NOT NULL DEFAULT 'unpaid' CHECK (payment_status IN ('unpaid', 'paid', 'failed', 'refunded', 'pending_verification')),
   stripe_payment_intent_id text,
+  stripe_session_id text,
   subtotal numeric(10,2) NOT NULL CHECK (subtotal >= 0),
   shipping_cost numeric(10,2) NOT NULL DEFAULT 0 CHECK (shipping_cost >= 0),
   tax numeric(10,2) NOT NULL DEFAULT 0 CHECK (tax >= 0),

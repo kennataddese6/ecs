@@ -231,6 +231,7 @@ export interface Database {
           payment_method?: string | null;
           payment_proof_url?: string | null;
           stripe_payment_intent_id: string | null;
+          stripe_session_id?: string | null;
           subtotal: number;
           shipping_cost: number;
           tax: number;
@@ -252,6 +253,7 @@ export interface Database {
           payment_method?: string | null;
           payment_proof_url?: string | null;
           stripe_payment_intent_id?: string | null;
+          stripe_session_id?: string | null;
           subtotal: number;
           shipping_cost?: number;
           tax?: number;
@@ -273,6 +275,7 @@ export interface Database {
           payment_method?: string | null;
           payment_proof_url?: string | null;
           stripe_payment_intent_id?: string | null;
+          stripe_session_id?: string | null;
           subtotal?: number;
           shipping_cost?: number;
           tax?: number;

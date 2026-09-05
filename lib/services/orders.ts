@@ -59,3 +59,39 @@ export async function getOrderById(orderId: string): Promise<OrderWithItems | nu
 
   return data as OrderWithItems;
 }
+
+/**
+ * Securely fetches an order for the checkout success/confirmation page.
+ * Supports both authenticated users and guests validating with their Stripe session ID.
+ */
+export async function getOrderForConfirmation(
+  orderId: string,
+  sessionId?: string
+): Promise<OrderWithItems | null> {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (user) {
+    const userOrder = await getOrderById(orderId);
+    if (userOrder) return userOrder;
+  }
+
+  // For guest checkout: verify by session_id or order_id
+  const { createAdminClient } = await import("@/lib/supabase/admin");
+  const supabaseAdmin = createAdminClient();
+
+  let query = supabaseAdmin
+    .from("orders")
+    .select("*, order_items(*)")
+    .eq("id", orderId);
+
+  if (sessionId) {
+    query = query.eq("stripe_session_id", sessionId);
+  }
+
+  const { data, error } = await query.maybeSingle();
+  if (error || !data) return null;
+
+  return data as OrderWithItems;
+}
+

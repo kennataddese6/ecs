@@ -19,8 +19,8 @@ export default async function CartPage() {
     return acc + (isDeliverable ? feePerUnit * item.quantity : 0);
   }, 0);
 
-  const tax = subtotal * 0.05;
-  const total = subtotal + estimatedShipping + tax;
+  const tax = 0; // Prices are VAT-inclusive; no additional VAT is added
+  const total = subtotal + estimatedShipping;
 
   if (items.length === 0) {
     return (
@@ -59,8 +59,8 @@ export default async function CartPage() {
               <span className="font-semibold">{estimatedShipping === 0 ? "FREE" : `£${estimatedShipping.toFixed(2)}`}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Estimated Tax (VAT 5%)</span>
-              <PriceDisplay price={tax} />
+              <span className="text-muted-foreground">VAT (Included in price)</span>
+              <PriceDisplay price={0} />
             </div>
             <div className="border-t border-border pt-3 flex justify-between font-bold text-base">
               <span>Total</span>

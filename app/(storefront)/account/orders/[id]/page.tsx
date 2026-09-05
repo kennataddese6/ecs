@@ -94,11 +94,11 @@ export default async function OrderDetailPage({
           </div>
           <div className="flex justify-between text-muted-foreground">
             <span>Shipping</span>
-            <span>${order.shipping_cost.toFixed(2)}</span>
+            <span>{order.shipping_cost === 0 ? "FREE" : `£${order.shipping_cost.toFixed(2)}`}</span>
           </div>
           <div className="flex justify-between text-muted-foreground">
-            <span>Tax</span>
-            <PriceDisplay price={order.tax} />
+            <span>VAT (Included in price)</span>
+            <PriceDisplay price={0} />
           </div>
           <div className="flex justify-between font-bold text-base border-t border-border pt-2">
             <span>Total</span>

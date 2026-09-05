@@ -1,13 +1,14 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { getOrderById } from "@/lib/services/orders";
-import { stripe } from "@/lib/stripe";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { getOrderForConfirmation } from "@/lib/services/orders";
+import { clearCart } from "@/lib/services/cart";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { PriceDisplay } from "@/components/shop/price-display";
-import { CheckCircle2, Package, Building2, FileCheck } from "lucide-react";
+import { CheckCircle2, Package, Building2, FileCheck, Clock } from "lucide-react";
 import { ShippingAddress } from "@/lib/types";
+
+export const dynamic = "force-dynamic";
 
 export default async function CheckoutSuccessPage({
   searchParams,
@@ -21,60 +22,70 @@ export default async function CheckoutSuccessPage({
     redirect("/");
   }
 
-  if (sessionId) {
-    try {
-      const session = await stripe.checkout.sessions.retrieve(sessionId);
-      if (session.payment_status === "paid") {
-        const supabaseAdmin = createAdminClient();
-
-        await supabaseAdmin
-          .from("orders")
-          .update({
-            status: "processing",
-            payment_status: "paid",
-            stripe_payment_id: (session.payment_intent as string) || session.id,
-          })
-          .eq("id", orderId);
-
-        const cartId = session.metadata?.cart_id;
-        if (cartId) {
-          await supabaseAdmin.from("cart_items").delete().eq("cart_id", cartId);
-        }
-      }
-    } catch (e) {
-      console.error("Stripe session verification error:", e);
-    }
+  // Clear guest cart cookie on the client side upon reaching success page
+  try {
+    await clearCart();
+  } catch (e) {
+    // Non-fatal
   }
 
-  const order = await getOrderById(orderId);
+  // Retrieve order details securely (read-only; webhook is the single source of truth for payment status)
+  const order = await getOrderForConfirmation(orderId, sessionId);
   if (!order) {
     notFound();
   }
 
   const shippingAddr = order.shipping_address as unknown as ShippingAddress;
   const isBankTransfer = order.payment_method === "bank_transfer" || !!order.payment_proof_url;
+  const isPaid = order.payment_status === "paid";
+  const isPendingVerification = order.payment_status === "pending_verification";
 
   return (
     <div className="max-w-3xl mx-auto py-12 space-y-8 text-center sm:text-left">
       <div className="bg-emerald-500/10 border border-emerald-500/20 p-8 rounded-3xl space-y-4 shadow-sm text-center">
         <div className="h-16 w-16 bg-emerald-500/20 text-emerald-500 rounded-full flex items-center justify-center mx-auto">
-          <CheckCircle2 className="h-10 w-10" />
+          {isPaid ? (
+            <CheckCircle2 className="h-10 w-10" />
+          ) : isBankTransfer ? (
+            <CheckCircle2 className="h-10 w-10" />
+          ) : (
+            <Clock className="h-10 w-10 animate-pulse" />
+          )}
         </div>
         <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
-          {isBankTransfer ? "Bank Transfer Order Received!" : "Order Confirmed!"}
+          {isBankTransfer
+            ? "Bank Transfer Order Received!"
+            : isPaid
+            ? "Payment Confirmed & Order Placed!"
+            : "Order Received!"}
         </h1>
         <p className="text-muted-foreground text-sm max-w-md mx-auto leading-relaxed">
           {isBankTransfer
             ? "Thank you for your order! We have received your purchase and payment proof. Our admin team will verify your transfer and notify you upon dispatch."
-            : "Thank you for your purchase. We've received your order and are preparing it for shipment."}
+            : isPaid
+            ? "Thank you for your payment! We've received your order and are preparing it for shipment."
+            : "Thank you for your order! Your Stripe payment is being verified by our system, and your order will begin processing momentarily."}
         </p>
 
         <div className="pt-2 flex flex-wrap justify-center gap-3">
           <Badge variant="secondary" className="text-xs py-1 px-3">
             Order #: {order.order_number}
           </Badge>
-          <Badge className="bg-emerald-500 text-white text-xs py-1 px-3">
-            Payment Status: {order.payment_status === "pending_verification" ? "Pending Verification (BACS)" : order.payment_status}
+          <Badge
+            className={`text-xs py-1 px-3 text-white ${
+              isPaid
+                ? "bg-emerald-500"
+                : isPendingVerification
+                ? "bg-amber-500"
+                : "bg-blue-500"
+            }`}
+          >
+            Payment Status:{" "}
+            {isPendingVerification
+              ? "Pending Verification (BACS)"
+              : isPaid
+              ? "Paid"
+              : "Verifying with Stripe..."}
           </Badge>
         </div>
       </div>
@@ -86,7 +97,7 @@ export default async function CheckoutSuccessPage({
             <span>Bank Transfer Reference & Verification Status</span>
           </div>
           <p className="text-xs text-muted-foreground leading-relaxed">
-            Your transfer receipt was attached to your order. If you need to re-upload or contact customer support regarding your payment, reach us at <strong>shop@enatmarket.co.uk</strong> or call <strong>+44 7356 226884</strong>.
+            Your transfer receipt was attached to your order. If you need to re-upload or contact customer support regarding your payment, reach us at <strong>shop@enatmarket.co.uk</strong> or call <strong>07830 682710</strong>.
           </p>
           {order.payment_proof_url && (
             <div className="pt-1">
@@ -113,11 +124,17 @@ export default async function CheckoutSuccessPage({
         </div>
 
         <div className="bg-card border border-border p-6 rounded-2xl space-y-2">
-          <h3 className="font-bold text-sm text-muted-foreground uppercase tracking-wider">Shipping Address</h3>
+          <h3 className="font-bold text-sm text-muted-foreground uppercase tracking-wider">
+            {order.shipping_address && (order.shipping_address as Record<string, string>).fulfillment_method?.includes("Collection")
+              ? "Collection Point"
+              : "Shipping Address"}
+          </h3>
           {shippingAddr && (
             <div className="text-sm text-muted-foreground space-y-0.5">
               <p className="font-medium text-foreground">{shippingAddr.street}</p>
-              <p>{shippingAddr.city}, {shippingAddr.state} {shippingAddr.postal_code}</p>
+              <p>
+                {shippingAddr.city}, {shippingAddr.state} {shippingAddr.postal_code}
+              </p>
               <p>{shippingAddr.country}</p>
             </div>
           )}
@@ -138,7 +155,22 @@ export default async function CheckoutSuccessPage({
           ))}
         </div>
 
-        <div className="flex justify-between items-center pt-2 font-bold text-base">
+        <div className="space-y-1.5 pt-2 text-xs text-muted-foreground border-b border-border pb-3">
+          <div className="flex justify-between">
+            <span>Subtotal</span>
+            <PriceDisplay price={order.subtotal} />
+          </div>
+          <div className="flex justify-between">
+            <span>Shipping</span>
+            <span>{order.shipping_cost === 0 ? "FREE" : `£${order.shipping_cost.toFixed(2)}`}</span>
+          </div>
+          <div className="flex justify-between">
+            <span>VAT (Included in price)</span>
+            <PriceDisplay price={0} />
+          </div>
+        </div>
+
+        <div className="flex justify-between items-center pt-1 font-bold text-base">
           <span>Total Amount</span>
           <PriceDisplay price={order.total} className="text-lg text-primary" />
         </div>
