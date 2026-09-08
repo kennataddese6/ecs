@@ -102,6 +102,7 @@ export default async function ProductDetailPage({
         <ProductImageGallery
           images={product.product_images}
           productName={product.name}
+          videoUrl={product.video_url}
         />
 
         <div className="space-y-6">

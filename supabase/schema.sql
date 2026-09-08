@@ -99,6 +99,7 @@ CREATE TABLE IF NOT EXISTS public.products (
   sku text UNIQUE,
   category_id uuid REFERENCES public.categories(id) ON DELETE SET NULL,
   unit_label text DEFAULT '1 Item',
+  video_url text,
   featured boolean NOT NULL DEFAULT false,
   active boolean NOT NULL DEFAULT true,
   created_at timestamptz NOT NULL DEFAULT now(),
@@ -399,7 +400,8 @@ CREATE POLICY "Admins full management on news"
 INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 VALUES 
   ('product-images', 'product-images', true, 10485760, ARRAY['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/svg+xml']),
-  ('news-images', 'news-images', true, 10485760, ARRAY['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/svg+xml'])
+  ('news-images', 'news-images', true, 10485760, ARRAY['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/svg+xml']),
+  ('product-videos', 'product-videos', true, 52428800, ARRAY['video/mp4', 'video/webm', 'video/ogg', 'video/quicktime', 'video/x-m4v'])
 ON CONFLICT (id) DO UPDATE SET public = true;
 
 -- Storage Read Policy for Product Images (Public)
@@ -437,6 +439,24 @@ CREATE POLICY "Admin Update News Images"
 CREATE POLICY "Admin Delete News Images"
   ON storage.objects FOR DELETE
   USING (bucket_id = 'news-images' AND public.is_admin(auth.uid()));
+
+-- Storage Read Policy for Product Videos (Public)
+CREATE POLICY "Public Read Product Videos"
+  ON storage.objects FOR SELECT
+  USING (bucket_id = 'product-videos');
+
+-- Storage Insert/Update/Delete Policy for Product Videos (Admin Only)
+CREATE POLICY "Admin Upload Product Videos"
+  ON storage.objects FOR INSERT
+  WITH CHECK (bucket_id = 'product-videos' AND (public.is_admin(auth.uid()) OR auth.role() = 'service_role'));
+
+CREATE POLICY "Admin Update Product Videos"
+  ON storage.objects FOR UPDATE
+  USING (bucket_id = 'product-videos' AND (public.is_admin(auth.uid()) OR auth.role() = 'service_role'));
+
+CREATE POLICY "Admin Delete Product Videos"
+  ON storage.objects FOR DELETE
+  USING (bucket_id = 'product-videos' AND (public.is_admin(auth.uid()) OR auth.role() = 'service_role'));
 
 -- ============================================================================
 -- 10. BANK ACCOUNTS TABLE

@@ -95,6 +95,7 @@ export interface Database {
           sku: string | null;
           category_id: string | null;
           unit_label?: string | null;
+          video_url?: string | null;
           featured: boolean;
           active: boolean;
           is_deliverable?: boolean;
@@ -113,6 +114,7 @@ export interface Database {
           sku?: string | null;
           category_id?: string | null;
           unit_label?: string | null;
+          video_url?: string | null;
           featured?: boolean;
           active?: boolean;
           is_deliverable?: boolean;
@@ -131,6 +133,7 @@ export interface Database {
           sku?: string | null;
           category_id?: string | null;
           unit_label?: string | null;
+          video_url?: string | null;
           featured?: boolean;
           active?: boolean;
           is_deliverable?: boolean;

@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { requireAdmin } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { uploadImageToStorage } from "@/lib/supabase/storage";
+import { uploadImageToStorage, uploadVideoToStorage } from "@/lib/supabase/storage";
 
 function revalidateProductPaths(slug?: string) {
   revalidatePath("/", "layout");
@@ -81,6 +81,17 @@ export async function createProductAction(formData: FormData): Promise<void> {
   const isDeliverable = formData.get("isDeliverable") === "true";
   const deliveryFeePerUnit = parseFloat((formData.get("deliveryFeePerUnit") as string) || "0");
 
+  // Product Video handling
+  const videoFile = formData.get("videoFile") as File | null;
+  const videoUrlInput = (formData.get("videoUrl") as string) || "";
+  let finalVideoUrl: string | null = null;
+
+  if (videoFile && typeof videoFile === "object" && videoFile.size > 0) {
+    finalVideoUrl = await uploadVideoToStorage(videoFile, "product-videos");
+  } else if (videoUrlInput && videoUrlInput.trim().length > 0) {
+    finalVideoUrl = videoUrlInput.trim();
+  }
+
   if (!name || !slug || isNaN(price)) {
     redirect(`/admin/products/new?error=${encodeURIComponent("Name, slug, and valid price are required.")}`);
   }
@@ -97,6 +108,7 @@ export async function createProductAction(formData: FormData): Promise<void> {
       sku,
       category_id: categoryId,
       unit_label: unitLabel,
+      video_url: finalVideoUrl,
       featured,
       active,
       is_deliverable: isDeliverable,
@@ -139,6 +151,23 @@ export async function updateProductAction(productId: string, formData: FormData)
   const isDeliverable = formData.get("isDeliverable") === "true";
   const deliveryFeePerUnit = parseFloat((formData.get("deliveryFeePerUnit") as string) || "0");
 
+  // Product Video handling
+  const removeVideo = formData.get("removeVideo") === "true";
+  const videoFile = formData.get("videoFile") as File | null;
+  const videoUrlInput = (formData.get("videoUrl") as string) || "";
+  const existingVideoUrl = (formData.get("existingVideoUrl") as string) || "";
+
+  let finalVideoUrl: string | null = null;
+  if (removeVideo) {
+    finalVideoUrl = null;
+  } else if (videoFile && typeof videoFile === "object" && videoFile.size > 0) {
+    finalVideoUrl = await uploadVideoToStorage(videoFile, "product-videos");
+  } else if (videoUrlInput && videoUrlInput.trim().length > 0) {
+    finalVideoUrl = videoUrlInput.trim();
+  } else if (existingVideoUrl && existingVideoUrl.trim().length > 0) {
+    finalVideoUrl = existingVideoUrl.trim();
+  }
+
   let actualProductId = productId;
 
   // Attempt update on existing Supabase product row
@@ -154,6 +183,7 @@ export async function updateProductAction(productId: string, formData: FormData)
       sku,
       category_id: categoryId,
       unit_label: unitLabel,
+      video_url: finalVideoUrl,
       featured,
       active,
       is_deliverable: isDeliverable,
@@ -183,6 +213,7 @@ export async function updateProductAction(productId: string, formData: FormData)
         sku: sku || `SKU-${Date.now().toString().slice(-6)}`,
         category_id: categoryId,
         unit_label: unitLabel,
+        video_url: finalVideoUrl,
         featured,
         active,
         is_deliverable: isDeliverable,

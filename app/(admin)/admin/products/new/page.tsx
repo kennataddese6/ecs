@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getAllAdminCategories } from "@/lib/services/admin";
 import { createProductAction } from "@/lib/actions/admin-products";
 import { MultiImageUploadInput } from "@/components/admin/multi-image-upload-input";
+import { VideoUploadInput } from "@/components/admin/video-upload-input";
 import { SubmitButton } from "@/components/common/submit-button";
 import { FormError } from "@/components/ui/form-message";
 import { Button } from "@/components/ui/button";
@@ -45,6 +46,8 @@ export default async function NewProductPage({
         </div>
 
         <MultiImageUploadInput label="Product Gallery Images" />
+
+        <VideoUploadInput label="Product Showcase Video (Optional)" />
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="space-y-2">

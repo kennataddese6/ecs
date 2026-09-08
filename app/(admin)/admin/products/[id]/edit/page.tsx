@@ -4,6 +4,7 @@ import { getProductById } from "@/lib/services/products";
 import { getAllAdminCategories } from "@/lib/services/admin";
 import { updateProductAction } from "@/lib/actions/admin-products";
 import { MultiImageUploadInput } from "@/components/admin/multi-image-upload-input";
+import { VideoUploadInput } from "@/components/admin/video-upload-input";
 import { SubmitButton } from "@/components/common/submit-button";
 import { FormError } from "@/components/ui/form-message";
 import { Button } from "@/components/ui/button";
@@ -63,6 +64,11 @@ export default async function EditProductPage({
               ? [primaryImage]
               : []
           }
+        />
+
+        <VideoUploadInput
+          existingVideoUrl={product.video_url}
+          label="Product Showcase Video (Optional)"
         />
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
