@@ -28,7 +28,7 @@ export function CartItem({ item }: { item: CartItemWithProduct }) {
           {product?.name}
         </Link>
 
-        <PriceDisplay price={product?.price || 0} />
+        <PriceDisplay price={product?.price || 0} priceOnRequest={product?.price_on_request} />
 
         {isLowStock && (
           <p className="text-[10px] font-semibold text-amber-500">
@@ -46,7 +46,11 @@ export function CartItem({ item }: { item: CartItemWithProduct }) {
       </div>
 
       <div className="flex flex-col items-end justify-between space-y-3">
-        <PriceDisplay price={(product?.price || 0) * item.quantity} className="font-bold text-sm" />
+        <PriceDisplay
+          price={(product?.price || 0) * item.quantity}
+          priceOnRequest={product?.price_on_request}
+          className="font-bold text-sm"
+        />
         <Button
           variant="ghost"
           size="icon"

@@ -4,6 +4,7 @@ import { getProductBySlug, getRelatedProducts } from "@/lib/services/products";
 import { ProductImageGallery } from "@/components/shop/product-image-gallery";
 import { PriceDisplay } from "@/components/shop/price-display";
 import { AddToCartButton } from "@/components/shop/add-to-cart-button";
+import { PriceEnquiryModal } from "@/components/shop/price-enquiry-modal";
 import { ProductGrid } from "@/components/shop/product-grid";
 import { Badge } from "@/components/ui/badge";
 import { Truck, ShieldCheck, RotateCcw, ArrowLeft } from "lucide-react";
@@ -129,16 +130,22 @@ export default async function ProductDetailPage({
             <PriceDisplay
               price={product.price}
               compareAtPrice={product.compare_at_price}
+              priceOnRequest={product.price_on_request}
               className="text-2xl sm:text-3xl font-extrabold"
             />
-            {product.unit_label && (
+            {!product.price_on_request && product.unit_label && (
               <span className="text-sm sm:text-base font-bold text-muted-foreground">
                 / {product.unit_label}
               </span>
             )}
-            {isSale && (
+            {!product.price_on_request && isSale && (
               <Badge className="bg-destructive text-destructive-foreground font-bold text-sm px-2.5 py-0.5">
                 Save {discountPercent}%
+              </Badge>
+            )}
+            {product.price_on_request && (
+              <Badge className="bg-primary/15 text-primary border border-primary/30 font-bold text-xs px-2.5 py-1">
+                Custom Quotation &bull; Payment Link on Agreement
               </Badge>
             )}
           </div>
@@ -180,11 +187,15 @@ export default async function ProductDetailPage({
           )}
 
           <div className="pt-2">
-            <AddToCartButton
-              productId={product.id}
-              disabled={isOutOfStock}
-              className="w-full h-12 text-base font-bold shadow-lg shadow-primary/25"
-            />
+            {product.price_on_request ? (
+              <PriceEnquiryModal product={product} />
+            ) : (
+              <AddToCartButton
+                productId={product.id}
+                disabled={isOutOfStock}
+                className="w-full h-12 text-base font-bold shadow-lg shadow-primary/25"
+              />
+            )}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-border text-xs text-muted-foreground font-medium">

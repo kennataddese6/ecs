@@ -96,6 +96,7 @@ export interface Database {
           category_id: string | null;
           unit_label?: string | null;
           video_url?: string | null;
+          price_on_request?: boolean;
           featured: boolean;
           active: boolean;
           is_deliverable?: boolean;
@@ -115,6 +116,7 @@ export interface Database {
           category_id?: string | null;
           unit_label?: string | null;
           video_url?: string | null;
+          price_on_request?: boolean;
           featured?: boolean;
           active?: boolean;
           is_deliverable?: boolean;
@@ -134,6 +136,7 @@ export interface Database {
           category_id?: string | null;
           unit_label?: string | null;
           video_url?: string | null;
+          price_on_request?: boolean;
           featured?: boolean;
           active?: boolean;
           is_deliverable?: boolean;

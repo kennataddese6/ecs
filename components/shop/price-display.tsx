@@ -3,10 +3,24 @@ import { cn } from "@/lib/utils";
 interface PriceDisplayProps {
   price: number;
   compareAtPrice?: number | null;
+  priceOnRequest?: boolean;
   className?: string;
 }
 
-export function PriceDisplay({ price, compareAtPrice, className }: PriceDisplayProps) {
+export function PriceDisplay({
+  price,
+  compareAtPrice,
+  priceOnRequest = false,
+  className,
+}: PriceDisplayProps) {
+  if (priceOnRequest) {
+    return (
+      <div className={cn("flex items-baseline font-bold", className)}>
+        <span className="text-primary tracking-tight">Price on Request</span>
+      </div>
+    );
+  }
+
   const formattedPrice = new Intl.NumberFormat("en-GB", {
     style: "currency",
     currency: "GBP",

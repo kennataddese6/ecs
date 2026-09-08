@@ -32,7 +32,13 @@ export default async function AdminProductsPage({
     },
     {
       header: "Price",
-      cell: (row) => <PriceDisplay price={row.price} compareAtPrice={row.compare_at_price} />,
+      cell: (row) => (
+        <PriceDisplay
+          price={row.price}
+          compareAtPrice={row.compare_at_price}
+          priceOnRequest={row.price_on_request}
+        />
+      ),
     },
     {
       header: "Unit / Size",

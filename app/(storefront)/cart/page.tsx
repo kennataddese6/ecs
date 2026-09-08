@@ -35,6 +35,8 @@ export default async function CartPage() {
     );
   }
 
+  const hasPriceOnRequestItem = items.some((it) => it.product?.price_on_request);
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 py-8">
       <h1 className="text-3xl font-extrabold tracking-tight">Shopping Cart ({items.length})</h1>
@@ -68,11 +70,23 @@ export default async function CartPage() {
             </div>
           </div>
 
-          <Button size="lg" className="w-full font-semibold shadow-md" asChild>
-            <Link href="/checkout">
-              Proceed to UK Checkout <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
+          {hasPriceOnRequestItem && (
+            <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/25 text-amber-600 dark:text-amber-400 text-xs leading-relaxed font-medium">
+              Your cart contains a <strong>Price on Request</strong> product. These items require a custom quotation and will receive a separate payment link once agreed. Please remove them to checkout online for standard products.
+            </div>
+          )}
+
+          {hasPriceOnRequestItem ? (
+            <Button size="lg" className="w-full font-semibold cursor-not-allowed opacity-60" disabled>
+              Quotation Required for Checkout
+            </Button>
+          ) : (
+            <Button size="lg" className="w-full font-semibold shadow-md" asChild>
+              <Link href="/checkout">
+                Proceed to UK Checkout <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+          )}
         </div>
       </div>
     </div>

@@ -49,18 +49,39 @@ export default async function NewProductPage({
 
         <VideoUploadInput label="Product Showcase Video (Optional)" />
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="space-y-2">
-            <label className="text-sm font-semibold">Price (£)</label>
-            <Input name="price" type="number" step="0.01" placeholder="28.50" required />
+        {/* Pricing Configuration */}
+        <div className="space-y-3 p-4 rounded-xl bg-card border border-border/80 shadow-xs">
+          <div className="flex items-start space-x-3">
+            <input
+              type="checkbox"
+              id="priceOnRequest"
+              name="priceOnRequest"
+              value="true"
+              className="mt-1 rounded border-input text-primary h-4 w-4 cursor-pointer"
+            />
+            <div className="space-y-0.5">
+              <label htmlFor="priceOnRequest" className="text-sm font-bold text-foreground cursor-pointer">
+                Price on Request
+              </label>
+              <p className="text-xs text-muted-foreground">
+                Enable for products with flexible, negotiable, or quotation-based pricing. Displays “Price on Request” on the storefront, disables instant checkout, and prompts customers to submit an enquiry.
+              </p>
+            </div>
           </div>
-          <div className="space-y-2">
-            <label className="text-sm font-semibold">Compare At Price (£)</label>
-            <Input name="compareAtPrice" type="number" step="0.01" placeholder="34.00" />
-          </div>
-          <div className="space-y-2">
-            <label className="text-sm font-semibold">Unit / Pack Size (kg, Litre, g)</label>
-            <Input name="unitLabel" placeholder="e.g. 1 kg, 500 g, 1 Litre, 250 ml" defaultValue="1 kg" />
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-3 border-t border-border/60">
+            <div className="space-y-2">
+              <label className="text-sm font-semibold">Price (£)</label>
+              <Input name="price" type="number" step="0.01" placeholder="28.50 (Optional if Price on Request)" />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-semibold">Compare At Price (£)</label>
+              <Input name="compareAtPrice" type="number" step="0.01" placeholder="34.00" />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-semibold">Unit / Pack Size (kg, Litre, g)</label>
+              <Input name="unitLabel" placeholder="e.g. 1 kg, 500 g, 1 Litre, 250 ml" defaultValue="1 kg" />
+            </div>
           </div>
         </div>
 

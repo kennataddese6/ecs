@@ -69,13 +69,20 @@ export async function addToCartAction(productId: string, quantityToAdd: number =
     return { error: "Quantity must be at least 1." };
   }
 
-  let product: { id: string; name: string; price: number; stock_quantity: number; active: boolean } | null = null;
+  let product: {
+    id: string;
+    name: string;
+    price: number;
+    stock_quantity: number;
+    active: boolean;
+    price_on_request?: boolean;
+  } | null = null;
 
   try {
     const supabase = await createClient();
     const { data } = await supabase
       .from("products")
-      .select("id, name, price, stock_quantity, active")
+      .select("id, name, price, stock_quantity, active, price_on_request")
       .eq("id", productId)
       .single();
 
@@ -93,12 +100,19 @@ export async function addToCartAction(productId: string, quantityToAdd: number =
         price: fallback.price,
         stock_quantity: fallback.stock_quantity,
         active: fallback.active,
+        price_on_request: fallback.price_on_request,
       };
     }
   }
 
   if (!product || !product.active) {
     return { error: "Product is currently unavailable." };
+  }
+
+  if (product.price_on_request) {
+    return {
+      error: `"${product.name}" is Price on Request. Please submit an enquiry from the product page to receive a quotation and direct payment link.`,
+    };
   }
 
   if (product.stock_quantity <= 0) {

@@ -21,6 +21,8 @@ export function CartDrawer({ items }: { items: CartItemWithProduct[] }) {
     0
   );
 
+  const hasPriceOnRequestItem = items.some((it) => it.product?.price_on_request);
+
   const drawerContent = isOpen && mounted ? (
     ReactDOM.createPortal(
       <div className="fixed inset-0 z-[100] flex justify-end">
@@ -63,13 +65,26 @@ export function CartDrawer({ items }: { items: CartItemWithProduct[] }) {
                 <span className="font-medium">Subtotal</span>
                 <PriceDisplay price={subtotal} />
               </div>
+
+              {hasPriceOnRequestItem && (
+                <p className="text-[11px] text-amber-500 font-medium leading-tight">
+                  Contains Price on Request item. Online checkout is disabled until quotation is settled.
+                </p>
+              )}
+
               <div className="grid grid-cols-2 gap-3">
                 <Button variant="outline" asChild onClick={() => setIsOpen(false)}>
                   <Link href="/cart">View Cart</Link>
                 </Button>
-                <Button asChild onClick={() => setIsOpen(false)}>
-                  <Link href="/checkout">Checkout</Link>
-                </Button>
+                {hasPriceOnRequestItem ? (
+                  <Button variant="outline" className="opacity-60 cursor-not-allowed text-xs font-bold" disabled>
+                    Quote Needed
+                  </Button>
+                ) : (
+                  <Button asChild onClick={() => setIsOpen(false)}>
+                    <Link href="/checkout">Checkout</Link>
+                  </Button>
+                )}
               </div>
             </div>
           )}

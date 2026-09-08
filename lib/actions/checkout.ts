@@ -77,11 +77,21 @@ export async function createCheckoutSessionAction(formData: FormData): Promise<v
     redirect("/cart");
   }
 
+  // Guard against checking out Price on Request items
+  const priceOnRequestItem = items.find((it) => it.product?.price_on_request);
+  if (priceOnRequestItem) {
+    redirect(
+      `/cart?error=${encodeURIComponent(
+        `"${priceOnRequestItem.product.name}" is Price on Request and cannot be purchased via online checkout. Please submit an enquiry from the product page to receive a quotation and direct payment link.`
+      )}`
+    );
+  }
+
   // Server-side product price & inventory verification directly against database
   const productIds = items.map((i) => i.product_id);
   const { data: dbProducts, error: dbError } = await supabase
     .from("products")
-    .select("id, name, price, stock_quantity, active, is_deliverable, delivery_fee_per_unit")
+    .select("id, name, price, stock_quantity, active, is_deliverable, delivery_fee_per_unit, price_on_request")
     .in("id", productIds);
 
   if (dbError || !dbProducts) {
@@ -107,6 +117,14 @@ export async function createCheckoutSessionAction(formData: FormData): Promise<v
 
     if (!product || product.active === false) {
       redirect(`/cart?error=${encodeURIComponent("One or more products are no longer available.")}`);
+    }
+
+    if (product.price_on_request) {
+      redirect(
+        `/cart?error=${encodeURIComponent(
+          `"${product.name}" is Price on Request and cannot be purchased via online checkout. Please submit an enquiry from the product page to receive a quotation and direct payment link.`
+        )}`
+      );
     }
 
     if (product.stock_quantity !== undefined && product.stock_quantity < item.quantity) {

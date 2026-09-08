@@ -68,8 +68,10 @@ export async function createProductAction(formData: FormData): Promise<void> {
   const name = formData.get("name") as string;
   const slug = formData.get("slug") as string;
   const description = formData.get("description") as string;
-  const price = parseFloat(formData.get("price") as string);
-  const compareAtPrice = formData.get("compareAtPrice")
+  const priceOnRequest = formData.get("priceOnRequest") === "true";
+  const rawPrice = parseFloat(formData.get("price") as string);
+  const price = priceOnRequest && (isNaN(rawPrice) || rawPrice < 0) ? 0 : rawPrice;
+  const compareAtPrice = formData.get("compareAtPrice") && !priceOnRequest
     ? parseFloat(formData.get("compareAtPrice") as string)
     : null;
   const stockQuantity = parseInt(formData.get("stockQuantity") as string, 10) || 0;
@@ -92,8 +94,8 @@ export async function createProductAction(formData: FormData): Promise<void> {
     finalVideoUrl = videoUrlInput.trim();
   }
 
-  if (!name || !slug || isNaN(price)) {
-    redirect(`/admin/products/new?error=${encodeURIComponent("Name, slug, and valid price are required.")}`);
+  if (!name || !slug || (!priceOnRequest && isNaN(price))) {
+    redirect(`/admin/products/new?error=${encodeURIComponent("Name, slug, and valid price are required unless Price on Request is enabled.")}`);
   }
 
   const { data: newProd, error } = await supabase
@@ -109,6 +111,7 @@ export async function createProductAction(formData: FormData): Promise<void> {
       category_id: categoryId,
       unit_label: unitLabel,
       video_url: finalVideoUrl,
+      price_on_request: priceOnRequest,
       featured,
       active,
       is_deliverable: isDeliverable,
@@ -138,8 +141,10 @@ export async function updateProductAction(productId: string, formData: FormData)
   const name = formData.get("name") as string;
   const slug = formData.get("slug") as string;
   const description = formData.get("description") as string;
-  const price = parseFloat(formData.get("price") as string);
-  const compareAtPrice = formData.get("compareAtPrice")
+  const priceOnRequest = formData.get("priceOnRequest") === "true";
+  const rawPrice = parseFloat(formData.get("price") as string);
+  const price = priceOnRequest && (isNaN(rawPrice) || rawPrice < 0) ? 0 : rawPrice;
+  const compareAtPrice = formData.get("compareAtPrice") && !priceOnRequest
     ? parseFloat(formData.get("compareAtPrice") as string)
     : null;
   const stockQuantity = parseInt(formData.get("stockQuantity") as string, 10) || 0;
@@ -184,6 +189,7 @@ export async function updateProductAction(productId: string, formData: FormData)
       category_id: categoryId,
       unit_label: unitLabel,
       video_url: finalVideoUrl,
+      price_on_request: priceOnRequest,
       featured,
       active,
       is_deliverable: isDeliverable,
@@ -214,6 +220,7 @@ export async function updateProductAction(productId: string, formData: FormData)
         category_id: categoryId,
         unit_label: unitLabel,
         video_url: finalVideoUrl,
+        price_on_request: priceOnRequest,
         featured,
         active,
         is_deliverable: isDeliverable,

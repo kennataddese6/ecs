@@ -3,6 +3,7 @@ import Image from "next/image";
 import { ProductWithImages } from "@/lib/services/products";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { PriceDisplay } from "@/components/shop/price-display";
 import { AddToCartButton } from "@/components/shop/add-to-cart-button";
 
@@ -77,14 +78,20 @@ export function ProductCard({ product }: { product: ProductWithImages }) {
 
         <div className="flex items-baseline justify-between pt-1">
           <div className="flex items-baseline space-x-1.5 flex-wrap">
-            <PriceDisplay price={product.price} compareAtPrice={product.compare_at_price} />
-            {product.unit_label && (
+            <PriceDisplay
+              price={product.price}
+              compareAtPrice={product.compare_at_price}
+              priceOnRequest={product.price_on_request}
+            />
+            {!product.price_on_request && product.unit_label && (
               <span className="text-xs font-semibold text-muted-foreground">/ {product.unit_label}</span>
             )}
           </div>
 
           <span className="text-[11px] font-semibold text-muted-foreground">
-            {!isDeliverable ? (
+            {product.price_on_request ? (
+              <span className="text-primary font-bold">Custom Quote</span>
+            ) : !isDeliverable ? (
               <span className="text-destructive font-bold">Pickup Only</span>
             ) : deliveryFee === 0 ? (
               <span className="text-emerald-500 font-bold">Free UK Delivery</span>
@@ -96,7 +103,19 @@ export function ProductCard({ product }: { product: ProductWithImages }) {
       </CardContent>
 
       <CardFooter className="p-5 pt-0">
-        <AddToCartButton productId={product.id} className="w-full" disabled={isOutOfStock} />
+        {product.price_on_request ? (
+          <Button
+            variant="outline"
+            className="w-full font-bold border-primary/50 text-primary hover:bg-primary hover:text-primary-foreground transition-all shadow-xs"
+            asChild
+          >
+            <Link href={`/products/${product.slug}`}>
+              Enquire for Price
+            </Link>
+          </Button>
+        ) : (
+          <AddToCartButton productId={product.id} className="w-full" disabled={isOutOfStock} />
+        )}
       </CardFooter>
     </Card>
   );
