@@ -1,23 +1,23 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 import {
-  LayoutDashboard,
-  Package,
-  FolderTree,
-  ShoppingBag,
-  Newspaper,
-  Mail,
-  MessageSquare,
-  Settings,
   ArrowLeft,
+  FolderTree,
+  LayoutDashboard,
+  Mail,
   Menu,
+  MessageSquare,
+  Newspaper,
+  Package,
+  Settings,
+  ShoppingBag,
   X,
 } from "lucide-react";
-import { ThemeToggle } from "@/components/theme/theme-toggle";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
 
 const navItems = [
   { name: "Overview", href: "/admin", icon: LayoutDashboard },
@@ -41,7 +41,7 @@ export function AdminSidebar() {
         <Link href="/admin" className="flex items-center space-x-2 font-bold text-base">
           <div className="relative h-7 w-7 overflow-hidden rounded-lg bg-card border border-border/80 p-0.5 shadow-xs">
             <Image
-              src="/logo.png"
+              src="/enat-market-logo-amharic.png"
               alt="Enat Market Logo"
               width={28}
               height={28}
@@ -69,7 +69,7 @@ export function AdminSidebar() {
             <Link href="/admin" className="flex items-center space-x-2 font-bold text-lg">
               <div className="relative h-8 w-8 overflow-hidden rounded-lg bg-card border border-border/80 p-0.5 shadow-sm">
                 <Image
-                  src="/logo.png"
+                  src="/enat-market-logo-amharic.png"
                   alt="Enat Market Logo"
                   width={32}
                   height={32}
@@ -127,7 +127,7 @@ export function AdminSidebar() {
           <Link href="/admin" className="flex items-center space-x-2 font-bold text-lg">
             <div className="relative h-8 w-8 overflow-hidden rounded-lg bg-card border border-border/80 p-0.5 shadow-sm">
               <Image
-                src="/logo.png"
+                src="/enat-market-logo-amharic.png"
                 alt="Enat Market Logo"
                 width={32}
                 height={32}

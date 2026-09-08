@@ -1,6 +1,6 @@
-import Link from "next/link";
-import Image from "next/image";
 import { Lock, Mail, Phone } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
 export function Footer() {
   return (
@@ -11,7 +11,7 @@ export function Footer() {
             <Link href="/" className="flex items-center space-x-3 font-black text-xl tracking-wider">
               <div className="relative h-10 w-10 overflow-hidden rounded-xl bg-card border border-border/80 shadow-sm flex items-center justify-center p-1">
                 <Image
-                  src="/logo.png"
+                  src="/enat-market-logo-amharic.png"
                   alt="Enat Market Logo"
                   width={36}
                   height={36}

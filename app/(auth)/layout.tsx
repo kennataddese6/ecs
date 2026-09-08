@@ -1,6 +1,6 @@
-import Link from "next/link";
-import Image from "next/image";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function AuthLayout({
   children,
@@ -17,7 +17,7 @@ export default function AuthLayout({
           <Link href="/" className="inline-flex items-center space-x-3 font-extrabold text-2xl group">
             <div className="relative h-11 w-11 overflow-hidden rounded-xl bg-card border border-border/80 p-1 shadow-sm group-hover:scale-105 transition-transform">
               <Image
-                src="/logo.png"
+                src="/enat-market-logo-amharic.png"
                 alt="Enat Market Logo"
                 width={40}
                 height={40}

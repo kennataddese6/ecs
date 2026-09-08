@@ -27,7 +27,7 @@ export async function Navbar() {
           <Link href="/" className="flex items-center space-x-3 font-extrabold text-xl tracking-tight group">
             <div className="relative h-10 w-10 overflow-hidden rounded-xl bg-card border border-border/80 shadow-sm flex items-center justify-center p-1 group-hover:scale-105 transition-transform">
               <Image
-                src="/logo.png"
+                src="/enat-market-logo-amharic.png"
                 alt="Enat Market Logo"
                 width={36}
                 height={36}
