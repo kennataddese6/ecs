@@ -4,18 +4,17 @@ import * as React from "react";
 import {
   UploadCloud,
   X,
-  Link as LinkIcon,
   Video,
   Play,
   AlertCircle,
   FileVideo,
   CheckCircle2,
+  Paperclip,
+  RefreshCw,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 
 interface VideoUploadInputProps {
-  name?: string;
   fileInputName?: string;
   existingVideoUrl?: string | null;
   label?: string;
@@ -32,73 +31,94 @@ function isValidVideoFormat(file: File): boolean {
 }
 
 export function VideoUploadInput({
-  name = "videoUrl",
   fileInputName = "videoFile",
   existingVideoUrl = "",
-  label = "Product Video (Optional)",
+  label = "Product Showcase Video (Optional)",
 }: VideoUploadInputProps) {
   const [previewUrl, setPreviewUrl] = React.useState<string>(existingVideoUrl || "");
-  const [mode, setMode] = React.useState<"file" | "url">("file");
-  const [urlInput, setUrlInput] = React.useState<string>(existingVideoUrl || "");
   const [errorMsg, setErrorMsg] = React.useState<string | null>(null);
   const [fileInfo, setFileInfo] = React.useState<{ name: string; sizeMb: string } | null>(null);
   const [isRemoved, setIsRemoved] = React.useState<boolean>(false);
+  const [isDragging, setIsDragging] = React.useState<boolean>(false);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   React.useEffect(() => {
     if (existingVideoUrl) {
       setPreviewUrl(existingVideoUrl);
-      setUrlInput(existingVideoUrl);
     }
   }, [existingVideoUrl]);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const processFile = (file: File) => {
     setErrorMsg(null);
     setIsRemoved(false);
+
+    if (!isValidVideoFormat(file)) {
+      setErrorMsg(
+        `Invalid file type "${file.name}". Please attach an MP4, WebM, OGG, or MOV video.`
+      );
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+      return;
+    }
+
+    if (file.size > MAX_FILE_SIZE_BYTES) {
+      setErrorMsg(
+        `File size exceeds 50MB limit (${(file.size / (1024 * 1024)).toFixed(1)}MB). Please attach a compressed video.`
+      );
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+      return;
+    }
+
+    setFileInfo({
+      name: file.name,
+      sizeMb: (file.size / (1024 * 1024)).toFixed(1),
+    });
+
+    const localUrl = URL.createObjectURL(file);
+    setPreviewUrl(localUrl);
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (!isValidVideoFormat(file)) {
-        setErrorMsg(
-          `Invalid file type "${file.name}". Please upload an MP4, WebM, OGG, or MOV video file.`
-        );
-        if (fileInputRef.current) {
-          fileInputRef.current.value = "";
-        }
-        return;
-      }
-
-      if (file.size > MAX_FILE_SIZE_BYTES) {
-        setErrorMsg(
-          `File size exceeds 50MB limit (${(file.size / (1024 * 1024)).toFixed(1)}MB). Please choose a compressed video file.`
-        );
-        if (fileInputRef.current) {
-          fileInputRef.current.value = "";
-        }
-        return;
-      }
-
-      setFileInfo({
-        name: file.name,
-        sizeMb: (file.size / (1024 * 1024)).toFixed(1),
-      });
-
-      const localUrl = URL.createObjectURL(file);
-      setPreviewUrl(localUrl);
+      processFile(file);
     }
   };
 
-  const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setErrorMsg(null);
-    setIsRemoved(false);
-    const val = e.target.value;
-    setUrlInput(val);
-    setPreviewUrl(val.trim());
-    setFileInfo(null);
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
   };
 
-  const handleClear = () => {
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+
+    const file = e.dataTransfer.files?.[0];
+    if (file) {
+      // Assign to input element if possible
+      if (fileInputRef.current) {
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(file);
+        fileInputRef.current.files = dataTransfer.files;
+      }
+      processFile(file);
+    }
+  };
+
+  const handleRemove = () => {
     setPreviewUrl("");
-    setUrlInput("");
     setFileInfo(null);
     setErrorMsg(null);
     setIsRemoved(true);
@@ -107,46 +127,43 @@ export function VideoUploadInput({
     }
   };
 
+  const handleOpenPicker = () => {
+    fileInputRef.current?.click();
+  };
+
   return (
     <div className="space-y-3 p-4 rounded-xl bg-card border border-border/80 shadow-xs">
       {/* Hidden inputs to manage video state across updates */}
       <input type="hidden" name="existingVideoUrl" value={existingVideoUrl || ""} />
       {isRemoved && <input type="hidden" name="removeVideo" value="true" />}
 
+      {/* Actual file input for form submission */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        name={fileInputName}
+        accept="video/mp4,video/webm,video/ogg,video/quicktime,video/x-m4v"
+        onChange={handleFileChange}
+        className="hidden"
+        id="product-video-file-upload"
+      />
+
       <div className="flex items-center justify-between">
         <label className="text-sm font-semibold flex items-center space-x-2">
           <Video className="h-4 w-4 text-primary" />
           <span>{label}</span>
         </label>
-        <div className="flex items-center space-x-1 bg-muted p-0.5 rounded-lg border border-border text-xs">
-          <button
-            type="button"
-            onClick={() => setMode("file")}
-            className={`px-2.5 py-1 rounded-md font-medium transition-all ${
-              mode === "file"
-                ? "bg-background text-foreground shadow-xs"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            Upload File
-          </button>
-          <button
-            type="button"
-            onClick={() => setMode("url")}
-            className={`px-2.5 py-1 rounded-md font-medium transition-all ${
-              mode === "url"
-                ? "bg-background text-foreground shadow-xs"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            Video URL
-          </button>
-        </div>
+        {previewUrl && (
+          <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 flex items-center space-x-1">
+            <CheckCircle2 className="h-3.5 w-3.5" />
+            <span>Video Attached</span>
+          </span>
+        )}
       </div>
 
       <p className="text-xs text-muted-foreground">
-        Showcase this product in action. The video will be displayed in the product gallery as the
-        final slide after the product photos.
+        Attach a video from your computer or phone. It will be uploaded to storage and featured as
+        the final slide in the product gallery.
       </p>
 
       {errorMsg && (
@@ -156,57 +173,41 @@ export function VideoUploadInput({
         </div>
       )}
 
-      {mode === "file" ? (
-        <div>
-          <input
-            ref={fileInputRef}
-            type="file"
-            name={fileInputName}
-            accept="video/mp4,video/webm,video/ogg,video/quicktime,video/x-m4v"
-            onChange={handleFileChange}
-            className="hidden"
-            id="product-video-file-upload"
-          />
-
-          {!previewUrl ? (
-            <label
-              htmlFor="product-video-file-upload"
-              className="border-2 border-dashed border-border/80 hover:border-primary/60 rounded-xl p-6 flex flex-col items-center justify-center cursor-pointer bg-muted/20 hover:bg-muted/40 transition-colors text-center group"
-            >
-              <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform mb-2">
-                <UploadCloud className="h-6 w-6" />
-              </div>
-              <p className="text-xs font-semibold text-foreground">
-                Click to upload video or drag and drop
-              </p>
-              <p className="text-[11px] text-muted-foreground mt-1">
-                MP4, WebM, OGG or MOV (Max 50MB)
-              </p>
-            </label>
-          ) : null}
+      {!previewUrl ? (
+        <div
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+          onClick={handleOpenPicker}
+          className={`border-2 border-dashed rounded-xl p-6 flex flex-col items-center justify-center cursor-pointer transition-all text-center group ${
+            isDragging
+              ? "border-primary bg-primary/10 scale-[1.01]"
+              : "border-border/80 hover:border-primary/60 bg-muted/20 hover:bg-muted/40"
+          }`}
+        >
+          <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform mb-2">
+            <Paperclip className="h-6 w-6" />
+          </div>
+          <p className="text-xs font-bold text-foreground">
+            Click to attach video file (or drag & drop)
+          </p>
+          <p className="text-[11px] text-muted-foreground mt-1">
+            MP4, WebM, MOV, or OGG (Max 50MB)
+          </p>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="mt-3 pointer-events-none text-xs font-semibold"
+          >
+            <UploadCloud className="h-3.5 w-3.5 mr-1.5" />
+            Choose Video File
+          </Button>
         </div>
       ) : (
-        <div className="space-y-2">
-          <div className="relative">
-            <LinkIcon className="h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              name={name}
-              value={urlInput}
-              onChange={handleUrlChange}
-              placeholder="https://.../video.mp4"
-              className="pl-9 text-xs"
-            />
-          </div>
-          <p className="text-[11px] text-muted-foreground">
-            Direct link to an MP4 or WebM video file.
-          </p>
-        </div>
-      )}
-
-      {/* Video Preview Player */}
-      {previewUrl && (
-        <div className="space-y-2 pt-1">
-          <div className="relative rounded-xl overflow-hidden border border-border bg-black/95 aspect-video w-full flex items-center justify-center shadow-inner">
+        /* Video Attached Preview Area */
+        <div className="space-y-3 pt-1">
+          <div className="relative rounded-xl overflow-hidden border border-border bg-black/95 aspect-video w-full flex items-center justify-center shadow-inner group">
             <video
               src={previewUrl}
               controls
@@ -217,45 +218,55 @@ export function VideoUploadInput({
 
             <button
               type="button"
-              onClick={handleClear}
+              onClick={handleRemove}
               className="absolute top-3 right-3 p-1.5 rounded-full bg-black/70 hover:bg-destructive text-white shadow-md transition-colors cursor-pointer z-10"
               title="Remove Video"
+              aria-label="Remove Video"
             >
               <X className="h-4 w-4" />
             </button>
           </div>
 
-          <div className="flex items-center justify-between text-xs text-muted-foreground px-1">
-            <div className="flex items-center space-x-1.5 truncate">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-2.5 rounded-xl bg-muted/40 border border-border text-xs">
+            <div className="flex items-center space-x-2 truncate">
+              <FileVideo className="h-4 w-4 text-primary shrink-0" />
               {fileInfo ? (
-                <>
-                  <FileVideo className="h-3.5 w-3.5 text-primary shrink-0" />
-                  <span className="font-medium text-foreground truncate max-w-[200px]">
-                    {fileInfo.name}
-                  </span>
-                  <span>({fileInfo.sizeMb} MB)</span>
-                  <span className="text-emerald-500 flex items-center space-x-0.5 ml-1">
-                    <CheckCircle2 className="h-3 w-3 inline" />
-                    <span>Ready</span>
-                  </span>
-                </>
+                <div className="truncate">
+                  <span className="font-semibold text-foreground truncate">{fileInfo.name}</span>
+                  <span className="text-muted-foreground ml-1.5">({fileInfo.sizeMb} MB)</span>
+                </div>
               ) : (
-                <>
-                  <Play className="h-3.5 w-3.5 text-primary shrink-0" />
-                  <span className="truncate max-w-[260px]">{previewUrl}</span>
-                </>
+                <div className="truncate">
+                  <span className="font-semibold text-foreground">Current Product Video</span>
+                  <span className="text-muted-foreground ml-1.5 truncate max-w-[200px]">
+                    ({previewUrl.split("/").pop() || "Attached"})
+                  </span>
+                </div>
               )}
             </div>
 
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={handleClear}
-              className="h-7 text-xs text-destructive hover:text-destructive hover:bg-destructive/10"
-            >
-              Remove
-            </Button>
+            <div className="flex items-center space-x-2 shrink-0 self-end sm:self-auto">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={handleOpenPicker}
+                className="h-7 text-xs font-semibold"
+              >
+                <RefreshCw className="h-3 w-3 mr-1.5" />
+                Change Video
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={handleRemove}
+                className="h-7 text-xs text-destructive hover:text-destructive hover:bg-destructive/10 font-semibold"
+              >
+                <X className="h-3 w-3 mr-1" />
+                Remove
+              </Button>
+            </div>
           </div>
         </div>
       )}
